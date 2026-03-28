@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos - CPEE</title>
+    <style>
+        body {
+            background-color: #e4cfac; /* Tu ocre elegante */
+            color: #000;
+            font-family: 'Inter', sans-serif;
+            padding: 50px;
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 { border-bottom: 2px solid #2B1B12; padding-bottom: 10px; }
+        .boton-volver {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #2a4939;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recursos Seleccionados</h1>
+    <p>Bibliografía técnica y herramientas para el estudio social.</p>
+    
+    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-left: 4px solid #1B3022;">
+        <h3>El Capital (Tomo III) - Karl Marx</h3>
+        <p>Próximamente disponible para descarga de estudio.</p>
+    </div>
+
+    <a href="../index.html" class="boton-volver">← Volver al inicio</a>
+</body>
+</html>
