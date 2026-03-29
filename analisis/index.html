@@ -21,13 +21,67 @@
             color: #2a4939;
             font-weight: bold;
         }
+        /* --- ESTILOS DEL MENÚ HAMBURGUESA --- */
+        .icono-menu {
+            position: fixed; /* Se queda fijo aunque bajes la página */
+            top: 20px;
+            left: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #2B1B12; /* Café oscuro institucional */
+            z-index: 1000;
+        }
+
+        .menu-desplegable {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 60px;
+            left: 20px;
+            background-color: #2B1B12; /* Fondo oscuro para contrastar */
+            padding: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+            min-width: 200px;
+        }
+
+        .menu-desplegable a {
+            display: block;
+            color: #D7C4A5; /* Letra ocre para que resalte */
+            text-decoration: none;
+            padding: 15px 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #3d261a;
+        }
+
+        .menu-desplegable a:hover {
+            background-color: #3d261a; /* Cambia un poco al pasar el mouse */
+        }
+        /* ------------------------------------ */
 </style>
 </head>
 <body>
+    <div class="icono-menu" onclick="toggleMenu()">☰</div>
+
+    <nav id="miMenu" class="menu-desplegable">
+        <a href="../index.html">Inicio</a>
+        <a href="../quienes-somos/index.html">¿Quiénes somos?</a>
+        <a href="../mision/index.html">Nuestra misión</a>
+        <a href="../colaboraciones/index.html">Colaboraciones</a>
+    </nav>
     <h1>Análisis</h1>
     <p>Proximamente artículos, ensayos y más.</p>
     
 </div>
-   
+   <script>
+        function toggleMenu() {
+            var menu = document.getElementById("miMenu");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
