@@ -1,195 +1,704 @@
 <!DOCTYPE html>
 <html lang="es">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 1: Fundamentos - CPEE</title>
-    <style>
-        /* ESTILOS GENERALES (MANTENIENDO TU ESTÉTICA OCRE) */
-        body { 
-            background-color: #fff1da; 
-            color: #000; 
-            font-family: 'Inter', sans-serif; 
-            padding: 20px; 
-            max-width: 900px; 
-            margin: auto; 
-        }
+    <title>Módulo 1: Fundamentos — Laboratorio CPEE</title>
 
-        /* CONTENEDOR DE LAS DIAPOSITIVAS */
-        .slide-container { 
-            position: relative; 
-            background: #fff; 
-            border: 2px solid #2B1B12; 
-            border-radius: 8px; 
-            padding: 40px; 
-            min-height: 400px; 
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.1); 
-            margin-top: 30px; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-        /* ESTILO DE CADA DIAPOSITIVA (OCULTAS POR DEFECTO) */
-        .slide { 
-            display: none; 
-            animation: fade 0.5s; 
-        }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
 
-        /* DIAPOSITIVA ACTIVA */
-        .active { 
-            display: block; 
-        }
+<style>
+:root {
+    --crema: #fff1da;
+    --crema-oscuro: #f5e3c0;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
 
-        @keyframes fade { 
-            from {opacity: 0.4} to {opacity: 1} 
-        }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-        /* TÍTULOS Y TEXTOS DENTRO DE LA DIAPO */
-        .slide h2 { 
-            color: #1B3022; 
-            border-bottom: 2px solid #1B3022; 
-            padding-bottom: 10px; 
-            margin-top: 0;
-        }
+body {
+    background-color: var(--crema);
+    color: var(--negro);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
 
-        .contenido-texto {
-            line-height: 1.8;
-            text-align: justify;
-            font-size: 1.1em;
-        }
+/* ─── MENÚ ─────────────────────────────────────────────── */
 
-        /* CAJA ESPECIAL PARA APLICACIÓN ECONÓMICA */
-        .app-economica { 
-            background: #f0ede6; 
-            padding: 15px; 
-            border-left: 4px solid #2a4939; 
-            margin-top: 20px; 
-            font-style: italic; 
-        }
+.menu-trigger {
+    position: fixed;
+    top: 22px; left: 24px;
+    z-index: 1100;
+    background: var(--cafe);
+    border: none;
+    border-radius: 8px;
+    width: 44px; height: 44px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: background 0.2s;
+}
+.menu-trigger:hover { background: var(--verde); }
+.menu-trigger span {
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--crema);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    transform-origin: center;
+}
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* BOTONES DE NAVEGACIÓN */
-        .nav-buttons { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-top: 30px; 
-        }
+.menu-overlay {
+    position: fixed; inset: 0;
+    background: rgba(43,27,18,0.45);
+    backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none;
+    z-index: 1050;
+    transition: opacity 0.3s ease;
+}
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
 
-        .btn { 
-            padding: 12px 25px; 
-            background: #2B1B12; 
-            color: #D7C4A5; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: bold; 
-            border-radius: 4px; 
-            transition: 0.3s;
-        }
+.menu-panel {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%; width: 280px;
+    background: var(--cafe);
+    z-index: 1090;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 80px 0 40px;
+}
+.menu-panel.abierto { transform: translateX(0); }
 
-        .btn:hover:not(:disabled) {
-            background: #3d261a;
-        }
+.menu-panel-logo {
+    padding: 0 28px 32px;
+    border-bottom: 1px solid rgba(215,196,165,0.2);
+    margin-bottom: 12px;
+}
+.menu-panel-logo span {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: #D7C4A5;
+    line-height: 1.3;
+    display: block;
+}
+.menu-panel-logo em {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.78rem;
+    color: rgba(215,196,165,0.55);
+    font-style: italic;
+}
+.menu-panel nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 28px;
+    color: #D7C4A5;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 400;
+    border-left: 3px solid transparent;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.menu-panel nav a:hover {
+    background: rgba(215,196,165,0.07);
+    border-left-color: var(--verde-medio);
+    color: #f0dfc0;
+}
+.menu-panel nav a .nav-num {
+    font-size: 0.7rem;
+    opacity: 0.4;
+    font-weight: 500;
+    min-width: 18px;
+}
 
-        .btn:disabled { 
-            background: #ccc; 
-            color: #666;
-            cursor: not-allowed; 
-        }
+/* ─── BREADCRUMB ───────────────────────────────────────── */
 
-        .counter { 
-            text-align: center; 
-            margin-top: 15px; 
-            font-weight: bold; 
-            color: #2B1B12; 
-        }
+.breadcrumb {
+    padding: 18px 48px 18px 90px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--cafe-claro);
+    opacity: 0.7;
+    border-bottom: 1px solid rgba(43,27,18,0.08);
+    flex-wrap: wrap;
+}
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--verde); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--verde); opacity: 1; }
 
-        .volver {
-            text-decoration: none; 
-            color: #2B1B12; 
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-    </style>
+/* ─── HEADER ────────────────────────────────────────────── */
+
+header {
+    position: relative;
+    padding: 48px 48px 40px;
+    border-bottom: 1px solid rgba(43,27,18,0.15);
+    overflow: hidden;
+}
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(42,73,57,0.1);
+}
+.header-bg-deco::after {
+    content: '';
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    border: 1px solid rgba(42,73,57,0.07);
+}
+.header-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.header-texto { flex: 1; }
+.header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+}
+.header-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px; height: 2px;
+    background: var(--verde);
+}
+header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--cafe);
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.2s forwards;
+}
+
+/* Progreso de módulo */
+.modulo-badge {
+    flex-shrink: 0;
+    background: rgba(42,73,57,0.08);
+    border: 1px solid rgba(42,73,57,0.15);
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+    align-self: center;
+}
+.modulo-badge .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--verde);
+    line-height: 1;
+    display: block;
+}
+.modulo-badge .etiqueta {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--verde);
+    opacity: 0.6;
+}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+
+main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+}
+
+/* ─── CONTENEDOR DE DIAPOSITIVAS ─────────────────────────── */
+
+.slide-wrapper {
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+}
+
+/* Barra de progreso */
+.progress-bar-outer {
+    height: 4px;
+    background: rgba(43,27,18,0.1);
+    border-radius: 4px;
+    margin-bottom: 4px;
+    overflow: hidden;
+}
+.progress-bar-inner {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.progress-texto {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cafe-claro);
+    opacity: 0.55;
+}
+.slide-counter-txt {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--verde);
+    opacity: 0.75;
+}
+
+/* Tarjeta de diapositiva */
+.slide-container {
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(43,27,18,0.1);
+    border-radius: 12px;
+    padding: 40px 40px 32px;
+    min-height: 340px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(43,27,18,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+}
+.slide-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--verde);
+    border-radius: 4px 0 0 4px;
+}
+
+/* Diapositivas */
+.slide {
+    display: none;
+    animation: fadeSlide 0.4s ease;
+    flex: 1;
+}
+.slide.active { display: block; }
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.slide h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: var(--cafe);
+    margin-bottom: 20px;
+    line-height: 1.3;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(43,27,18,0.1);
+}
+
+.contenido-texto {
+    font-size: 0.935rem;
+    color: var(--texto-suave);
+    line-height: 1.85;
+    text-align: justify;
+}
+
+.contenido-texto p { margin-bottom: 14px; }
+.contenido-texto p:last-child { margin-bottom: 0; }
+
+.contenido-texto ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+.contenido-texto ul li {
+    margin-bottom: 10px;
+    padding-left: 4px;
+}
+.contenido-texto ul li::marker {
+    color: var(--verde);
+}
+
+.contenido-texto em {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    color: var(--cafe-claro);
+}
+
+/* Caja de aplicación económica */
+.app-economica {
+    background: rgba(42,73,57,0.06);
+    border: 1px solid rgba(42,73,57,0.14);
+    border-left: 4px solid var(--verde);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-top: 20px;
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+    line-height: 1.7;
+}
+.app-economica strong {
+    color: var(--verde);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* ─── NAVEGACIÓN ─────────────────────────────────────────── */
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(43,27,18,0.08);
+    margin-top: 8px;
+}
+
+.btn-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--cafe);
+    color: #D7C4A5;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.2s;
+}
+.btn-nav:hover:not(:disabled) {
+    background: var(--verde);
+    transform: translateY(-1px);
+}
+.btn-nav:disabled {
+    background: rgba(43,27,18,0.1);
+    color: rgba(43,27,18,0.3);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.puntos-nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.punto {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(43,27,18,0.15);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+.punto.activo {
+    background: var(--verde);
+    transform: scale(1.25);
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+
+footer {
+    border-top: 1px solid rgba(43,27,18,0.15);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.82rem;
+    color: var(--cafe-claro);
+    background: rgba(43,27,18,0.03);
+}
+.footer-marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.95rem;
+    color: var(--cafe);
+}
+.footer-marca::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+}
+.footer-badge {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(42,73,57,0.1);
+    color: var(--verde);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+
+/* ─── ANIMACIONES ────────────────────────────────────────── */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .breadcrumb { padding: 14px 20px 14px 80px; }
+    header { padding: 40px 24px 32px; }
+    main { padding: 32px 24px 60px; }
+    .slide-container { padding: 28px 22px 24px; }
+    .modulo-badge { display: none; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+}
+</style>
 </head>
 <body>
 
-    <a href="matematicas_inicio.html" class="volver">← Volver al curso</a>
+<!-- ── BOTÓN MENÚ ─────────────────────────────────────── -->
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+</button>
 
-    <div class="slide-container">
-        
-        <div class="slide active">
-            <h2>¿Para que sirven las matemáticas en economía?</h2>
-            <div class="contenido-texto">
-                <p>En el análisis economico, las matemáticas cumplen funciones criticas que van mas allá del simple cálculo, las matemáticas:</p>
-                <ul>
-                    <li>Nos permite expresar suposiciones y conclusiones mediante símbolos y ecuaciones, evitando caer en ambiguedades.</li>
-                    <li>Al utilizar teoremas matemáticos, el analista se ve forzado a explicar todos los supuestos o condiciones necesarias para no perder el sentido económico.</li>
-                    <li>Las matemáticas nos permiten trabajar con <em>n</em> variables, permitiendonos hacer modelos que reflejen la realidad.</li>
-                    <li>Herramientas como el cálculo nos sirve para optimizar (maximizar ganancias o minimizar costos) y el ágebra lineal para analizar la interdependecia entre los distintos sectores de una economía.</li>               
-                </ul>
-                
-            </div>
-        </div>
+<!-- ── OVERLAY ────────────────────────────────────────── -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
-        <div class="slide">
-            <h2>Título de la Diapositiva 2</h2>
-            <div class="contenido-texto">
-                <p>Tu contenido para la segunda diapositiva.</p>
-                <div class="app-economica">
-                    <strong>Aplicación Económica:</strong> ....
-                </div>
-            </div>
-        </div>
+<!-- ── PANEL MENÚ ─────────────────────────────────────── -->
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo">
+        <span>Centro Popular de<br>Estudios Económicos</span>
+        <em>Ciencia Social aplicada</em>
+    </div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../../quienes-somos/index.html"><span class="nav-num">01</span> ¿Quiénes somos?</a>
+        <a href="../../mision/index.html"><span class="nav-num">02</span> Nuestra misión</a>
+        <a href="../../colaboraciones/index.html"><span class="nav-num">03</span> Colaboraciones</a>
+    </nav>
+</aside>
 
-        <div class="slide">
-            <h2>Título de la Diapositiva 3</h2>
-            <div class="contenido-texto">
-                <p>Tu contenido para la tercera diapositiva.</p>
-            </div>
+<!-- ── BREADCRUMB ─────────────────────────────────────── -->
+<div class="breadcrumb">
+    <a href="../../index.html">Inicio</a>
+    <span class="sep">/</span>
+    <a href="index.html">Laboratorio</a>
+    <span class="sep">/</span>
+    <a href="matematicas_inicio.html">Matemáticas para la Economía</a>
+    <span class="sep">/</span>
+    <span class="actual">Módulo 1</span>
+</div>
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Laboratorio · Matemáticas</p>
+            <h1>Módulo 1: Fundamentos</h1>
         </div>
-        <div class="controles-footer">
-            <div class="nav-buttons">
-                <button class="btn" id="prevBtn" onclick="changeSlide(-1)" disabled>Anterior</button>
-                <button class="btn" id="nextBtn" onclick="changeSlide(1)">Siguiente</button>
-            </div>
-            <div class="counter" id="slideCounter">Página 1 de 3</div>
+        <div class="modulo-badge">
+            <span class="num">01</span>
+            <span class="etiqueta">Módulo</span>
         </div>
     </div>
+</header>
 
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const counter = document.getElementById('slideCounter');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+<!-- ── MAIN ───────────────────────────────────────────── -->
+<main>
+    <div class="slide-wrapper">
 
-        function updateUI() {
-            // Actualizar el número de página
-            counter.innerText = `Página ${currentSlide + 1} de ${slides.length}`;
-            
-            // Bloquear/Desbloquear botones
-            prevBtn.disabled = (currentSlide === 0);
-            nextBtn.disabled = (currentSlide === slides.length - 1);
+        <!-- Barra de progreso -->
+        <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="progressBar" style="width: 33.3%"></div>
+        </div>
+        <div class="progress-label">
+            <span class="progress-texto">Progreso del módulo</span>
+            <span class="slide-counter-txt" id="slideCounter">1 / 3</span>
+        </div>
+
+        <!-- Tarjeta de diapositivas -->
+        <div class="slide-container">
+
+            <!-- ── DIAPOSITIVA 1 ── -->
+            <div class="slide active">
+                <h2>¿Para qué sirven las matemáticas en economía?</h2>
+                <div class="contenido-texto">
+                    <p>En el análisis económico, las matemáticas cumplen funciones críticas que van más allá del simple cálculo:</p>
+                    <ul>
+                        <li>Nos permiten expresar suposiciones y conclusiones mediante símbolos y ecuaciones, evitando caer en ambigüedades.</li>
+                        <li>Al utilizar teoremas matemáticos, el analista se ve forzado a explicar todos los supuestos o condiciones necesarias para no perder el sentido económico.</li>
+                        <li>Las matemáticas nos permiten trabajar con <em>n</em> variables, permitiéndonos hacer modelos que reflejen la realidad.</li>
+                        <li>Herramientas como el cálculo sirven para optimizar (maximizar ganancias o minimizar costos) y el álgebra lineal para analizar la interdependencia entre los distintos sectores de una economía.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ── DIAPOSITIVA 2 ── -->
+            <div class="slide">
+                <h2>Título de la Diapositiva 2</h2>
+                <div class="contenido-texto">
+                    <p>Tu contenido para la segunda diapositiva.</p>
+                    <div class="app-economica">
+                        <strong>Aplicación Económica</strong>
+                        ....
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── DIAPOSITIVA 3 ── -->
+            <div class="slide">
+                <h2>Título de la Diapositiva 3</h2>
+                <div class="contenido-texto">
+                    <p>Tu contenido para la tercera diapositiva.</p>
+                </div>
+            </div>
+
+            <!-- ── NAVEGACIÓN ── -->
+            <div class="nav-buttons">
+                <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
+                <div class="puntos-nav" id="puntos"></div>
+                <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────── -->
+<footer>
+    <div class="footer-marca">Centro Popular de Estudios Económicos</div>
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="footer-badge">En construcción</span>
+        <span>© 2026</span>
+    </div>
+</footer>
+
+<script>
+    /* ── Menú ── */
+    function toggleMenu() {
+        const btn     = document.getElementById('menuBtn');
+        const panel   = document.getElementById('menuPanel');
+        const overlay = document.getElementById('menuOverlay');
+        const abierto = panel.classList.contains('abierto');
+        btn.classList.toggle('abierto', !abierto);
+        panel.classList.toggle('abierto', !abierto);
+        overlay.classList.toggle('visible', !abierto);
+        panel.setAttribute('aria-hidden', abierto ? 'true' : 'false');
+        document.body.style.overflow = abierto ? '' : 'hidden';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const panel = document.getElementById('menuPanel');
+            if (panel.classList.contains('abierto')) toggleMenu();
         }
+    });
 
-        function changeSlide(n) {
-            // Quitar clase activa a la actual
-            slides[currentSlide].classList.remove('active');
-            
-            // Cambiar el índice
-            currentSlide += n;
-            
-            // Poner clase activa a la nueva
-            slides[currentSlide].classList.add('active');
-            
-            updateUI();
-        }
+    /* ── Diapositivas ── */
+    let currentSlide = 0;
+    const slides  = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progress = document.getElementById('progressBar');
+    const puntosContainer = document.getElementById('puntos');
 
-        // Inicializar el contador correctamente al cargar
+    // Generar puntos de navegación
+    slides.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.classList.add('punto');
+        if (i === 0) btn.classList.add('activo');
+        btn.addEventListener('click', () => goToSlide(i));
+        puntosContainer.appendChild(btn);
+    });
+
+    function updateUI() {
+        const total = slides.length;
+        counter.innerText = `${currentSlide + 1} / ${total}`;
+        prevBtn.disabled = (currentSlide === 0);
+        nextBtn.disabled = (currentSlide === total - 1);
+        progress.style.width = `${((currentSlide + 1) / total) * 100}%`;
+
+        document.querySelectorAll('.punto').forEach((p, i) => {
+            p.classList.toggle('activo', i === currentSlide);
+        });
+    }
+
+    function goToSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = n;
+        slides[currentSlide].classList.add('active');
         updateUI();
-    </script>
+    }
+
+    function changeSlide(n) {
+        goToSlide(currentSlide + n);
+    }
+
+    // Navegación con teclado
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+    });
+
+    updateUI();
+</script>
 </body>
 </html>
