@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+    <!-- TRADUCTOR DE MATEMÁTICAS (MathJax) -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Fundamentos — Laboratorio CPEE</title>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --crema: #fff1da;
+    --crema-oscuro: #f5e3c0;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--crema);
+    color: var(--negro);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* ─── MENÚ ─────────────────────────────────────────────── */
+
+.menu-trigger {
+    position: fixed;
+    top: 22px; left: 24px;
+    z-index: 1100;
+    background: var(--cafe);
+    border: none;
+    border-radius: 8px;
+    width: 44px; height: 44px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: background 0.2s;
+}
+.menu-trigger:hover { background: var(--verde); }
+.menu-trigger span {
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--crema);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    transform-origin: center;
+}
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.menu-overlay {
+    position: fixed; inset: 0;
+    background: rgba(43,27,18,0.45);
+    backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none;
+    z-index: 1050;
+    transition: opacity 0.3s ease;
+}
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
+
+.menu-panel {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%; width: 280px;
+    background: var(--cafe);
+    z-index: 1090;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 80px 0 40px;
+}
+.menu-panel.abierto { transform: translateX(0); }
+
+.menu-panel-logo {
+    padding: 0 28px 32px;
+    border-bottom: 1px solid rgba(215,196,165,0.2);
+    margin-bottom: 12px;
+}
+.menu-panel-logo span {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: #D7C4A5;
+    line-height: 1.3;
+    display: block;
+}
+.menu-panel-logo em {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.78rem;
+    color: rgba(215,196,165,0.55);
+    font-style: italic;
+}
+.menu-panel nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 28px;
+    color: #D7C4A5;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 400;
+    border-left: 3px solid transparent;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.menu-panel nav a:hover {
+    background: rgba(215,196,165,0.07);
+    border-left-color: var(--verde-medio);
+    color: #f0dfc0;
+}
+.menu-panel nav a .nav-num {
+    font-size: 0.7rem;
+    opacity: 0.4;
+    font-weight: 500;
+    min-width: 18px;
+}
+
+/* ─── BREADCRUMB ───────────────────────────────────────── */
+
+.breadcrumb {
+    padding: 18px 48px 18px 90px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--cafe-claro);
+    opacity: 0.7;
+    border-bottom: 1px solid rgba(43,27,18,0.08);
+    flex-wrap: wrap;
+}
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--verde); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--verde); opacity: 1; }
+
+/* ─── HEADER ────────────────────────────────────────────── */
+
+header {
+    position: relative;
+    padding: 48px 48px 40px;
+    border-bottom: 1px solid rgba(43,27,18,0.15);
+    overflow: hidden;
+}
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(42,73,57,0.1);
+}
+.header-bg-deco::after {
+    content: '';
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    border: 1px solid rgba(42,73,57,0.07);
+}
+.header-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.header-texto { flex: 1; }
+.header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+}
+.header-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px; height: 2px;
+    background: var(--verde);
+}
+header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--cafe);
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.2s forwards;
+}
+
+/* Progreso de módulo */
+.modulo-badge {
+    flex-shrink: 0;
+    background: rgba(42,73,57,0.08);
+    border: 1px solid rgba(42,73,57,0.15);
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+    align-self: center;
+}
+.modulo-badge .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--verde);
+    line-height: 1;
+    display: block;
+}
+.modulo-badge .etiqueta {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--verde);
+    opacity: 0.6;
+}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+
+main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+}
+
+/* ─── CONTENEDOR DE DIAPOSITIVAS ─────────────────────────── */
+
+.slide-wrapper {
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+}
+
+/* Barra de progreso */
+.progress-bar-outer {
+    height: 4px;
+    background: rgba(43,27,18,0.1);
+    border-radius: 4px;
+    margin-bottom: 4px;
+    overflow: hidden;
+}
+.progress-bar-inner {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.progress-texto {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cafe-claro);
+    opacity: 0.55;
+}
+.slide-counter-txt {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--verde);
+    opacity: 0.75;
+}
+
+/* Tarjeta de diapositiva */
+.slide-container {
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(43,27,18,0.1);
+    border-radius: 12px;
+    padding: 40px 40px 32px;
+    min-height: 340px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(43,27,18,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+}
+.slide-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--verde);
+    border-radius: 4px 0 0 4px;
+}
+
+/* Diapositivas */
+.slide {
+    display: none;
+    animation: fadeSlide 0.4s ease;
+    flex: 1;
+}
+.slide.active { display: block; }
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.slide h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: var(--cafe);
+    margin-bottom: 20px;
+    line-height: 1.3;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(43,27,18,0.1);
+}
+
+.contenido-texto {
+    font-size: 0.935rem;
+    color: var(--texto-suave);
+    line-height: 1.85;
+    text-align: justify;
+}
+
+.contenido-texto p { margin-bottom: 14px; }
+.contenido-texto p:last-child { margin-bottom: 0; }
+
+.contenido-texto ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+.contenido-texto ul li {
+    margin-bottom: 10px;
+    padding-left: 4px;
+}
+.contenido-texto ul li::marker {
+    color: var(--verde);
+}
+
+.contenido-texto em {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    color: var(--cafe-claro);
+}
+
+/* Caja de aplicación económica */
+.app-economica {
+    background: rgba(42,73,57,0.06);
+    border: 1px solid rgba(42,73,57,0.14);
+    border-left: 4px solid var(--verde);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-top: 20px;
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+    line-height: 1.7;
+}
+.app-economica strong {
+    color: var(--verde);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* ─── NAVEGACIÓN ─────────────────────────────────────────── */
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(43,27,18,0.08);
+    margin-top: 8px;
+}
+
+.btn-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--cafe);
+    color: #D7C4A5;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.2s;
+}
+.btn-nav:hover:not(:disabled) {
+    background: var(--verde);
+    transform: translateY(-1px);
+}
+.btn-nav:disabled {
+    background: rgba(43,27,18,0.1);
+    color: rgba(43,27,18,0.3);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.puntos-nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.punto {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(43,27,18,0.15);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+.punto.activo {
+    background: var(--verde);
+    transform: scale(1.25);
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+
+footer {
+    border-top: 1px solid rgba(43,27,18,0.15);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.82rem;
+    color: var(--cafe-claro);
+    background: rgba(43,27,18,0.03);
+}
+.footer-marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.95rem;
+    color: var(--cafe);
+}
+.footer-marca::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+}
+.footer-badge {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(42,73,57,0.1);
+    color: var(--verde);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+
+/* ─── ANIMACIONES ────────────────────────────────────────── */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .breadcrumb { padding: 14px 20px 14px 80px; }
+    header { padding: 40px 24px 32px; }
+    main { padding: 32px 24px 60px; }
+    .slide-container { padding: 28px 22px 24px; }
+    .modulo-badge { display: none; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── BOTÓN MENÚ ─────────────────────────────────────── -->
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+</button>
+
+<!-- ── OVERLAY ────────────────────────────────────────── -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+<!-- ── PANEL MENÚ ─────────────────────────────────────── -->
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo">
+        <span>Centro Popular de<br>Estudios Económicos</span>
+        <em>Ciencia Social aplicada</em>
+    </div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../../quienes-somos/index.html"><span class="nav-num">01</span> ¿Quiénes somos?</a>
+        <a href="../../mision/index.html"><span class="nav-num">02</span> Nuestra misión</a>
+        <a href="../../colaboraciones/index.html"><span class="nav-num">03</span> Colaboraciones</a>
+    </nav>
+</aside>
+
+<!-- ── BREADCRUMB ─────────────────────────────────────── -->
+<div class="breadcrumb">
+    <a href="../../index.html">Inicio</a>
+    <span class="sep">/</span>
+    <a href="index.html">Laboratorio</a>
+    <span class="sep">/</span>
+    <a href="matematicas_inicio.html">Matemáticas para la Economía</a>
+    <span class="sep">/</span>
+    <span class="actual">Módulo 1</span>
+</div>
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Laboratorio · Matemáticas</p>
+            <h1>Módulo 2: Álgebra</h1>
+        </div>
+        <div class="modulo-badge">
+            <span class="num">01</span>
+            <span class="etiqueta">Módulo</span>
+        </div>
+    </div>
+</header>
+
+<!-- ── MAIN ───────────────────────────────────────────── -->
+<main>
+    <div class="slide-wrapper">
+
+        <!-- Barra de progreso -->
+        <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="progressBar" style="width: 33.3%"></div>
+        </div>
+        <div class="progress-label">
+            <span class="progress-texto">Progreso del módulo</span>
+            <span class="slide-counter-txt" id="slideCounter">1 / 3</span>
+        </div>
+
+        <!-- Tarjeta de diapositivas -->
+        <div class="slide-container">
+<!-- ── TEMA 1: INTRODUCCIÓN AL ÁLGEBRA BÁSICA ── -->
+<!-- ── DIAPOSITIVA 1 ── -->
+<div class="slide active">
+    <h2>2.1 El Álgebra como Lenguaje Económico</h2>
+    <div class="contenido-texto">
+        <p>En aritmética trabajamos con números específicos ($5 + 3 = 8$). En álgebra, damos un salto hacia la generalización usando letras (variables) para representar cantidades que pueden cambiar.</p>
+        <p>En el análisis económico, las variables más comunes son:</p>
+        <ul>
+            <li>$P$: Precio de un bien o servicio.</li>
+            <li>$Q$: Cantidad producida o demandada.</li>
+            <li>$Y$: Ingreso (del inglés <em>Yield</em> o <em>Income</em>).</li>
+            <li>$C$: Costos de una empresa.</li>
+            <li>$\pi$: Beneficios o ganancias (Ingresos menos Costos).</li>
+        </ul>
+        <p>El álgebra nos permite escribir ecuaciones que muestran cómo se relacionan estas variables antes de conocer sus valores exactos. Para dominar los modelos económicos, primero debemos dominar las reglas de este lenguaje.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 2 ── -->
+<div class="slide">
+    <h2>2.2 Leyes de los Exponentes</h2>
+    <div class="contenido-texto">
+        <p>Los exponentes nos indican cuántas veces se multiplica una base por sí misma. Son fundamentales para calcular tasas de interés compuesto o modelar funciones de producción (como la de Cobb-Douglas).</p>
+        <p>Las reglas de oro que no puedes olvidar:</p>
+        <ul>
+            <li><strong>Multiplicación (se suman):</strong> $x^a \cdot x^b = x^{a+b}$</li>
+            <li><strong>División (se restan):</strong> $\frac{x^a}{x^b} = x^{a-b}$</li>
+            <li><strong>Potencia de potencia (se multiplican):</strong> $(x^a)^b = x^{a \cdot b}$</li>
+            <li><strong>Exponente cero:</strong> $x^0 = 1$ (para cualquier $x \neq 0$)</li>
+            <li><strong>Exponente negativo (se invierte):</strong> $x^{-a} = \frac{1}{x^a}$</li>
+            <li><strong>Exponente fraccionario (raíces):</strong> $x^{\frac{a}{b}} = \sqrt[b]{x^a}$</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 3 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Exponentes</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Simplificar factores de capital ($K$) y trabajo ($L$)</strong><br>
+        Multiplica: $(2K^3 L^2)(4K L^5)$<br>
+        <em>Paso 1:</em> Multiplica los coeficientes numéricos: $2 \cdot 4 = 8$<br>
+        <em>Paso 2:</em> Suma los exponentes de $K$: $K^3 \cdot K^1 = K^{3+1} = K^4$<br>
+        <em>Paso 3:</em> Suma los exponentes de $L$: $L^2 \cdot L^5 = L^{2+5} = L^7$<br>
+        <em>Resultado final:</em> $8K^4 L^7$</p>
+
+        <p><strong>Ejemplo 2: División y exponentes negativos</strong><br>
+        Simplifica: $\frac{15 Q^2 P^{-3}}{5 Q^5 P^{-1}}$<br>
+        <em>Paso 1:</em> Divide números: $\frac{15}{5} = 3$<br>
+        <em>Paso 2:</em> Resta exponentes de $Q$: $Q^{2-5} = Q^{-3}$<br>
+        <em>Paso 3:</em> Resta exponentes de $P$: $P^{-3 - (-1)} = P^{-3+1} = P^{-2}$<br>
+        <em>Resultado final:</em> $3 Q^{-3} P^{-2}$, o expresado sin negativos: $\frac{3}{Q^3 P^2}$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 4 ── -->
+<div class="slide">
+    <h2>2.3 Operaciones con Polinomios</h2>
+    <div class="contenido-texto">
+        <p>Un polinomio es una expresión algebraica formada por la suma o resta de varios términos. En economía, la función de beneficios de una empresa ($\pi$) suele ser la resta de dos polinomios: el Ingreso Total menos el Costo Total.</p>
+        <ul>
+            <li><strong>Suma y Resta:</strong> Solo puedes sumar o restar <em>términos semejantes</em> (aquellos que tienen exactamente las mismas letras y exponentes). $3Q^2$ y $5Q^2$ se pueden sumar, pero $3Q^2$ y $5Q$ no.</li>
+            <li><strong>Multiplicación:</strong> Todo término del primer paréntesis debe multiplicarse por todo término del segundo (propiedad distributiva). Ten mucho cuidado con la ley de los signos.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 5 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Polinomios</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Cálculo de Beneficios ($\pi = I - C$)</strong><br>
+        El Ingreso es $I = 50Q - 2Q^2$ y el Costo es $C = 10 + 5Q$. Calcula $\pi$.<br>
+        <em>Paso 1:</em> Plantea la resta: $\pi = (50Q - 2Q^2) - (10 + 5Q)$<br>
+        <em>Paso 2:</em> El signo menos cambia todos los signos del segundo paréntesis: $\pi = 50Q - 2Q^2 - 10 - 5Q$<br>
+        <em>Paso 3:</em> Agrupa términos semejantes (las $Q$ con las $Q$): $\pi = -2Q^2 + (50Q - 5Q) - 10$<br>
+        <em>Resultado final:</em> $\pi = -2Q^2 + 45Q - 10$</p>
+
+        <p><strong>Ejemplo 2: Multiplicación de binomios</strong><br>
+        Desarrolla: $(P + 3)(2P - 4)$<br>
+        <em>Paso 1:</em> Primeros términos: $P \cdot 2P = 2P^2$<br>
+        <em>Paso 2:</em> Externos e internos: $P(-4) + 3(2P) = -4P + 6P = 2P$<br>
+        <em>Paso 3:</em> Últimos términos: $3(-4) = -12$<br>
+        <em>Resultado final:</em> $2P^2 + 2P - 12$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 6 ── -->
+<div class="slide">
+    <h2>2.4 Factorización</h2>
+    <div class="contenido-texto">
+        <p>Factorizar es el proceso inverso de multiplicar: es descomponer una expresión en factores más pequeños. Es una herramienta vital para encontrar "puntos muertos" o equilibrios en economía.</p>
+        <p>Los tres métodos que más utilizarás son:</p>
+        <ol>
+            <li><strong>Factor Común:</strong> Extraer el término que se repite en todos lados. (Ej. $ax + ay = a(x+y)$).</li>
+            <li><strong>Diferencia de Cuadrados:</strong> Dos cosas al cuadrado restándose siempre se factorizan en binomios conjugados: $x^2 - y^2 = (x - y)(x + y)$.</li>
+            <li><strong>Trinomios de la forma $x^2 + bx + c$:</strong> Buscas dos números que sumados te den $b$ y multiplicados te den $c$.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 7 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Factorización</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Factor Común</strong><br>
+        Factoriza la función de costo total: $C = 15Q^3 - 5Q^2$<br>
+        <em>Paso 1:</em> El máximo común divisor de 15 y 5 es 5. La letra común con menor exponente es $Q^2$.<br>
+        <em>Paso 2:</em> Divides cada término entre $5Q^2$: $(15Q^3 / 5Q^2) = 3Q$ y $(-5Q^2 / 5Q^2) = -1$.<br>
+        <em>Resultado final:</em> $5Q^2(3Q - 1)$</p>
+
+        <p><strong>Ejemplo 2: Trinomio Cuadrático</strong><br>
+        Factoriza: $P^2 - 7P + 12$<br>
+        <em>Paso 1:</em> Abre dos paréntesis con $P$: $(P \quad)(P \quad)$<br>
+        <em>Paso 2:</em> Busca dos números que multiplicados den $+12$ y sumados den $-7$. Esos números son $-4$ y $-3$.<br>
+        <em>Resultado final:</em> $(P - 4)(P - 3)$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 8 ── -->
+<div class="slide">
+    <h2>2.5 Ecuaciones Lineales (De primer grado)</h2>
+    <div class="contenido-texto">
+        <p>Una ecuación es una balanza en equilibrio. Tu objetivo es encontrar el valor de la variable oculta (despejar). La regla universal del despeje es simple: <strong>Lo que le haces a un lado de la ecuación, tienes que hacérselo al otro.</strong></p>
+        <ul>
+            <li>Si algo está sumando, pasa restando.</li>
+            <li>Si algo está multiplicando, pasa dividiendo a <em>todo</em> el otro lado.</li>
+            <li><strong>Tip clave:</strong> Si la variable que buscas está negativa, es más fácil pasarla al otro lado sumando antes de continuar.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 9 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Ecuaciones Lineales</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Despeje directo</strong><br>
+        Resuelve: $4x - 8 = 12$<br>
+        <em>Paso 1:</em> Pasa el 8 sumando: $4x = 12 + 8 \implies 4x = 20$<br>
+        <em>Paso 2:</em> Pasa el 4 dividiendo: $x = \frac{20}{4} \implies x = 5$</p>
+
+        <p><strong>Ejemplo 2: Equilibrio de Mercado (Oferta = Demanda)</strong><br>
+        Sea la Demanda $Q_d = 100 - 2P$ y la Oferta $Q_s = 20 + 3P$. Encuentra el Precio de Equilibrio ($P$).<br>
+        <em>Paso 1:</em> Iguala ambas ecuaciones: $100 - 2P = 20 + 3P$<br>
+        <em>Paso 2:</em> Agrupa las $P$ de un lado y los números del otro: $100 - 20 = 3P + 2P$<br>
+        <em>Paso 3:</em> Simplifica: $80 = 5P$<br>
+        <em>Paso 4:</em> Despeja $P$: $P = \frac{80}{5} \implies P = 16$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 10 ── -->
+<div class="slide">
+    <h2>2.6 Ecuaciones Cuadráticas y Fórmula General</h2>
+    <div class="contenido-texto">
+        <p>Cuando la variable de tu ecuación está elevada al cuadrado ($ax^2 + bx + c = 0$), normalmente tendrás <strong>dos soluciones</strong>. Por ejemplo, una empresa podría tener beneficios iguales a cero en dos niveles de producción distintos.</p>
+        <p>Puedes resolverlas factorizando (como vimos antes) e igualando cada paréntesis a cero. Si la factorización es muy difícil, usamos la herramienta definitiva: la <strong>Fórmula General</strong>:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 15px 0;">
+            $$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
+        </p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 11 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Ecuaciones Cuadráticas</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Puntos de equilibrio resolviendo por factorización</strong><br>
+        Encuentra los valores de $Q$ donde los beneficios son cero: $Q^2 - 5Q + 6 = 0$<br>
+        <em>Paso 1:</em> Factoriza el trinomio (números que sumen -5 y multipliquen +6). Son -2 y -3.<br>
+        <em>Paso 2:</em> Escribe: $(Q - 2)(Q - 3) = 0$<br>
+        <em>Paso 3:</em> Para que la multiplicación sea cero, al menos un paréntesis debe ser cero. Igualamos: $Q - 2 = 0 \implies Q = 2$<br>
+        <em>Paso 4:</em> Igualamos el otro: $Q - 3 = 0 \implies Q = 3$<br>
+        <em>Resultado final:</em> La empresa no gana ni pierde produciendo 2 o 3 unidades.</p>
+
+        <p><strong>Ejemplo 2: Usando fórmula general en $2x^2 + 5x - 3 = 0$</strong><br>
+        <em>Paso 1:</em> Identifica $a=2, b=5, c=-3$.<br>
+        <em>Paso 2:</em> Sustituye: $x = \frac{-5 \pm \sqrt{5^2 - 4(2)(-3)}}{2(2)}$<br>
+        <em>Paso 3:</em> Simplifica la raíz: $\sqrt{25 + 24} = \sqrt{49} = 7$<br>
+        <em>Paso 4:</em> Calcula las dos raíces: $x_1 = \frac{-5 + 7}{4} = \frac{2}{4} = \frac{1}{2}$ y $x_2 = \frac{-5 - 7}{4} = \frac{-12}{4} = -3$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 12 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Álgebra Fundamental</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
+        <p>Resuelve en tu cuaderno paso a paso:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+                <strong>A. Leyes de los Exponentes</strong>
+                <ol>
+                    <li>$(3x^2)(4x^5)$</li>
+                    <li>$\frac{20y^7}{4y^3}$</li>
+                    <li>$(2P^3)^{-2}$</li>
+                </ol>
+                <strong>B. Polinomios</strong>
+                <ol start="4">
+                    <li>Suma: $(3Q^2 - 5Q + 2) + (Q^2 + 2Q - 8)$</li>
+                    <li>Multiplica: $(x - 5)(x + 5)$</li>
+                    <li>Resta: $(10P - 5) - (3P - 8)$</li>
+                </ol>
+            </div>
+            <div>
+                <strong>C. Factorización</strong>
+                <ol start="7">
+                    <li>$12x^3 - 4x^2$</li>
+                    <li>$P^2 - 25$</li>
+                    <li>$Q^2 - 8Q + 15$</li>
+                </ol>
+                <strong>D. Ecuaciones (Lineales y Cuadráticas)</strong>
+                <ol start="10">
+                    <li>$5x - 12 = 3x + 8$</li>
+                    <li>$3(P - 2) = 15$</li>
+                    <li>$x^2 - 9x + 14 = 0$</li>
+                    <li>$2Q^2 - 8 = 0$</li>
+                </ol>
+            </div>
+        </div>
+        <div style="margin-top: 15px;">
+            <strong>E. Aplicaciones Económicas</strong>
+            <ol start="14">
+                <li>Encuentra el precio de equilibrio si $Oferta = 10 + 4P$ y $Demanda = 100 - P$.</li>
+                <li>La función de beneficios es $\pi = -Q^2 + 10Q - 16$. Encuentra los dos niveles de producción ($Q$) donde los beneficios son cero ($\pi = 0$).</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+            <!-- ── NAVEGACIÓN ── -->
+            <div class="nav-buttons">
+                <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
+                <div class="puntos-nav" id="puntos"></div>
+                <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+            </div>
+
+        </div>
+    
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────── -->
+<footer>
+    <div class="footer-marca">Centro Popular de Estudios Económicos</div>
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="footer-badge">En construcción</span>
+        <span>© 2026</span>
+    </div>
+</footer>
+
+<script>
+    /* ── Menú ── */
+    function toggleMenu() {
+        const btn     = document.getElementById('menuBtn');
+        const panel   = document.getElementById('menuPanel');
+        const overlay = document.getElementById('menuOverlay');
+        const abierto = panel.classList.contains('abierto');
+        btn.classList.toggle('abierto', !abierto);
+        panel.classList.toggle('abierto', !abierto);
+        overlay.classList.toggle('visible', !abierto);
+        panel.setAttribute('aria-hidden', abierto ? 'true' : 'false');
+        document.body.style.overflow = abierto ? '' : 'hidden';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const panel = document.getElementById('menuPanel');
+            if (panel.classList.contains('abierto')) toggleMenu();
+        }
+    });
+
+    /* ── Diapositivas ── */
+    let currentSlide = 0;
+    const slides  = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progress = document.getElementById('progressBar');
+    const puntosContainer = document.getElementById('puntos');
+
+    // Generar puntos de navegación
+    slides.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.classList.add('punto');
+        if (i === 0) btn.classList.add('activo');
+        btn.addEventListener('click', () => goToSlide(i));
+        puntosContainer.appendChild(btn);
+    });
+
+    function updateUI() {
+        const total = slides.length;
+        counter.innerText = `${currentSlide + 1} / ${total}`;
+        prevBtn.disabled = (currentSlide === 0);
+        nextBtn.disabled = (currentSlide === total - 1);
+        progress.style.width = `${((currentSlide + 1) / total) * 100}%`;
+
+        document.querySelectorAll('.punto').forEach((p, i) => {
+            p.classList.toggle('activo', i === currentSlide);
+        });
+    }
+
+    function goToSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = n;
+        slides[currentSlide].classList.add('active');
+        updateUI();
+    }
+
+    function changeSlide(n) {
+        goToSlide(currentSlide + n);
+    }
+
+    // Navegación con teclado
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+    });
+
+    updateUI();
+</script>
+</body>
+</html>
