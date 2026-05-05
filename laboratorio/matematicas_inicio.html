@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-    <!-- TRADUCTOR DE MATEMÁTICAS (MathJax) -->
-    <script>
-        MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 <head>
+<!-- TRADUCTOR DE MATEMÁTICAS (MathJax) -->
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matemáticas para la Economía — Laboratorio CPEE</title>
@@ -229,7 +230,93 @@ header h1 {
     animation: fadeUp 0.7s ease 0.3s forwards;
 }
 
-/* ─── MAIN ───────────────────────────────────────────────── */
+/* ─── PANTALLA DE BLOQUEO ───────────────────────────────── */
+
+.pantalla-bloqueo {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 72px 48px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+    animation: fadeUp 0.6s ease 0.2s both;
+}
+
+.bloqueo-icono {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(42,73,57,0.07);
+    border: 1px solid rgba(42,73,57,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+}
+
+.bloqueo-titulo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--cafe);
+    margin-bottom: 10px;
+}
+
+.bloqueo-desc {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--cafe-claro);
+    margin-bottom: 32px;
+    max-width: 400px;
+}
+
+.bloqueo-divider {
+    width: 40px; height: 2px;
+    background: rgba(42,73,57,0.2);
+    margin: 0 auto 32px;
+}
+
+.btn-solicitar {
+    background: var(--verde);
+    color: var(--crema);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 14px rgba(42,73,57,0.2);
+}
+.btn-solicitar:hover {
+    background: var(--verde-medio);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42,73,57,0.25);
+}
+.btn-solicitar:disabled {
+    background: var(--cafe-claro);
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+}
+
+.bloqueo-mensaje {
+    margin-top: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--cafe-claro);
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ─── MAIN / CURSO ──────────────────────────────────────── */
 
 main {
     max-width: 820px;
@@ -264,7 +351,6 @@ main {
     gap: 18px;
 }
 
-/* Módulo activo */
 .modulo-card {
     display: block;
     text-decoration: none;
@@ -300,7 +386,6 @@ main {
 }
 .modulo-card:hover::before { height: 100%; }
 
-/* Módulo bloqueado */
 .modulo-bloqueado {
     opacity: 0.48;
     cursor: not-allowed;
@@ -314,7 +399,6 @@ main {
 }
 .modulo-bloqueado::before { display: none; }
 
-/* Contenido de la tarjeta */
 .modulo-num {
     font-size: 0.65rem;
     font-weight: 700;
@@ -327,8 +411,6 @@ main {
     align-items: center;
     gap: 8px;
 }
-
-/* Candado para bloqueados */
 .modulo-bloqueado .modulo-num::after {
     content: '🔒';
     font-size: 0.7rem;
@@ -352,7 +434,6 @@ main {
     color: var(--texto-suave);
     line-height: 1.65;
 }
-
 .modulo-card p em {
     font-family: 'Libre Baskerville', serif;
     font-size: 0.8rem;
@@ -411,6 +492,7 @@ footer {
     .breadcrumb { padding: 14px 20px 14px 80px; }
     header { padding: 40px 24px 36px; }
     main { padding: 40px 24px 60px; }
+    .pantalla-bloqueo { padding: 48px 24px 60px; }
     .grid-modulos { grid-template-columns: 1fr; }
     footer { padding: 24px; flex-direction: column; align-items: flex-start; }
 }
@@ -458,18 +540,19 @@ footer {
         <p class="header-desc">Selecciona un módulo para comenzar tu ruta de aprendizaje.</p>
     </div>
 </header>
-<!-- PANTALLA DE BLOQUEO -->
-<div id="pantalla-bloqueo" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh; text-align: center; padding: 40px;">
-    <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
-    <h2 style="color: #2B1B12; font-family: 'DM Serif Display', serif;">Curso Privado</h2>
-    <p style="color: #4a3828; margin-bottom: 20px;">Este curso requiere autorización previa del CPEE.</p>
-    
-    <button id="btnSolicitar" style="background-color: #2a4939; color: #fff1da; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold;">Solicitar Acceso</button>
-    
-    <p id="mensaje-solicitud" style="margin-top: 15px; font-weight: bold; color: #6b4c35;"></p>
+
+<!-- ── PANTALLA DE BLOQUEO ────────────────────────────── -->
+<div class="pantalla-bloqueo" id="pantalla-bloqueo">
+    <div class="bloqueo-icono">🔒</div>
+    <h2 class="bloqueo-titulo">Curso Privado</h2>
+    <p class="bloqueo-desc">Este curso requiere autorización previa del CPEE.</p>
+    <div class="bloqueo-divider"></div>
+    <button class="btn-solicitar" id="btnSolicitar">Solicitar Acceso</button>
+    <p class="bloqueo-mensaje" id="mensaje-solicitud"></p>
 </div>
-<!-- ── MAIN ───────────────────────────────────────────── -->
-<main id="contenido-curso" style="display: none;"></main>
+
+<!-- ── MAIN / CONTENIDO DEL CURSO ─────────────────────── -->
+<main id="contenido-curso" style="display: none;">
     <p class="seccion-label">Módulos del curso</p>
 
     <div class="grid-modulos">
@@ -494,100 +577,108 @@ footer {
 
     </div>
 </main>
-<!-- CEREBRO DE FIREBASE: CONTROL DE ACCESO Y PROGRESO -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
-            authDomain: "cpee-plataforma-a655a.firebaseapp.com",
-            projectId: "cpee-plataforma-a655a",
-            storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
-            messagingSenderId: "684415102099",
-            appId: "1:684415102099:web:3f2b649a34386677a87166"
-        };
+<!-- ── FIREBASE: CONTROL DE ACCESO Y PROGRESO ─────────── -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+        authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+        projectId: "cpee-plataforma-a655a",
+        storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+        messagingSenderId: "684415102099",
+        appId: "1:684415102099:web:3f2b649a34386677a87166"
+    };
 
-        // Conexión con la pantalla
-        const contenidoCurso = document.getElementById("contenido-curso");
-        const pantallaBloqueo = document.getElementById("pantalla-bloqueo");
-        const btnSolicitar = document.getElementById("btnSolicitar");
-        const mensajeSolicitud = document.getElementById("mensaje-solicitud");
-        const btnCompletar = document.getElementById("btnCompletarM1");
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        function marcarBotonComoCompletado() {
-            if(btnCompletar) {
-                btnCompletar.innerText = "✅ Módulo 1 Completado";
-                btnCompletar.style.backgroundColor = "#6b4c35";
-                btnCompletar.disabled = true;
-                btnCompletar.style.cursor = "default";
-            }
+    const contenidoCurso  = document.getElementById("contenido-curso");
+    const pantallaBloqueo = document.getElementById("pantalla-bloqueo");
+    const btnSolicitar    = document.getElementById("btnSolicitar");
+    const mensajeSolicitud = document.getElementById("mensaje-solicitud");
+    const btnCompletar    = document.getElementById("btnCompletarM1");
+
+    function marcarBotonComoCompletado() {
+        if (btnCompletar) {
+            btnCompletar.innerText = "✅ Módulo 1 Completado";
+            btnCompletar.style.backgroundColor = "#6b4c35";
+            btnCompletar.disabled = true;
+            btnCompletar.style.cursor = "default";
         }
+    }
 
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = "../login.html"; // Lo expulsa si no hay cuenta
-            } else {
-                const docRef = doc(db, "progreso_usuarios", user.uid);
-                const docSnap = await getDoc(docRef);
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "../login.html";
+        } else {
+            const docRef  = doc(db, "progreso_usuarios", user.uid);
+            const docSnap = await getDoc(docRef);
 
-                let tieneAcceso = false;
-                let estadoSolicitud = null;
+            let tieneAcceso      = false;
+            let estadoSolicitud  = null;
 
-                // Revisar la libreta para ver si ya tiene la llave
-                if (docSnap.exists()) {
-                    tieneAcceso = docSnap.data().acceso_matematicas === true;
-                    estadoSolicitud = docSnap.data().estado_solicitud_matematicas;
+            if (docSnap.exists()) {
+                tieneAcceso     = docSnap.data().acceso_matematicas === true;
+                estadoSolicitud = docSnap.data().estado_solicitud_matematicas;
+            }
+
+            if (tieneAcceso) {
+                pantallaBloqueo.style.display = "none";
+                contenidoCurso.style.display  = "block";
+
+                if (docSnap.exists() && docSnap.data().modulo1_completado === true) {
+                    marcarBotonComoCompletado();
                 }
 
-                if (tieneAcceso) {
-                    // ¡TIENE LA LLAVE! Ocultar candado y mostrar clase
-                    pantallaBloqueo.style.display = "none";
-                    contenidoCurso.style.display = "block";
-
-                    // Lógica del progreso (si ya lo había completado)
-                    if (docSnap.exists() && docSnap.data().modulo1_completado === true) {
-                        marcarBotonComoCompletado();
-                    }
-
-                    if(btnCompletar) {
-                        btnCompletar.addEventListener("click", async () => {
-                            btnCompletar.innerText = "Guardando..."; 
-                            await setDoc(docRef, {
-                                correo: user.email,
-                                modulo1_completado: true,
-                                fecha_completado: new Date()
-                            }, { merge: true });
-                            marcarBotonComoCompletado();
-                        });
-                    }
-
-                } else {
-                    // NO TIENE LA LLAVE. Mostrar candado.
-                    if (estadoSolicitud === "pendiente") {
-                        btnSolicitar.style.display = "none";
-                        mensajeSolicitud.innerText = "⏳ Tu solicitud está siendo revisada por la coordinación.";
-                    }
-
-                    // Programar botón de solicitar
-                    btnSolicitar.addEventListener("click", async () => {
-                        btnSolicitar.innerText = "Enviando...";
+                if (btnCompletar) {
+                    btnCompletar.addEventListener("click", async () => {
+                        btnCompletar.innerText = "Guardando...";
                         await setDoc(docRef, {
                             correo: user.email,
-                            estado_solicitud_matematicas: "pendiente"
+                            modulo1_completado: true,
+                            fecha_completado: new Date()
                         }, { merge: true });
-                        
-                        btnSolicitar.style.display = "none";
-                        mensajeSolicitud.innerText = "✅ Solicitud enviada. Espera la autorización del CPEE.";
+                        marcarBotonComoCompletado();
                     });
                 }
+
+            } else {
+                if (estadoSolicitud === "pendiente") {
+                    btnSolicitar.style.display = "none";
+                    mensajeSolicitud.innerText = "⏳ Tu solicitud está siendo revisada por la coordinación.";
+                }
+
+                btnSolicitar.addEventListener("click", async () => {
+                    btnSolicitar.disabled  = true;
+                    btnSolicitar.innerText = "Enviando...";
+                    await setDoc(docRef, {
+                        correo: user.email,
+                        estado_solicitud_matematicas: "pendiente"
+                    }, { merge: true });
+                    btnSolicitar.style.display = "none";
+                    mensajeSolicitud.innerText = "✅ Solicitud enviada. Espera la autorización del CPEE.";
+                });
             }
-        });
-    </script>
+        }
+    });
+</script>
+
+<script>
+function toggleMenu() {
+    const btn     = document.getElementById("menuBtn");
+    const panel   = document.getElementById("menuPanel");
+    const overlay = document.getElementById("menuOverlay");
+    const abierto = btn.classList.toggle("abierto");
+    panel.classList.toggle("abierto", abierto);
+    overlay.classList.toggle("visible", abierto);
+    panel.setAttribute("aria-hidden", String(!abierto));
+}
+</script>
+
 </body>
 </html>
