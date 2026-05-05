@@ -601,38 +601,309 @@ footer {
                 </div>
             </div>
 
-            <!-- ── DIAPOSITIVA 2 ── -->
-            <div class="slide">
-                <h2>1.1 Lógica Proposicional</h2>
-                <div class="contenido-texto">
-                    <p>La lógica proposicional es el cimiento de cualquier demostración matemática y modelo económico. Nos permite estructurar argumentos sin ambigüedades.</p>
-                    <ul>
-                        <li><strong>Proposición:</strong> Es un enunciado que puede ser verdadero ($V$) o falso ($F$), pero no ambas cosas a la vez. <em>Ejemplo: "La tasa de interés aumentó."</em></li>
-                        <li><strong>Conectivos Lógicos:</strong> Nos permiten unir proposiciones simples para crear modelos más complejos:
-                            <ul style="margin-top: 10px; margin-bottom: 10px;">
-                                <li><strong>Conjunción (Y):</strong> $p \land q$. Ambas condiciones deben cumplirse simultáneamente.</li>
-                                <li><strong>Disyunción (O):</strong> $p \lor q$. Al menos una de las condiciones se cumple.</li>
-                                <li><strong>Implicación (Si... entonces):</strong> $p \implies q$. Es la base de las teorías económicas. <em>Ejemplo: "Si la demanda supera la oferta ($p$), entonces el precio sube ($q$)."</em></li>
-                                <li><strong>Bicondicional (Si y solo si):</strong> $p \iff q$. Se usa para establecer equivalencias exactas.</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <!-- ── TEMA 1: LÓGICA PROPOSICIONAL (Sin tablas de verdad) ── -->
+<!-- ── DIAPOSITIVA 2 ── -->
+<div class="slide">
+    <h2>1.1 Lógica Proposicional: Conceptos Básicos</h2>
+    <div class="contenido-texto">
+        <p>Iniciamos con la <strong>proposición</strong>: una afirmación que solo puede ser verdadera ($V$) o falsa ($F$). Los <strong>conectivos lógicos</strong> nos permiten crear argumentos complejos a partir de ideas simples:</p>
+        <ul>
+            <li><strong>Negación ($\neg p$):</strong> Afirma exactamente lo contrario a $p$.</li>
+            <li><strong>Conjunción ($p \land q$):</strong> "Y". Exige que ambas condiciones se cumplan estrictamente al mismo tiempo.</li>
+            <li><strong>Disyunción ($p \lor q$):</strong> "O". Es flexible; basta con que al menos una condición sea cierta para que todo el enunciado lo sea.</li>
+            <li><strong>Implicación ($p \implies q$):</strong> "Si $p$, entonces $q$". Establece una relación causa-efecto o de condición suficiente. Es la base de cualquier teorema matemático.</li>
+            <li><strong>Bicondicional ($p \iff q$):</strong> "Si y solo si". Significa que $p$ y $q$ son equivalentes; no puede ocurrir una sin la otra.</li>
+        </ul>
+    </div>
+</div>
 
-            <!-- ── DIAPOSITIVA 3 ── -->
-            <div class="slide">
-                <h2>Título de la Diapositiva 3</h2>
-                <div class="contenido-texto">
-                    <p>Tu contenido para la tercera diapositiva.</p>
-                <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
+<!-- ── DIAPOSITIVA 3 ── -->
+<div class="slide">
+    <h2>1.2 Tautologías y Equivalencias</h2>
+    <div class="contenido-texto">
+        <p>En lugar de memorizar escenarios mecánicos, en matemáticas buscamos identificar estructuras lógicas que siempre funcionan:</p>
+        <ul>
+            <li><strong>Tautología:</strong> Un argumento que siempre es verdadero por su pura estructura lógica, sin importar de qué estemos hablando. Por ejemplo, la frase "Llueve o no llueve" ($p \lor \neg p$) es una verdad absoluta indiscutible.</li>
+            <li><strong>Contradicción:</strong> Algo que es imposible por definición. Por ejemplo, "Subió y no subió" ($p \land \neg p$).</li>
+            <li><strong>Leyes de De Morgan:</strong> Son trucos de oro para negar ideas agrupadas.
+                <ul style="margin-top: 5px;">
+                    <li>Negar que pasaron <em>ambas</em> cosas ($\neg(p \land q)$), es lo mismo que decir que falló la primera <em>o</em> falló la segunda ($\neg p \lor \neg q$).</li>
+                    <li>Negar que pasó <em>al menos una</em> de las dos ($\neg(p \lor q)$), es lo mismo que decir que no pasó la primera <em>y</em> tampoco la segunda ($\neg p \land \neg q$).</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 4 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Lógica Proposicional</h2>
+    <div class="contenido-texto">
+        <p>Realiza los siguientes ejercicios analíticos en tu cuaderno:</p>
+        <ol>
+            <li><strong>Traducción:</strong> Sean $p$: "Hay inflación" y $q$: "El banco central interviene". Escribe en lenguaje natural las siguientes expresiones formales: 
+                <ul>
+                    <li>$p \implies q$</li>
+                    <li>$\neg q \implies \neg p$</li>
+                </ul>
+                ¿Tienen el mismo significado en la vida real?
+            </li>
+            <li><strong>Aplicación de De Morgan:</strong> Un reglamento dice: "Para aprobar necesitas entregar la tesis ($t$) Y pasar el examen ($e$)". Si un estudiante reprueba, ¿cómo expresas lógicamente lo que le faltó usando la Ley de De Morgan?</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── TEMA 2: LÓGICA DE PREDICADOS (Simplificada) ── -->
+<!-- ── DIAPOSITIVA 5 ── -->
+<div class="slide">
+    <h2>1.3 Lógica de Predicados: De lo particular a lo general</h2>
+    <div class="contenido-texto">
+        <p>Una proposición normal dice: <em>"Juan es estudiante"</em>. Es fácil saber si es verdad. Pero un <strong>predicado</strong> usa variables: <em>"$x$ es estudiante"</em>. No podemos saber si es verdad hasta saber quién es $x$ o a cuántos nos referimos.</p>
+        <p>Para eso usamos los <strong>cuantificadores</strong>, que nos dicen de cuántos elementos estamos hablando:</p>
+        <ul>
+            <li><strong>Cuantificador Universal ($\forall$):</strong> Significa "Para todos". <br>
+            <em>Ejemplo: $\forall x$, $x$ necesita comer. (Todos necesitan comer).</em></li>
+            <li><strong>Cuantificador Existencial ($\exists$):</strong> Significa "Existe al menos uno" (puede haber más, pero mínimo hay uno). <br>
+            <em>Ejemplo: $\exists x$ tal que $x$ tiene un millón de dólares. (Alguien es millonario).</em></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 6 ── -->
+<div class="slide">
+    <h2>1.4 ¿Cómo contradecir a alguien? (Negación de Cuantificadores)</h2>
+    <div class="contenido-texto">
+        <p>Negar cuantificadores es simplemente usar el sentido común para ganar un debate:</p>
+        <ul>
+            <li><strong>Para negar un "Todos" ($\forall$):</strong> <br>
+            Si yo afirmo: <em>"Todos los cisnes son blancos"</em>, tú no necesitas revisar cada cisne del mundo para demostrar que miento. Solo necesitas traerme <strong>un</strong> cisne que sea negro. <br>
+            <strong>Regla:</strong> $\neg (\forall x, P(x))$ se convierte en $\exists x, \neg P(x)$.</li>
+            <br>
+            <li><strong>Para negar un "Existe" ($\exists$):</strong> <br>
+            Si yo afirmo: <em>"Existe un monstruo debajo de la cama"</em>, para demostrar que miento, tú tienes que encender la luz y comprobar que <strong>ninguno</strong> de los rincones tiene un monstruo. <br>
+            <strong>Regla:</strong> $\neg (\exists x, P(x))$ se convierte en $\forall x, \neg P(x)$.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 7 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Lógica de Predicados</h2>
+    <div class="contenido-texto">
+        <p>Pon a prueba tu intuición con estos ejercicios:</p>
+        <ol>
+            <li>Escribe usando los símbolos $\forall$ o $\exists$ la siguiente frase matemática: "Existe al menos un número real $x$ que, al multiplicarse por cero, da como resultado uno". ¿Es verdadera o falsa?</li>
+            <li>Un político afirma: "Todos los programas sociales reducen la pobreza" ($\forall x, R(x)$). Si fueras un investigador que quiere demostrar que el político miente, ¿qué tendrías que encontrar en los datos? Escribe tu objetivo usando símbolos lógicos.</li>
+            <li>Traduce la frase "No hay reglas sin excepciones" al lenguaje de cuantificadores usando $\forall$ (Todos) y $\exists$ (Existe).</li>
+        </ol>
+    </div>
+</div>
+<!-- ── TEMA 3: MÉTODOS DE DEMOSTRACIÓN ── -->
+<!-- ── DIAPOSITIVA 8 ── -->
+<div class="slide">
+    <h2>1.5 Métodos de Demostración: El arte de probar</h2>
+    <div class="contenido-texto">
+        <p>En matemáticas, no basta con que algo parezca cierto; hay que <strong>demostrarlo</strong> sin dejar lugar a dudas. Toda demostración parte de supuestos conocidos (hipótesis, $p$) para llegar a una conclusión irrebatible ($q$).</p>
+        <ul>
+            <li><strong>Demostración Directa:</strong> Es el camino recto. Asumimos que $p$ es verdadero y, mediante álgebra y lógica paso a paso, llegamos a $q$.<br>
+            <em>Ejemplo:</em> Demostrar que "Si $x$ es un número par, entonces $x^2$ es par". Asumes que $x = 2k$, lo elevas al cuadrado ($4k^2$) y factorizas un 2 para probarlo: $2(2k^2)$.</li>
+        </ul>
+        <p>Pero a veces, el camino directo es muy complicado. Para eso existen las estrategias indirectas.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 9 ── -->
+<div class="slide">
+    <h2>1.6 Demostración por Contrapositiva y Contradicción</h2>
+    <div class="contenido-texto">
+        <p>Cuando probar $p \implies q$ es difícil, usamos trucos lógicos:</p>
+        <ul>
+            <li><strong>Por Contrapositiva:</strong> Lógicamente, decir "Si llueve, el piso se moja" es exactamente igual a decir "Si el piso NO está mojado, entonces NO llovió". <br>
+            En lugar de probar $p \implies q$, probamos su equivalente: $\neg q \implies \neg p$. A veces, trabajar con las negaciones hace el álgebra mucho más fácil.</li>
+            <br>
+            <li><strong>Por Contradicción (Reducción al absurdo):</strong> Es el método del investigador. Asumimos que lo que queremos probar es falso y seguimos las reglas matemáticas hasta llegar a algo imposible (como $1 = 0$). Como la matemática no se equivoca, nuestro supuesto inicial debió ser el error, probando así que la afirmación original era cierta.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 10 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Métodos de Demostración</h2>
+    <div class="contenido-texto">
+        <p>Aplica la lógica de demostración en los siguientes casos:</p>
+        <ol>
+            <li><strong>Directa:</strong> Demuestra que la suma de dos números impares siempre da como resultado un número par. <em>(Pista: Un número impar se escribe como $2k + 1$).</em></li>
+            <li><strong>Contrapositiva:</strong> Queremos demostrar la frase: "Si $3x + 2$ es impar, entonces $x$ es impar". ¿Cuál sería la afirmación contrapositiva que tendrías que demostrar? Escríbela en lenguaje natural.</li>
+            <li><strong>Contradicción (Análisis de argumento):</strong> Un abogado dice: "Asumamos que mi cliente robó el banco. Si lo hizo, debió estar en la ciudad a las 3 PM. Pero las cámaras lo ubican en otro país a esa hora". ¿Por qué esto demuestra la inocencia del cliente usando reducción al absurdo?</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── TEMA 4: TEORÍA DE CONJUNTOS ── -->
+<!-- ── DIAPOSITIVA 11 ── -->
+<div class="slide">
+    <h2>1.7 Teoría de Conjuntos: El alfabeto de las matemáticas</h2>
+    <div class="contenido-texto">
+        <p>Un <strong>conjunto</strong> es simplemente una colección bien definida de objetos o números, a los que llamamos <strong>elementos</strong>. Casi toda la matemática moderna está escrita en lenguaje de conjuntos.</p>
+        <ul>
+            <li><strong>Pertenencia ($\in$):</strong> Indica que un elemento vive dentro del conjunto. Si $A = \{1, 2, 3\}$, entonces $2 \in A$ (2 pertenece a A), pero $5 \notin A$ (5 no pertenece a A).</li>
+            <li><strong>Subconjunto ($\subseteq$):</strong> Decimos que $B$ es subconjunto de $A$ si <em>todos</em> los elementos de $B$ también están dentro de $A$.</li>
+            <li><strong>Conjunto Vacío ($\emptyset$):</strong> Es el conjunto que no tiene ningún elemento. Es un concepto filosófico poderoso: la nada también es un conjunto y es subconjunto de todos los demás.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 12 ── -->
+<div class="slide">
+    <h2>1.8 Operaciones con Conjuntos</h2>
+    <div class="contenido-texto">
+        <p>Podemos combinar conjuntos de la misma forma que sumamos o restamos números. Estas operaciones están directamente conectadas con los conectivos lógicos que ya aprendimos :</p>
+        <ul>
+            <li><strong>Unión ($A \cup B$):</strong> Junta todos los elementos de $A$ con los de $B$. Está conectada con la disyunción lógica "O" ($p \lor q$).</li>
+            <li><strong>Intersección ($A \cap B$):</strong> Toma <em>únicamente</em> los elementos que tienen en común. Está conectada con la conjunción lógica "Y" ($p \land q$).</li>
+            <li><strong>Diferencia ($A \setminus B$):</strong> A los elementos del conjunto $A$, le quitamos cualquiera que también esté en $B$.</li>
+            <li><strong>Complemento ($A^c$):</strong> Son todos los elementos del universo que NO están en $A$. Está conectado con la negación lógica ($\neg p$).</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 13 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Teoría de Conjuntos</h2>
+    <div class="contenido-texto">
+        <p>Sean los siguientes conjuntos. Universo $U = \{1, 2, 3, 4, 5, 6, 7, 8, 9\}$, $A = \{2, 4, 6, 8\}$ y $B = \{3, 4, 5, 6\}$.</p>
+        <ol>
+            <li>Encuentra los elementos que forman la intersección: $A \cap B$.</li>
+            <li>Encuentra los elementos que forman la diferencia: $A \setminus B$. ¿Es el mismo resultado que $B \setminus A$?</li>
+            <li>Calcula el complemento de $A$ ($A^c$) y luego encuentra la intersección de ese resultado con el conjunto $B$. Es decir, resuelve: $A^c \cap B$.</li>
+            <li>Analiza lógicamente: Si sabes que la intersección de dos conjuntos está vacía ($X \cap Y = \emptyset$), ¿qué puedes concluir sobre los elementos de $X$ y $Y$?</li>
+        </ol>
+    </div>
+</div>
+<!-- ── TEMA 5: RELACIONES ── -->
+<!-- ── DIAPOSITIVA 14 ── -->
+<div class="slide">
+    <h2>1.9 Producto Cartesiano y Relaciones</h2>
+    <div class="contenido-texto">
+        <p>Antes de hablar de funciones, necesitamos entender cómo interactúan los elementos de dos conjuntos distintos.</p>
+        <ul>
+            <li><strong>Producto Cartesiano ($A \times B$):</strong> Es el conjunto de <em>todos</em> los pares ordenados $(a, b)$ que se pueden formar tomando el primer elemento del conjunto $A$ y el segundo del conjunto $B$. Es la base matemática de cualquier sistema de coordenadas.</li>
+            <li><strong>Relación:</strong> Una relación matemática de $A$ en $B$ es, formalmente, cualquier subconjunto del producto cartesiano. Es decir, es una regla que asocia <em>algunos</em> elementos de un conjunto con los de otro, sin restricciones estrictas.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 15 ── -->
+<div class="slide">
+    <h2>1.10 Propiedades de las Relaciones</h2>
+    <div class="contenido-texto">
+        <p>Si analizamos una relación dentro de un mismo conjunto (elementos relacionándose entre sí mismos), esta puede tener ciertas propiedades lógicas:</p>
+        <ul>
+            <li><strong>Reflexiva:</strong> Todo elemento está relacionado consigo mismo. ($x$ se relaciona con $x$). Ejemplo clásico: El signo de igualdad ($=$).</li>
+            <li><strong>Simétrica:</strong> Si $x$ está relacionado con $y$, entonces $y$ está forzosamente relacionado con $x$. Ejemplo: "Ser hermano de".</li>
+            <li><strong>Transitiva:</strong> Si $x$ se relaciona con $y$, y a su vez $y$ se relaciona con $z$, entonces $x$ se relaciona con $z$. Ejemplo: "Ser mayor que" ($>$).</li>
+        </ul>
+        <p>Si una relación matemática cumple estas tres propiedades al mismo tiempo, se le llama <strong>Relación de Equivalencia</strong>.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 16 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Relaciones</h2>
+    <div class="contenido-texto">
+        <p>Analiza las siguientes relaciones y determina sus propiedades lógicas:</p>
+        <ol>
+            <li>Si $A = \{1, 2\}$ y $B = \{x, y\}$, escribe todos los pares ordenados que conforman el producto cartesiano $A \times B$.</li>
+            <li>Considera la relación "ser amigo de" en una red social como Facebook. Analiza lógicamente: ¿Es reflexiva? ¿Es simétrica? ¿Es transitiva? Justifica cada respuesta.</li>
+            <li>En el conjunto de los números naturales, analiza la relación "es múltiplo de" (ej. 4 es múltiplo de 2). Determina si esta relación cumple con las propiedades reflexiva, simétrica y transitiva.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── TEMA 6: FUNCIONES ── -->
+<!-- ── DIAPOSITIVA 17 ── -->
+<div class="slide">
+    <h2>1.11 Funciones: La máquina matemática</h2>
+    <div class="contenido-texto">
+        <p>Una <strong>función</strong> es un tipo muy especial y estricto de relación. Es una regla de correspondencia que asigna a <em>cada</em> elemento de un conjunto inicial <strong>exactamente un</strong> elemento de un conjunto final.</p>
+        <ul>
+            <li><strong>Dominio:</strong> Todos los valores de entrada permitidos (las $x$).</li>
+            <li><strong>Codominio y Rango:</strong> El codominio es el conjunto de llegada posible. El <strong>rango</strong> (o imagen) son los valores que <em>realmente</em> escupe la función (las $y$).</li>
+        </ul>
+        <p><em>Regla de oro:</em> De un elemento del dominio solo puede salir una flecha. Una función es como una máquina predecible: no puedes meter un $2$ y que a veces te devuelva un $4$ y a veces un $5$.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 18 ── -->
+<div class="slide">
+    <h2>1.12 Inyectividad, Suprayectividad y Biyectividad</h2>
+    <div class="contenido-texto">
+        
+        <p>Clasificamos las funciones según cómo interactúan con el conjunto de llegada:</p>
+        <ul>
+            <li><strong>Inyectiva (Uno a uno):</strong> Nunca dos elementos diferentes del dominio ($x$) dan el mismo resultado en el rango ($y$). <br>
+            <em>Formalmente:</em> Si $f(x_1) = f(x_2) \implies x_1 = x_2$.</li>
+            <li><strong>Suprayectiva (Sobre):</strong> El rango cubre la totalidad del codominio. Ningún elemento del conjunto de llegada se queda "solo" sin ser apuntado por la regla de la función.</li>
+            <li><strong>Biyectiva:</strong> Es inyectiva y suprayectiva al mismo tiempo. Es una correspondencia perfecta, sin que sobre ni falte nada. <em>Solo las funciones biyectivas tienen función inversa ($f^{-1}$).</em></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 19 ── -->
+<div class="slide">
+    <h2>1.13 Composición de Funciones</h2>
+    <div class="contenido-texto">
+        <p>A menudo necesitamos evaluar el resultado de una función directamente dentro de otra. Esto se llama <strong>composición</strong> y se denota como $(g \circ f)(x)$, que significa evaluar $g(f(x))$.</p>
+        <p>Funciona como una línea de ensamblaje en una fábrica:</p>
+        <ol>
+            <li>Tomas un valor $x$ y lo procesas en la máquina $f$.</li>
+            <li>La máquina $f$ te devuelve un resultado intermedio.</li>
+            <li>Tomas ese resultado intermedio y lo metes inmediatamente en la máquina $g$ para obtener el valor final.</li>
+        </ol>
+        <p><em>Ojo matemático:</em> En general, el orden de las operaciones altera el producto. Evaluar $g(f(x))$ casi nunca es igual a evaluar $f(g(x))$.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 20 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Funciones</h2>
+    <div class="contenido-texto">
+        <p>Aplica los conceptos estrictos de funciones en estos ejercicios:</p>
+        <ol>
+            <li>Identifica si la siguiente relación es una función: "A cada persona en un país se le asigna su número de teléfono celular". <em>(Pista: Analiza qué pasa si alguien tiene dos líneas a su nombre bajo la regla de "exactamente un" elemento).</em></li>
+            <li>Determina si la función $f(x) = x^2$ (definida para todos los números reales) es inyectiva. Justifica usando la definición formal matemática.</li>
+            <li>Sean $f(x) = 2x + 1$ y $g(x) = x^2$. Calcula:
+                <ul>
+                    <li>La composición $(g \circ f)(x)$</li>
+                    <li>La composición $(f \circ g)(x)$</li>
+                </ul>
+                ¿Los resultados son equivalentes?
+            </li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 21: CIERRE DEL MÓDULO ── -->
+<div class="slide">
+    <h2 style="color: #2a4939; text-align: center; margin-bottom: 20px;">¡Felicidades! Has completado el Módulo 1</h2>
+    <div class="contenido-texto" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 15px;">🎓</div>
+        <p>Has construido los cimientos analíticos necesarios para adentrarte en las matemáticas superiores sin temor al rigor formal.</p>
+        <p style="margin-top: 15px;">Ahora dominas:</p>
+        <ul style="text-align: left; display: inline-block; margin-top: 10px;">
+            <li>La estructura lógica para construir argumentos irrebatibles ($p \implies q$).</li>
+            <li>El uso correcto de los cuantificadores ($\forall, \exists$) y su negación.</li>
+            <li>Las estrategias matemáticas para demostrar la veracidad de una afirmación.</li>
+            <li>El lenguaje de los conjuntos, las relaciones y la definición estricta de una función.</li>
+        </ul>
+        <p style="margin-top: 25px; font-weight: bold;">Estás listo para iniciar el <strong>Módulo 2: Álgebra</strong>.</p>
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
     <button id="btnCompletarM1" style="background-color: #2a4939; color: #fff1da; padding: 14px 28px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: background 0.3s;">
         Marcar Módulo 1 como Completado
     </button>
 </div>
-                </div>
-
-            </div>
+    </div>
+</div>
             <!-- ── NAVEGACIÓN ── -->
             <div class="nav-buttons">
                 <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
