@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+    <!-- TRADUCTOR DE MATEMÁTICAS (MathJax) -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -593,13 +603,20 @@ footer {
 
             <!-- ── DIAPOSITIVA 2 ── -->
             <div class="slide">
-                <h2>Título de la Diapositiva 2</h2>
+                <h2>1.1 Lógica Proposicional</h2>
                 <div class="contenido-texto">
-                    <p>Tu contenido para la segunda diapositiva.</p>
-                    <div class="app-economica">
-                        <strong>Aplicación Económica</strong>
-                        ....
-                    </div>
+                    <p>La lógica proposicional es el cimiento de cualquier demostración matemática y modelo económico. Nos permite estructurar argumentos sin ambigüedades.</p>
+                    <ul>
+                        <li><strong>Proposición:</strong> Es un enunciado que puede ser verdadero ($V$) o falso ($F$), pero no ambas cosas a la vez. <em>Ejemplo: "La tasa de interés aumentó."</em></li>
+                        <li><strong>Conectivos Lógicos:</strong> Nos permiten unir proposiciones simples para crear modelos más complejos:
+                            <ul style="margin-top: 10px; margin-bottom: 10px;">
+                                <li><strong>Conjunción (Y):</strong> $p \land q$. Ambas condiciones deben cumplirse simultáneamente.</li>
+                                <li><strong>Disyunción (O):</strong> $p \lor q$. Al menos una de las condiciones se cumple.</li>
+                                <li><strong>Implicación (Si... entonces):</strong> $p \implies q$. Es la base de las teorías económicas. <em>Ejemplo: "Si la demanda supera la oferta ($p$), entonces el precio sube ($q$)."</em></li>
+                                <li><strong>Bicondicional (Si y solo si):</strong> $p \iff q$. Se usa para establecer equivalencias exactas.</li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
