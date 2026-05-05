@@ -448,9 +448,18 @@ footer {
         <p class="header-desc">Selecciona un módulo para comenzar tu ruta de aprendizaje.</p>
     </div>
 </header>
-
+<!-- PANTALLA DE BLOQUEO -->
+<div id="pantalla-bloqueo" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh; text-align: center; padding: 40px;">
+    <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+    <h2 style="color: #2B1B12; font-family: 'DM Serif Display', serif;">Curso Privado</h2>
+    <p style="color: #4a3828; margin-bottom: 20px;">Este curso requiere autorización previa del CPEE.</p>
+    
+    <button id="btnSolicitar" style="background-color: #2a4939; color: #fff1da; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold;">Solicitar Acceso</button>
+    
+    <p id="mensaje-solicitud" style="margin-top: 15px; font-weight: bold; color: #6b4c35;"></p>
+</div>
 <!-- ── MAIN ───────────────────────────────────────────── -->
-<main>
+<main id="contenido-curso" style="display: none;"></main>
     <p class="seccion-label">Módulos del curso</p>
 
     <div class="grid-modulos">
@@ -475,11 +484,10 @@ footer {
 
     </div>
 </main>
-<!-- CEREBRO DE FIREBASE: SEGURIDAD Y GUARDADO DE PROGRESO -->
+<!-- CEREBRO DE FIREBASE: CONTROL DE ACCESO Y PROGRESO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        // IMPORTAMOS FIRESTORE (La Base de Datos)
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -493,54 +501,81 @@ footer {
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app); // Encendemos la libreta
+        const db = getFirestore(app);
 
+        // Conexión con la pantalla
+        const contenidoCurso = document.getElementById("contenido-curso");
+        const pantallaBloqueo = document.getElementById("pantalla-bloqueo");
+        const btnSolicitar = document.getElementById("btnSolicitar");
+        const mensajeSolicitud = document.getElementById("mensaje-solicitud");
         const btnCompletar = document.getElementById("btnCompletarM1");
 
-        // Función visual para cuando ya está terminado
         function marcarBotonComoCompletado() {
-            btnCompletar.innerText = "✅ Módulo 1 Completado";
-            btnCompletar.style.backgroundColor = "#6b4c35"; // Cambia a café claro
-            btnCompletar.disabled = true;
-            btnCompletar.style.cursor = "default";
+            if(btnCompletar) {
+                btnCompletar.innerText = "✅ Módulo 1 Completado";
+                btnCompletar.style.backgroundColor = "#6b4c35";
+                btnCompletar.disabled = true;
+                btnCompletar.style.cursor = "default";
+            }
         }
 
-        // El vigilante de la puerta y del progreso
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                // Si no tiene cuenta, lo corre
-                window.location.href = "../login.html";
+                window.location.href = "../login.html"; // Lo expulsa si no hay cuenta
             } else {
-                // SI TIENE CUENTA, buscamos su página en la libreta
                 const docRef = doc(db, "progreso_usuarios", user.uid);
                 const docSnap = await getDoc(docRef);
 
-                // Verificamos si ya había completado el curso antes
-                if (docSnap.exists() && docSnap.data().modulo1_completado === true) {
-                    marcarBotonComoCompletado();
+                let tieneAcceso = false;
+                let estadoSolicitud = null;
+
+                // Revisar la libreta para ver si ya tiene la llave
+                if (docSnap.exists()) {
+                    tieneAcceso = docSnap.data().acceso_matematicas === true;
+                    estadoSolicitud = docSnap.data().estado_solicitud_matematicas;
                 }
 
-                // Programamos el botón para que guarde al darle clic
-                btnCompletar.addEventListener("click", async () => {
-                    // Cambiamos el texto mientras guarda
-                    btnCompletar.innerText = "Guardando..."; 
-                    
-                    try {
-                        // Escribe en la libreta en la nube
+                if (tieneAcceso) {
+                    // ¡TIENE LA LLAVE! Ocultar candado y mostrar clase
+                    pantallaBloqueo.style.display = "none";
+                    contenidoCurso.style.display = "block";
+
+                    // Lógica del progreso (si ya lo había completado)
+                    if (docSnap.exists() && docSnap.data().modulo1_completado === true) {
+                        marcarBotonComoCompletado();
+                    }
+
+                    if(btnCompletar) {
+                        btnCompletar.addEventListener("click", async () => {
+                            btnCompletar.innerText = "Guardando..."; 
+                            await setDoc(docRef, {
+                                correo: user.email,
+                                modulo1_completado: true,
+                                fecha_completado: new Date()
+                            }, { merge: true });
+                            marcarBotonComoCompletado();
+                        });
+                    }
+
+                } else {
+                    // NO TIENE LA LLAVE. Mostrar candado.
+                    if (estadoSolicitud === "pendiente") {
+                        btnSolicitar.style.display = "none";
+                        mensajeSolicitud.innerText = "⏳ Tu solicitud está siendo revisada por la coordinación.";
+                    }
+
+                    // Programar botón de solicitar
+                    btnSolicitar.addEventListener("click", async () => {
+                        btnSolicitar.innerText = "Enviando...";
                         await setDoc(docRef, {
                             correo: user.email,
-                            modulo1_completado: true,
-                            fecha_completado: new Date()
-                        }, { merge: true }); // El merge hace que no borre otros módulos que guardemos después
+                            estado_solicitud_matematicas: "pendiente"
+                        }, { merge: true });
                         
-                        marcarBotonComoCompletado();
-                        alert("¡Felicidades! Progreso guardado en la nube.");
-                    } catch (error) {
-                        console.error("Error al guardar: ", error);
-                        alert("Hubo un error al guardar tu progreso.");
-                        btnCompletar.innerText = "Marcar Módulo 1 como Completado";
-                    }
-                });
+                        btnSolicitar.style.display = "none";
+                        mensajeSolicitud.innerText = "✅ Solicitud enviada. Espera la autorización del CPEE.";
+                    });
+                }
             }
         });
     </script>
