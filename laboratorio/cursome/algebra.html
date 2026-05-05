@@ -813,6 +813,120 @@ footer {
         </div>
     </div>
 </div>
+<!-- ── TEMA 2: FUNCIONES Y SUS PROPIEDADES ── -->
+<!-- ── DIAPOSITIVA 13 ── -->
+<div class="slide">
+    <h2>2.7 La Notación de Función: $f(x)$</h2>
+    <div class="contenido-texto">
+        <p>Hasta ahora hemos usado ecuaciones como $y = 2x + 3$. En matemáticas avanzadas, cambiamos la $y$ por la notación $f(x)$ (se lee "efe de equis").</p>
+        <p>Esto nos dice explícitamente que la variable dependiente (el resultado) está en <em>función</em> de la variable independiente ($x$).</p>
+        <ul>
+            <li><strong>En matemáticas:</strong> $f(x) = x^2 + 5$</li>
+            <li><strong>En economía:</strong> $C(Q) = Q^2 + 5$ (El Costo está en función de la Cantidad).</li>
+        </ul>
+        <p><strong>Evaluar una función</strong> simplemente significa sustituir la variable independiente por un número. Si $C(Q) = 50 + 5Q$, entonces el costo de producir 10 unidades es $C(10) = 50 + 5(10) = 100$.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 14 ── -->
+<div class="slide">
+    <h2>2.8 Dominio Algebraico y Económico</h2>
+    <div class="contenido-texto">
+        <p>El <strong>Dominio</strong> son todos los valores que la variable $x$ tiene permitido tomar. Algebraicamente, buscamos evitar dos "explosiones" matemáticas:</p>
+        <ol>
+            <li><strong>División entre cero:</strong> El denominador jamás puede ser cero. Si $f(x) = \frac{10}{x - 2}$, el dominio son todos los reales <em>excepto</em> $x = 2$.</li>
+            <li><strong>Raíces negativas:</strong> No existen raíces cuadradas (o pares) de números negativos en los números reales. Si $f(x) = \sqrt{x - 5}$, forzosamente $x \geq 5$.</li>
+        </ol>
+        <p><em>Nota Económica:</em> A veces la matemática permite números negativos, pero la realidad no. Si $Q$ es "toneladas de acero", el <strong>dominio económico</strong> siempre será $Q \geq 0$, sin importar lo que diga el álgebra.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 15 ── -->
+<div class="slide">
+    <h2>2.9 Funciones Lineales: $f(x) = mx + b$</h2>
+    <div class="contenido-texto">
+        <p>Son líneas rectas y representan relaciones de cambio constante. Son la base de los modelos de oferta, demanda y restricciones presupuestarias.</p>
+        <ul>
+            <li><strong>$m$ (Pendiente):</strong> Es la tasa de cambio. Te dice cuánto sube o baja $y$ por cada unidad extra de $x$. En economía, esto suele ser un concepto <em>marginal</em> (costo marginal constante, propensión marginal al consumo).</li>
+            <li><strong>$b$ (Ordenada al origen):</strong> Es el valor de $y$ cuando $x = 0$. Es el punto donde la línea corta el eje vertical. En economía, suele representar los <em>costos fijos</em> o el <em>consumo autónomo</em>.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 16 ── -->
+<div class="slide">
+    <h2>2.10 Funciones Cuadráticas: $f(x) = ax^2 + bx + c$</h2>
+    <div class="contenido-texto">
+        <p>Su gráfica es una <strong>parábola</strong> (una curva en forma de "U" o de arco). Aparecen cuando multiplicamos variables, como al calcular el Ingreso ($Precio \times Cantidad$).</p>
+        <ul>
+            <li>Si $a > 0$ (positivo), la parábola abre hacia arriba $\cup$. Tiene un punto mínimo (ideal para minimizar Costos).</li>
+            <li>Si $a < 0$ (negativo), la parábola abre hacia abajo $\cap$. Tiene un punto máximo (ideal para maximizar Beneficios).</li>
+        </ul>
+        <p>El punto más bajo o más alto se llama <strong>Vértice</strong>. La coordenada $x$ del vértice se calcula con una fórmula de oro:</p>
+        <p style="text-align: center; font-size: 1.2rem;">
+            $$ x_{v\acute{e}rtice} = \frac{-b}{2a} $$
+        </p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 17 ── -->
+<div class="slide">
+    <h2>2.11 Funciones Exponenciales y Logarítmicas</h2>
+    <div class="contenido-texto">
+        <p>Cuando la variable independiente ($x$) está en el exponente, tenemos un crecimiento o decaimiento explosivo. Son vitales para finanzas y macroeconomía.</p>
+        <ul>
+            <li><strong>Función Exponencial ($f(x) = a^x$):</strong> Modela el interés compuesto, la inflación o el crecimiento poblacional. La base más famosa es el número de Euler $e \approx 2.718$.</li>
+            <li><strong>Función Logarítmica ($f(x) = \ln(x)$):</strong> Es la función inversa de la exponencial. En econometría, aplicar logaritmos a una base de datos nos permite transformar curvas en líneas rectas y calcular <em>elasticidades</em> directamente.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 18 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Dominio y Evaluación</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Encontrar el Dominio</strong><br>
+        Halla el dominio algebraico de $f(x) = \frac{3x}{x^2 - 16}$<br>
+        <em>Paso 1:</em> El denominador no puede ser cero, así que planteamos: $x^2 - 16 \neq 0$<br>
+        <em>Paso 2:</em> Despejamos (o factorizamos por diferencia de cuadrados): $x^2 \neq 16$<br>
+        <em>Paso 3:</em> Aplicamos raíz: $x \neq 4$ y $x \neq -4$.<br>
+        <em>Resultado:</em> El dominio son todos los números reales menos el 4 y el -4.</p>
+
+        <p><strong>Ejemplo 2: Evaluación Compuesta</strong><br>
+        Si $f(x) = x^2 - 3x$, evalúa $f(x + h)$<br>
+        <em>Paso 1:</em> Donde veas una $x$, abre paréntesis y mete $(x + h)$.<br>
+        <em>Paso 2:</em> $f(x+h) = (x + h)^2 - 3(x + h)$<br>
+        <em>Paso 3:</em> Desarrolla: $x^2 + 2xh + h^2 - 3x - 3h$. ¡Esta es la base del cálculo diferencial!</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 19 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Vértice Cuadrático</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 3: Maximizar Beneficios usando el Vértice</strong><br>
+        La función de beneficios de una fábrica de muebles es $\pi(Q) = -2Q^2 + 40Q - 50$. ¿Cuántos muebles ($Q$) deben producir para alcanzar la ganancia máxima?<br>
+        <em>Paso 1:</em> Identificamos coeficientes: $a = -2$, $b = 40$. Como $a$ es negativo, es una parábola triste $\cap$, el vértice será el punto máximo.<br>
+        <em>Paso 2:</em> Usamos la fórmula del vértice: $Q = \frac{-b}{2a}$<br>
+        <em>Paso 3:</em> Sustituimos: $Q = \frac{-40}{2(-2)} = \frac{-40}{-4} = 10$<br>
+        <em>Resultado:</em> Deben producir 10 muebles para maximizar ganancias.<br>
+        <em>Extra:</em> Para saber de cuánto será esa ganancia, evaluamos la función: $\pi(10) = -2(10)^2 + 40(10) - 50 = -200 + 400 - 50 = 150$.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 20 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Funciones y Propiedades</h2>
+    <div class="contenido-texto">
+        <p>Resuelve estos ejercicios analíticos:</p>
+        <ol>
+            <li><strong>Evaluación:</strong> Dada la función de demanda $P(Q) = 150 - 3Q^2$, evalúa $P(5)$ e interpreta el resultado en términos económicos.</li>
+            <li><strong>Dominio:</strong> Encuentra el dominio algebraico de la función $f(x) = \sqrt{2x - 10}$. <em>(Pista: lo de adentro de la raíz debe ser mayor o igual a cero).</em></li>
+            <li><strong>Optimización sin cálculo:</strong> Una empresa tiene costos dados por $C(Q) = 3Q^2 - 60Q + 500$. Encuentra la cantidad $Q$ que minimiza el costo utilizando la fórmula del vértice de una parábola.</li>
+            <li><strong>Funciones Lineales:</strong> Si la función de consumo es $C(Y) = 1000 + 0.75Y$ (donde $Y$ es el ingreso), ¿cuál es el valor de la pendiente y qué significado económico tiene? ¿Qué pasa si el ingreso es cero?</li>
+        </ol>
+    </div>
+</div>
 
             <!-- ── NAVEGACIÓN ── -->
             <div class="nav-buttons">
