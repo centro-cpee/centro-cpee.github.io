@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="es">
+    <!-- TRADUCTOR DE MATEMÁTICAS (MathJax) -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Fundamentos — Laboratorio CPEE</title>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --crema: #fff1da;
+    --crema-oscuro: #f5e3c0;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--crema);
+    color: var(--negro);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* ─── MENÚ ─────────────────────────────────────────────── */
+
+.menu-trigger {
+    position: fixed;
+    top: 22px; left: 24px;
+    z-index: 1100;
+    background: var(--cafe);
+    border: none;
+    border-radius: 8px;
+    width: 44px; height: 44px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: background 0.2s;
+}
+.menu-trigger:hover { background: var(--verde); }
+.menu-trigger span {
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--crema);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    transform-origin: center;
+}
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.menu-overlay {
+    position: fixed; inset: 0;
+    background: rgba(43,27,18,0.45);
+    backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none;
+    z-index: 1050;
+    transition: opacity 0.3s ease;
+}
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
+
+.menu-panel {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%; width: 280px;
+    background: var(--cafe);
+    z-index: 1090;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 80px 0 40px;
+}
+.menu-panel.abierto { transform: translateX(0); }
+
+.menu-panel-logo {
+    padding: 0 28px 32px;
+    border-bottom: 1px solid rgba(215,196,165,0.2);
+    margin-bottom: 12px;
+}
+.menu-panel-logo span {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: #D7C4A5;
+    line-height: 1.3;
+    display: block;
+}
+.menu-panel-logo em {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.78rem;
+    color: rgba(215,196,165,0.55);
+    font-style: italic;
+}
+.menu-panel nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 28px;
+    color: #D7C4A5;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 400;
+    border-left: 3px solid transparent;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.menu-panel nav a:hover {
+    background: rgba(215,196,165,0.07);
+    border-left-color: var(--verde-medio);
+    color: #f0dfc0;
+}
+.menu-panel nav a .nav-num {
+    font-size: 0.7rem;
+    opacity: 0.4;
+    font-weight: 500;
+    min-width: 18px;
+}
+
+/* ─── BREADCRUMB ───────────────────────────────────────── */
+
+.breadcrumb {
+    padding: 18px 48px 18px 90px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--cafe-claro);
+    opacity: 0.7;
+    border-bottom: 1px solid rgba(43,27,18,0.08);
+    flex-wrap: wrap;
+}
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--verde); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--verde); opacity: 1; }
+
+/* ─── HEADER ────────────────────────────────────────────── */
+
+header {
+    position: relative;
+    padding: 48px 48px 40px;
+    border-bottom: 1px solid rgba(43,27,18,0.15);
+    overflow: hidden;
+}
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(42,73,57,0.1);
+}
+.header-bg-deco::after {
+    content: '';
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    border: 1px solid rgba(42,73,57,0.07);
+}
+.header-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.header-texto { flex: 1; }
+.header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+}
+.header-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px; height: 2px;
+    background: var(--verde);
+}
+header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--cafe);
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.2s forwards;
+}
+
+/* Progreso de módulo */
+.modulo-badge {
+    flex-shrink: 0;
+    background: rgba(42,73,57,0.08);
+    border: 1px solid rgba(42,73,57,0.15);
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+    align-self: center;
+}
+.modulo-badge .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--verde);
+    line-height: 1;
+    display: block;
+}
+.modulo-badge .etiqueta {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--verde);
+    opacity: 0.6;
+}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+
+main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+}
+
+/* ─── CONTENEDOR DE DIAPOSITIVAS ─────────────────────────── */
+
+.slide-wrapper {
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+}
+
+/* Barra de progreso */
+.progress-bar-outer {
+    height: 4px;
+    background: rgba(43,27,18,0.1);
+    border-radius: 4px;
+    margin-bottom: 4px;
+    overflow: hidden;
+}
+.progress-bar-inner {
+    height: 100%;
+    background: var(--verde);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.progress-texto {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cafe-claro);
+    opacity: 0.55;
+}
+.slide-counter-txt {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--verde);
+    opacity: 0.75;
+}
+
+/* Tarjeta de diapositiva */
+.slide-container {
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(43,27,18,0.1);
+    border-radius: 12px;
+    padding: 40px 40px 32px;
+    min-height: 340px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(43,27,18,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+}
+.slide-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--verde);
+    border-radius: 4px 0 0 4px;
+}
+
+/* Diapositivas */
+.slide {
+    display: none;
+    animation: fadeSlide 0.4s ease;
+    flex: 1;
+}
+.slide.active { display: block; }
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.slide h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: var(--cafe);
+    margin-bottom: 20px;
+    line-height: 1.3;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(43,27,18,0.1);
+}
+
+.contenido-texto {
+    font-size: 0.935rem;
+    color: var(--texto-suave);
+    line-height: 1.85;
+    text-align: justify;
+}
+
+.contenido-texto p { margin-bottom: 14px; }
+.contenido-texto p:last-child { margin-bottom: 0; }
+
+.contenido-texto ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+.contenido-texto ul li {
+    margin-bottom: 10px;
+    padding-left: 4px;
+}
+.contenido-texto ul li::marker {
+    color: var(--verde);
+}
+
+.contenido-texto em {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    color: var(--cafe-claro);
+}
+
+/* Caja de aplicación económica */
+.app-economica {
+    background: rgba(42,73,57,0.06);
+    border: 1px solid rgba(42,73,57,0.14);
+    border-left: 4px solid var(--verde);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-top: 20px;
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+    line-height: 1.7;
+}
+.app-economica strong {
+    color: var(--verde);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* ─── NAVEGACIÓN ─────────────────────────────────────────── */
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(43,27,18,0.08);
+    margin-top: 8px;
+}
+
+.btn-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--cafe);
+    color: #D7C4A5;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.2s;
+}
+.btn-nav:hover:not(:disabled) {
+    background: var(--verde);
+    transform: translateY(-1px);
+}
+.btn-nav:disabled {
+    background: rgba(43,27,18,0.1);
+    color: rgba(43,27,18,0.3);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.puntos-nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.punto {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(43,27,18,0.15);
+    transition: background 0.3s, transform 0.3s;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+.punto.activo {
+    background: var(--verde);
+    transform: scale(1.25);
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+
+footer {
+    border-top: 1px solid rgba(43,27,18,0.15);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.82rem;
+    color: var(--cafe-claro);
+    background: rgba(43,27,18,0.03);
+}
+.footer-marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.95rem;
+    color: var(--cafe);
+}
+.footer-marca::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+}
+.footer-badge {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(42,73,57,0.1);
+    color: var(--verde);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+
+/* ─── ANIMACIONES ────────────────────────────────────────── */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .breadcrumb { padding: 14px 20px 14px 80px; }
+    header { padding: 40px 24px 32px; }
+    main { padding: 32px 24px 60px; }
+    .slide-container { padding: 28px 22px 24px; }
+    .modulo-badge { display: none; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── BOTÓN MENÚ ─────────────────────────────────────── -->
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+</button>
+
+<!-- ── OVERLAY ────────────────────────────────────────── -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+<!-- ── PANEL MENÚ ─────────────────────────────────────── -->
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo">
+        <span>Centro Popular de<br>Estudios Económicos</span>
+        <em>Ciencia Social aplicada</em>
+    </div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../../quienes-somos/index.html"><span class="nav-num">01</span> ¿Quiénes somos?</a>
+        <a href="../../mision/index.html"><span class="nav-num">02</span> Nuestra misión</a>
+        <a href="../../colaboraciones/index.html"><span class="nav-num">03</span> Colaboraciones</a>
+    </nav>
+</aside>
+
+<!-- ── BREADCRUMB ─────────────────────────────────────── -->
+<div class="breadcrumb">
+    <a href="../../index.html">Inicio</a>
+    <span class="sep">/</span>
+    <a href="index.html">Laboratorio</a>
+    <span class="sep">/</span>
+    <a href="matematicas_inicio.html">Matemáticas para la Economía</a>
+    <span class="sep">/</span>
+    <span class="actual">Módulo 1</span>
+</div>
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Laboratorio · Matemáticas</p>
+            <h1>Módulo 3: Álgebra Lineal</h1>
+        </div>
+        <div class="modulo-badge">
+            <span class="num">01</span>
+            <span class="etiqueta">Módulo</span>
+        </div>
+    </div>
+</header>
+
+<!-- ── MAIN ───────────────────────────────────────────── -->
+<main>
+    <div class="slide-wrapper">
+
+        <!-- Barra de progreso -->
+        <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="progressBar" style="width: 33.3%"></div>
+        </div>
+        <div class="progress-label">
+            <span class="progress-texto">Progreso del módulo</span>
+            <span class="slide-counter-txt" id="slideCounter">1 / 3</span>
+        </div>
+
+        <!-- Tarjeta de diapositivas -->
+        <div class="slide-container">
+<!-- ── DIAPOSITIVA 1: INTRODUCCIÓN ── -->
+<div class="slide active">
+    <h2>3.1 El Álgebra Lineal en la Economía</h2>
+    <div class="contenido-texto">
+        <p>En el módulo anterior trabajábamos con una o dos variables a la vez. Pero, ¿qué pasa cuando queremos modelar una economía entera con 50 sectores industriales interconectados, o analizar una base de datos con miles de encuestas de empleo?</p>
+        <p>El <strong>Álgebra Lineal</strong> nos permite empaquetar grandes cantidades de información y sistemas de ecuaciones gigantescos en bloques manejables llamados <strong>matrices</strong>.</p>
+        <ul>
+            <li>En <strong>Microeconomía</strong>: Para resolver equilibrios de mercado con múltiples bienes sustitutos y complementarios.</li>
+            <li>En <strong>Macroeconomía</strong>: El modelo Insumo-Producto de Leontief usa matrices para predecir cómo un shock en el sector energético afecta al sector agrícola.</li>
+            <li>En <strong>Econometría</strong>: El estimador de Mínimos Cuadrados Ordinarios (MCO) es pura multiplicación y de inversión de matrices.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── TEMA 1: MATRICES ── -->
+<!-- ── DIAPOSITIVA 2 ── -->
+<div class="slide">
+    <h2>3.2 ¿Qué es una Matriz?</h2>
+    <div class="contenido-texto">
+        <p>Una <strong>matriz</strong> es un arreglo rectangular de números ordenados en filas (horizontales) y columnas (verticales). Se denotan con letras mayúsculas ($A, B, X$).</p>
+        <p>La <strong>dimensión</strong> (u orden) de una matriz se escribe como $m \times n$, donde $m$ es el número de filas y $n$ el número de columnas.</p>
+        <p style="text-align: center; font-size: 1.2rem;">
+            $$ A = \begin{pmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \end{pmatrix} $$
+        </p>
+        <p>Cada número dentro de la matriz es un <strong>elemento</strong> o <strong>entrada</strong>, denotado como $a_{ij}$, donde $i$ indica su fila y $j$ su columna. En la matriz de arriba, $a_{21}$ está en la fila 2, columna 1.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 3 ── -->
+<div class="slide">
+    <h2>3.3 Tipos Especiales de Matrices</h2>
+    <div class="contenido-texto">
+        <p>Algunas estructuras matriciales son tan comunes que tienen nombre propio:</p>
+        <ul>
+            <li><strong>Matriz Cuadrada:</strong> Tiene el mismo número de filas que de columnas ($m = n$). Son las únicas a las que se les puede calcular un determinante.</li>
+            <li><strong>Vector Fila / Vector Columna:</strong> Una matriz de una sola fila ($1 \times n$) o una sola columna ($m \times 1$).</li>
+            <li><strong>Matriz Nula ($0$):</strong> Todos sus elementos son cero.</li>
+            <li><strong>Matriz Identidad ($I$):</strong> Es una matriz cuadrada con unos ($1$) en la diagonal principal y ceros ($0$) en el resto. Es el equivalente matricial al número 1.</li>
+        </ul>
+        <p style="text-align: center;">
+            $$ I = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix} $$
+        </p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 4 ── -->
+<div class="slide">
+    <h2>3.4 Operaciones Básicas: Suma y Escalares</h2>
+    <div class="contenido-texto">
+        <p><strong>1. Suma y Resta de Matrices:</strong> Solo puedes sumar o restar matrices que tengan <em>exactamente la misma dimensión</em>. La operación se hace elemento por elemento (el primero con el primero, el segundo con el segundo, etc.).</p>
+        <p><strong>2. Multiplicación por un Escalar:</strong> Un "escalar" es simplemente un número normal (como 2, -5, o 0.5). Si multiplicas una matriz por un escalar, ese número multiplica a <em>todos y cada uno</em> de los elementos dentro de la matriz.</p>
+        <p><em>Aplicación:</em> Si una matriz $A$ representa la producción de 3 fábricas en enero, y quieres duplicar la producción para febrero, calculas $2A$.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 5 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Suma y Escalares</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Suma y Escalar</strong><br>
+        Dadas las matrices $A = \begin{pmatrix} 2 & 4 \\ 1 & -3 \end{pmatrix}$ y $B = \begin{pmatrix} 0 & 5 \\ -1 & 2 \end{pmatrix}$. Calcula $3A - B$.</p>
+        <p><em>Paso 1:</em> Multiplica $A$ por el escalar 3.<br>
+        $$ 3A = 3 \begin{pmatrix} 2 & 4 \\ 1 & -3 \end{pmatrix} = \begin{pmatrix} 6 & 12 \\ 3 & -9 \end{pmatrix} $$</p>
+        <p><em>Paso 2:</em> Resta la matriz $B$ elemento por elemento.<br>
+        $$ 3A - B = \begin{pmatrix} 6 - 0 & 12 - 5 \\ 3 - (-1) & -9 - 2 \end{pmatrix} $$</p>
+        <p><em>Resultado final:</em><br>
+        $$ \begin{pmatrix} 6 & 7 \\ 4 & -11 \end{pmatrix} $$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 6 ── -->
+<div class="slide">
+    <h2>3.5 Multiplicación de Matrices</h2>
+    <div class="contenido-texto">
+        <p>La multiplicación entre dos matrices ($A \cdot B$) NO se hace elemento por elemento. Sigue una regla muy estricta de "filas contra columnas".</p>
+        <p><strong>Condición de Oro:</strong> Para poder multiplicar $A \cdot B$, el número de columnas de la primera ($A$) debe ser igual al número de filas de la segunda ($B$).</p>
+        <ul>
+            <li>Si $A$ es de dimensión $(m \times n)$ y $B$ es $(n \times p)$, sí se pueden multiplicar porque las $n$ coinciden.</li>
+            <li>La matriz resultante $C$ tendrá las dimensiones "exteriores": $(m \times p)$.</li>
+        </ul>
+        <p><strong>¡Atención!</strong> En álgebra lineal, el orden de los factores sí altera el producto. En casi todos los casos, $AB \neq BA$. ¡La multiplicación de matrices <strong>no es conmutativa</strong>!</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 7 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Multiplicación (Paso a Paso)</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 2: Producto de matrices $2 \times 2$</strong><br>
+        Multiplica $A \cdot B$ si $A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}$ y $B = \begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix}$.</p>
+        <p><em>Paso 1:</em> Multiplicamos la <strong>Fila 1 de A</strong> por la <strong>Columna 1 de B</strong> (el primer elemento por el primero, más el segundo por el segundo).<br>
+        $c_{11} = (1 \cdot 5) + (2 \cdot 7) = 5 + 14 = 19$</p>
+        <p><em>Paso 2:</em> <strong>Fila 1 de A</strong> por <strong>Columna 2 de B</strong>.<br>
+        $c_{12} = (1 \cdot 6) + (2 \cdot 8) = 6 + 16 = 22$</p>
+        <p><em>Paso 3:</em> <strong>Fila 2 de A</strong> por <strong>Columna 1 de B</strong>.<br>
+        $c_{21} = (3 \cdot 5) + (4 \cdot 7) = 15 + 28 = 43$</p>
+        <p><em>Paso 4:</em> <strong>Fila 2 de A</strong> por <strong>Columna 2 de B</strong>.<br>
+        $c_{22} = (3 \cdot 6) + (4 \cdot 8) = 18 + 32 = 50$</p>
+        <p><em>Resultado:</em> $AB = \begin{pmatrix} 19 & 22 \\ 43 & 50 \end{pmatrix}$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 8 ── -->
+<div class="slide">
+    <h2>3.6 La Matriz Transpuesta ($A^T$)</h2>
+    <div class="contenido-texto">
+        <p>Transponer una matriz es una operación muy sencilla pero crucial en estadística y econometría (aparece en la fórmula $X^T X$).</p>
+        <p>La transpuesta se denota como $A^T$ y consiste simplemente en <strong>convertir las filas en columnas</strong> (o las columnas en filas, que es lo mismo). Si $A$ era de dimensión $m \times n$, su transpuesta $A^T$ será $n \times m$.</p>
+        <p><strong>Ejemplo:</strong><br>
+        Si $A = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix} $ (Dimensión $2 \times 3$)</p>
+        <p>Entonces $A^T = \begin{pmatrix} 1 & 4 \\ 2 & 5 \\ 3 & 6 \end{pmatrix} $ (Dimensión $3 \times 2$)</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 9 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Vectores y Precios (Aplicación)</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 3: Ingreso Total usando matrices</strong><br>
+        Una tienda vende 3 productos. Las cantidades vendidas son un vector fila $Q = \begin{pmatrix} 10 & 20 & 5 \end{pmatrix}$. Los precios son un vector columna $P = \begin{pmatrix} 50 \\ 30 \\ 100 \end{pmatrix}$. Calcula el Ingreso Total ($I = Q \cdot P$).</p>
+        <p><em>Solución:</em> Como $Q$ es $(1 \times 3)$ y $P$ es $(3 \times 1)$, se pueden multiplicar y el resultado será un escalar ($1 \times 1$).</p>
+        <p>Multiplicamos la única fila por la única columna:<br>
+        $I = (10 \cdot 50) + (20 \cdot 30) + (5 \cdot 100)$<br>
+        $I = 500 + 600 + 500$<br>
+        $I = 1600$</p>
+        <p>El uso de la multiplicación de matrices automatiza la suma de ingresos por producto.</p>
+    </div>
+</div>
+
+<!-- ── TEMA 2: DETERMINANTES ── -->
+<!-- ── DIAPOSITIVA 10 ── -->
+<div class="slide">
+    <h2>3.7 ¿Qué es un Determinante?</h2>
+    <div class="contenido-texto">
+        <p>Un <strong>determinante</strong> es un número escalar especial que se le puede calcular <em>únicamente</em> a las matrices cuadradas ($2 \times 2, 3 \times 3$, etc.). Se denota entre barras verticales $|A|$ o como $\det(A)$.</p>
+        <p>Este número es como el "ADN" de la matriz y nos da información crítica:</p>
+        <ul>
+            <li><strong>Económicamente:</strong> Nos dice si un sistema de ecuaciones (como la oferta y la demanda) tiene una solución única.</li>
+            <li><strong>Geométricamente:</strong> El determinante de una matriz $2 \times 2$ representa el área de un paralelogramo; el de $3 \times 3$ representa un volumen.</li>
+            <li><strong>Regla de supervivencia:</strong> Si el determinante es igual a cero ($|A| = 0$), la matriz está "rota" (es singular) y no tiene inversa.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 11 ── -->
+<div class="slide">
+    <h2>3.8 Determinante de una Matriz $2 \times 2$</h2>
+    <div class="contenido-texto">
+        <p>Para una matriz de $2 \times 2$, el cálculo del determinante es sumamente rápido. Se multiplican los elementos de la diagonal principal y se le resta el producto de la diagonal secundaria.</p>
+        <p>Si la matriz es: $$ A = \begin{pmatrix} a & b \\ c & d \end{pmatrix} $$</p>
+        <p>La fórmula del determinante es:</p>
+        <p style="text-align: center; font-size: 1.5rem; margin: 20px 0; font-weight: bold;">
+            $$ |A| = (a \cdot d) - (b \cdot c) $$
+        </p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 12 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Determinante $2 \times 2$</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 4: Cálculo de determinantes</strong></p>
+        <p>Halla el determinante de $A = \begin{pmatrix} 5 & 2 \\ 3 & 4 \end{pmatrix}$</p>
+        <p><em>Paso 1:</em> Diagonal principal ($a \cdot d$): $5 \cdot 4 = 20$<br>
+        <em>Paso 2:</em> Diagonal secundaria ($b \cdot c$): $2 \cdot 3 = 6$<br>
+        <em>Paso 3:</em> Restamos: $20 - 6 = 14$<br>
+        <strong>$|A| = 14$</strong></p>
+        <br>
+        <p>Halla el determinante de $B = \begin{pmatrix} -2 & -4 \\ 1 & 3 \end{pmatrix}$</p>
+        <p><em>Paso 1:</em> Diagonal principal: $(-2) \cdot 3 = -6$<br>
+        <em>Paso 2:</em> Diagonal secundaria: $(-4) \cdot 1 = -4$<br>
+        <em>Paso 3:</em> Restamos (¡cuidado con los signos!): $-6 - (-4) = -6 + 4 = -2$<br>
+        <strong>$|B| = -2$</strong></p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 13 ── -->
+<div class="slide">
+    <h2>3.9 Determinante de una Matriz $3 \times 3$ (Regla de Sarrus)</h2>
+    <div class="contenido-texto">
+        <p>Para matrices de $3 \times 3$, el método más visual es la <strong>Regla de Sarrus</strong>:</p>
+        <ol>
+            <li>Se copian las dos primeras columnas de la matriz y se pegan a la derecha de la matriz original.</li>
+            <li>Se trazan tres diagonales principales (hacia abajo y a la derecha) y se multiplican sus elementos. Luego se suman estos tres resultados.</li>
+            <li>Se trazan tres diagonales secundarias (hacia arriba y a la derecha) y se multiplican sus elementos. Se suman estos tres resultados.</li>
+            <li>Se resta el total de las secundarias al total de las principales.</li>
+        </ol>
+        <p><em>(Veremos el desarrollo paso a paso en la siguiente diapositiva).</em></p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 14 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Determinante $3 \times 3$</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 5: Regla de Sarrus</strong><br>
+        Calcula $|A|$ para $A = \begin{pmatrix} 1 & 2 & 1 \\ 0 & 3 & 1 \\ 4 & 2 & 2 \end{pmatrix}$</p>
+        <p><em>Paso 1:</em> Ampliamos las dos primeras columnas:<br>
+        $1 \quad 2 \quad 1 \quad | \quad 1 \quad 2$<br>
+        $0 \quad 3 \quad 1 \quad | \quad 0 \quad 3$<br>
+        $4 \quad 2 \quad 2 \quad | \quad 4 \quad 2$</p>
+        <p><em>Paso 2:</em> Diagonales principales (bajan de izq a der):<br>
+        $(1\cdot3\cdot2) + (2\cdot1\cdot4) + (1\cdot0\cdot2) = 6 + 8 + 0 = 14$</p>
+        <p><em>Paso 3:</em> Diagonales secundarias (bajan de der a izq):<br>
+        $(1\cdot3\cdot4) + (1\cdot1\cdot2) + (2\cdot0\cdot2) = 12 + 2 + 0 = 14$</p>
+        <p><em>Paso 4:</em> Restamos (Principales menos Secundarias): $14 - 14 = 0$<br>
+        <strong>$|A| = 0$</strong>. (¡Es una matriz singular, no tiene solución única en un sistema!).</p>
+    </div>
+</div>
+
+<!-- ── TEMA 3: SISTEMAS LINEALES E INVERSA ── -->
+<!-- ── DIAPOSITIVA 15 ── -->
+<div class="slide">
+    <h2>3.10 Sistemas Lineales en Forma Matricial</h2>
+    <div class="contenido-texto">
+        <p>Cualquier sistema de ecuaciones de oferta y demanda, por complejo que sea, puede escribirse de forma elegante como una sola ecuación matricial: <strong>$AX = B$</strong>.</p>
+        <ul>
+            <li><strong>$A$:</strong> Es la matriz de coeficientes (los números que acompañan a las letras).</li>
+            <li><strong>$X$:</strong> Es el vector de variables desconocidas (ej. $P_1, P_2, Q$).</li>
+            <li><strong>$B$:</strong> Es el vector de términos independientes (los números del lado derecho del igual).</li>
+        </ul>
+        <p>Si tienes: <br>
+        $2x + 3y = 8$<br>
+        $5x - y = 3$<br>
+        Matricialmente es: $\begin{pmatrix} 2 & 3 \\ 5 & -1 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} 8 \\ 3 \end{pmatrix}$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 16 ── -->
+<div class="slide">
+    <h2>3.11 La Matriz Inversa ($A^{-1}$)</h2>
+    <div class="contenido-texto">
+        <p>En el álgebra normal, si tenemos $5x = 10$, pasamos el 5 dividiendo ($x = 10/5$). En matrices, <strong>la división no existe</strong>. En su lugar, multiplicamos por la matriz inversa.</p>
+        <p>La inversa de $A$ se denota como $A^{-1}$. Su propiedad mágica es que al multiplicarla por la matriz original, nos da la matriz Identidad (el "1" de las matrices):<br>
+        $$ A \cdot A^{-1} = I $$</p>
+        <p><strong>Condición indispensable:</strong> Una matriz solo tiene inversa si su determinante NO es cero ($|A| \neq 0$). Si es cero, decimos que no es invertible.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 17 ── -->
+<div class="slide">
+    <h2>3.12 Fórmula de la Inversa $2 \times 2$</h2>
+    <div class="contenido-texto">
+        <p>Para una matriz $2 \times 2$, existe un atajo directo para encontrar su inversa. Si $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$, entonces:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 15px 0;">
+            $$ A^{-1} = \frac{1}{|A|} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix} $$
+        </p>
+        <p><strong>Los pasos son:</strong></p>
+        <ol>
+            <li>Calculas el determinante ($|A| = ad - bc$).</li>
+            <li>Intercambias de lugar los elementos de la diagonal principal ($a$ y $d$).</li>
+            <li>Les cambias el signo a los elementos de la diagonal secundaria ($b$ y $c$).</li>
+            <li>Multiplicas toda esa nueva matriz por la fracción $\frac{1}{|A|}$.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 18 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Matriz Inversa</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 6: Calculando la Inversa</strong><br>
+        Halla $A^{-1}$ si $A = \begin{pmatrix} 4 & 7 \\ 2 & 6 \end{pmatrix}$</p>
+        <p><em>Paso 1:</em> Determinante $|A| = (4 \cdot 6) - (7 \cdot 2) = 24 - 14 = 10$. Como $10 \neq 0$, sí tiene inversa.</p>
+        <p><em>Paso 2:</em> Intercambiamos la principal (4 y 6) y cambiamos signo a la secundaria (7 y 2):<br>
+        $\begin{pmatrix} 6 & -7 \\ -2 & 4 \end{pmatrix}$</p>
+        <p><em>Paso 3:</em> Multiplicamos por $1/10$:<br>
+        $$ A^{-1} = \frac{1}{10} \begin{pmatrix} 6 & -7 \\ -2 & 4 \end{pmatrix} = \begin{pmatrix} 6/10 & -7/10 \\ -2/10 & 4/10 \end{pmatrix} = \begin{pmatrix} 0.6 & -0.7 \\ -0.2 & 0.4 \end{pmatrix} $$</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 19 ── -->
+<div class="slide">
+    <h2>3.13 Resolviendo Sistemas de Ecuaciones: Método de Inversa</h2>
+    <div class="contenido-texto">
+        <p>Recordemos nuestro sistema matricial: $AX = B$.</p>
+        <p>Queremos encontrar las variables ($X$). Para "despejar" $X$, multiplicamos ambos lados de la ecuación por la matriz inversa $A^{-1}$ (siempre por la izquierda):</p>
+        <p style="text-align: center;">$A^{-1} A X = A^{-1} B$</p>
+        <p>Como $A^{-1} A = I$ (se "cancelan"), la fórmula mágica para resolver cualquier sistema económico matricial es:</p>
+        <p style="text-align: center; font-size: 1.5rem; font-weight: bold; margin: 15px 0;">
+            $$ X = A^{-1} B $$
+        </p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 20 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Sistema con Inversa</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 7: Resolver el sistema</strong><br>
+        $4x + 7y = 2$<br>
+        $2x + 6y = 6$</p>
+        <p><em>Paso 1:</em> Plantear matrices. $A = \begin{pmatrix} 4 & 7 \\ 2 & 6 \end{pmatrix}$, $X = \begin{pmatrix} x \\ y \end{pmatrix}$, $B = \begin{pmatrix} 2 \\ 6 \end{pmatrix}$</p>
+        <p><em>Paso 2:</em> Ya calculamos $A^{-1}$ en el ejemplo anterior: $\begin{pmatrix} 0.6 & -0.7 \\ -0.2 & 0.4 \end{pmatrix}$</p>
+        <p><em>Paso 3:</em> Aplicar $X = A^{-1} B$:<br>
+        $$ \begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} 0.6 & -0.7 \\ -0.2 & 0.4 \end{pmatrix} \begin{pmatrix} 2 \\ 6 \end{pmatrix} $$</p>
+        <p><em>Paso 4:</em> Multiplicar fila por columna:<br>
+        $x = (0.6 \cdot 2) + (-0.7 \cdot 6) = 1.2 - 4.2 = -3$<br>
+        $y = (-0.2 \cdot 2) + (0.4 \cdot 6) = -0.4 + 2.4 = 2$<br>
+        <strong>Solución: $x = -3, y = 2$</strong></p>
+    </div>
+</div>
+<!-- ── TEMA EXTRA: GAUSS-JORDAN Y TRANSFORMACIONES ELEMENTALES ── -->
+<!-- ── DIAPOSITIVA 20.1 ── -->
+<div class="slide">
+    <h2>3.14 Transformaciones Elementales de Fila</h2>
+    <div class="contenido-texto">
+        <p>¿Qué pasa si tenemos un sistema de $3 \times 3$ o más grande? La fórmula directa de la inversa ya no sirve. Para resolver estos "monstruos", usamos el método de eliminación, el cual se basa en tres reglas de oro llamadas <strong>Transformaciones Elementales de Fila</strong>.</p>
+        <p>Puedes hacerle cualquiera de estas tres cosas a una matriz sin alterar la solución final del sistema económico:</p>
+        <ol>
+            <li><strong>Intercambiar filas:</strong> Cambiar la Fila 1 por la Fila 2 ($R_1 \leftrightarrow R_2$).</li>
+            <li><strong>Multiplicar por un escalar:</strong> Multiplicar toda una fila por un número distinto de cero ($R_1 \to 5R_1$).</li>
+            <li><strong>Sumar un múltiplo de otra fila:</strong> A una fila sumarle o restarle otra fila multiplicada por un número ($R_2 \to R_2 - 3R_1$). ¡Esta es la clave para crear ceros!</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 20.2 ── -->
+<div class="slide">
+    <h2>3.15 El Método de Gauss-Jordan</h2>
+    <div class="contenido-texto">
+        <p>El objetivo de <strong>Gauss-Jordan</strong> es aplicar estas tres transformaciones elementales hasta convertir la parte izquierda de nuestra matriz en una <strong>Matriz Identidad</strong> (unos en la diagonal y ceros en el resto).</p>
+        <p><strong>Para resolver sistemas ($AX = B$):</strong></p>
+        <p>Se crea una "matriz aumentada" pegando los resultados a la derecha: $\left( \begin{array}{c|c} A & B \end{array} \right)$. Al convertir $A$ en Identidad, el lado derecho se transforma mágicamente en las soluciones del sistema: $\left( \begin{array}{c|c} I & X \end{array} \right)$.</p>
+        <p><strong>Para encontrar Inversas ($A^{-1}$):</strong></p>
+        <p>Se pega la matriz Identidad a la derecha: $\left( \begin{array}{c|c} A & I \end{array} \right)$. Al aplicar el método, el lado derecho se convierte en la inversa: $\left( \begin{array}{c|c} I & A^{-1} \end{array} \right)$.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 20.3 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Gauss-Jordan para Sistemas</h2>
+    <div class="contenido-texto" style="font-size: 0.95rem;">
+        <p><strong>Ejemplo 10: Resolver el sistema</strong><br>
+        $x + 2y = 5$<br>
+        $3x + 4y = 11$</p>
+        <p><em>Paso 1: Matriz aumentada.</em><br>
+        $$ \left( \begin{array}{cc|c} 1 & 2 & 5 \\ 3 & 4 & 11 \end{array} \right) $$</p>
+        <p><em>Paso 2: Hacer cero el 3 de abajo ($R_2 \to R_2 - 3R_1$).</em><br>
+        Fila 2 nueva: $(3 - 3\cdot1)$, $(4 - 3\cdot2)$, $(11 - 3\cdot5) \implies 0, -2, -4$<br>
+        $$ \left( \begin{array}{cc|c} 1 & 2 & 5 \\ 0 & -2 & -4 \end{array} \right) $$</p>
+        <p><em>Paso 3: Hacer uno el -2 ($R_2 \to R_2 / -2$).</em><br>
+        $$ \left( \begin{array}{cc|c} 1 & 2 & 5 \\ 0 & 1 & 2 \end{array} \right) $$</p>
+        <p><em>Paso 4: Hacer cero el 2 de arriba ($R_1 \to R_1 - 2R_2$).</em><br>
+        Fila 1 nueva: $(1 - 2\cdot0)$, $(2 - 2\cdot1)$, $(5 - 2\cdot2) \implies 1, 0, 1$<br>
+        $$ \left( \begin{array}{cc|c} 1 & 0 & 1 \\ 0 & 1 & 2 \end{array} \right) $$</p>
+        <p><strong>Solución directa leída a la derecha: $x = 1, y = 2$.</strong></p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 20.4 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Inversa con Gauss-Jordan</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
+        <p><strong>Ejemplo 11: Inversa de $A = \begin{pmatrix} 2 & 1 \\ 4 & 3 \end{pmatrix}$</strong></p>
+        <p><em>Paso 1: Aumentar con la Identidad.</em><br>
+        $$ \left( \begin{array}{cc|cc} 2 & 1 & 1 & 0 \\ 4 & 3 & 0 & 1 \end{array} \right) $$</p>
+        <p><em>Paso 2: Hacer cero el 4 ($R_2 \to R_2 - 2R_1$).</em><br>
+        Fila 2: $(4-4), (3-2) \mid (0-2), (1-0) \implies 0, 1 \mid -2, 1$<br>
+        $$ \left( \begin{array}{cc|cc} 2 & 1 & 1 & 0 \\ 0 & 1 & -2 & 1 \end{array} \right) $$</p>
+        <p><em>Paso 3: Hacer cero el 1 de arriba ($R_1 \to R_1 - R_2$).</em><br>
+        Fila 1: $(2-0), (1-1) \mid (1 - (-2)), (0-1) \implies 2, 0 \mid 3, -1$<br>
+        $$ \left( \begin{array}{cc|cc} 2 & 0 & 3 & -1 \\ 0 & 1 & -2 & 1 \end{array} \right) $$</p>
+        <p><em>Paso 4: Hacer uno el 2 ($R_1 \to R_1 / 2$).</em><br>
+        $$ \left( \begin{array}{cc|cc} 1 & 0 & 1.5 & -0.5 \\ 0 & 1 & -2 & 1 \end{array} \right) $$</p>
+        <p><strong>La matriz de la derecha es la inversa $A^{-1} = \begin{pmatrix} 1.5 & -0.5 \\ -2 & 1 \end{pmatrix}$.</strong></p>
+    </div>
+</div>
+<!-- ── DIAPOSITIVA 21 ── -->
+<div class="slide">
+    <h2>3.16 Resolviendo Sistemas: Regla de Cramer</h2>
+    <div class="contenido-texto">
+        <p>Si no quieres calcular inversas, existe la <strong>Regla de Cramer</strong>, que usa puros determinantes. Es muy útil en economía para ver cómo un parámetro cambia todo el sistema.</p>
+        <p>La regla dice que el valor de cada variable $x_i$ es:</p>
+        <p style="text-align: center; font-size: 1.2rem;">
+            $$ x_i = \frac{|A_i|}{|A|} $$
+        </p>
+        <ul>
+            <li>$|A|$ es el determinante general del sistema.</li>
+            <li>$|A_i|$ es el determinante de la matriz $A$, pero <em>sustituyendo</em> la columna de la variable $i$ por el vector de resultados $B$.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 22 ── -->
+<div class="slide">
+    <h2>Ejemplos Resueltos: Regla de Cramer</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 8: Equilibrio de dos mercados (Bienes A y B)</strong><br>
+        $3P_A + P_B = 5$<br>
+        $P_A + 2P_B = 5$</p>
+        <p><em>Paso 1:</em> Det. general $|A| = \det \begin{pmatrix} 3 & 1 \\ 1 & 2 \end{pmatrix} = (3 \cdot 2) - (1 \cdot 1) = 6 - 1 = 5$</p>
+        <p><em>Paso 2:</em> Matriz para $P_A$ (Cambiamos la 1ra columna por los resultados de la derecha):<br>
+        $|A_{P_A}| = \det \begin{pmatrix} \mathbf{5} & 1 \\ \mathbf{5} & 2 \end{pmatrix} = (5 \cdot 2) - (1 \cdot 5) = 10 - 5 = 5$</p>
+        <p><em>Paso 3:</em> Matriz para $P_B$ (Cambiamos la 2da columna):<br>
+        $|A_{P_B}| = \det \begin{pmatrix} 3 & \mathbf{5} \\ 1 & \mathbf{5} \end{pmatrix} = (3 \cdot 5) - (5 \cdot 1) = 15 - 5 = 10$</p>
+        <p><em>Paso 4:</em> Dividir:<br>
+        $P_A = 5 / 5 = 1$<br>
+        $P_B = 10 / 5 = 2$</p>
+    </div>
+</div>
+
+<!-- ── TEMA 4: TRANSFORMACIONES LINEALES ── -->
+<!-- ── DIAPOSITIVA 23 ── -->
+<div class="slide">
+    <h2>3.17 Transformaciones Lineales</h2>
+    <div class="contenido-texto">
+        <p>Las funciones normales toman un número y devuelven un número ($f(x) = y$). Las <strong>Transformaciones Lineales ($T$)</strong> toman un <em>vector</em> (una lista de números) y devuelven otro <em>vector</em>.</p>
+        <p>Una transformación es "lineal" si cumple dos reglas de comportamiento predecible:</p>
+        <ol>
+            <li>$T(u + v) = T(u) + T(v)$ (El todo es igual a la suma de las partes).</li>
+            <li>$T(c \cdot u) = c \cdot T(u)$ (Proporcionalidad escalar).</li>
+        </ol>
+        <p>En el mundo real, cada matriz funciona como una transformación lineal que "estira", "encoge" o "rota" los datos de un vector.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 24 ── -->
+<div class="slide">
+    <h2>3.18 Aplicando una Transformación</h2>
+    <div class="contenido-texto">
+        <p>Toda transformación lineal $T$ puede representarse como una multiplicación por una matriz $A$. La fórmula es simplemente: $T(x) = Ax$.</p>
+        <p><strong>Ejemplo 9: Proyección de crecimiento</strong><br>
+        Imagina que una transformación toma las ventas de este año $\begin{pmatrix} x \\ y \end{pmatrix}$ y predice las del próximo bajo la matriz $A = \begin{pmatrix} 1.2 & 0 \\ 0 & 1.5 \end{pmatrix}$ (crecimiento del 20% y 50%).</p>
+        <p>Si las ventas actuales son $v = \begin{pmatrix} 100 \\ 200 \end{pmatrix}$, aplicamos la transformación:<br>
+        $$ T(v) = \begin{pmatrix} 1.2 & 0 \\ 0 & 1.5 \end{pmatrix} \begin{pmatrix} 100 \\ 200 \end{pmatrix} = \begin{pmatrix} (1.2 \cdot 100) + 0 \\ 0 + (1.5 \cdot 200) \end{pmatrix} = \begin{pmatrix} 120 \\ 300 \end{pmatrix} $$</p>
+        <p>El álgebra lineal acaba de transformar los datos actuales en el escenario futuro.</p>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 25 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Álgebra Lineal (Parte 1/2)</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
+        <p>Resuelve paso a paso en tu cuaderno:</p>
+        <strong>A. Operaciones Matriciales</strong><br>
+        Dadas $A = \begin{pmatrix} 1 & -2 \\ 3 & 0 \end{pmatrix}$, $B = \begin{pmatrix} 4 & 1 \\ -1 & 5 \end{pmatrix}$, $C = \begin{pmatrix} 2 & -1 & 3 \\ 0 & 4 & -2 \end{pmatrix}$
+        <ol>
+            <li>Calcula $2A + B$.</li>
+            <li>Calcula $A - 3B$.</li>
+            <li>Multiplica $A \cdot B$.</li>
+            <li>Multiplica $B \cdot A$. ¿Da el mismo resultado que el ejercicio anterior?</li>
+            <li>Multiplica $A \cdot C$. (Verifica primero si las dimensiones son compatibles).</li>
+            <li>Encuentra la matriz transpuesta $C^T$.</li>
+            <li>Calcula el producto de un vector fila por columna: $\begin{pmatrix} 2 & 5 & -1 \end{pmatrix} \begin{pmatrix} 4 \\ 0 \\ 3 \end{pmatrix}$.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ── DIAPOSITIVA 26 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Álgebra Lineal (Parte 2/2)</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
+        <strong>B. Determinantes e Inversas</strong>
+        <ol start="8">
+            <li>Calcula el determinante de $A = \begin{pmatrix} 7 & -3 \\ 2 & 4 \end{pmatrix}$.</li>
+            <li>Calcula el determinante de $B = \begin{pmatrix} 5 & 10 \\ 2 & 4 \end{pmatrix}$. ¿Tiene matriz inversa?</li>
+            <li>Halla la matriz inversa ($A^{-1}$) de la matriz del ejercicio 8.</li>
+            <li>Usa la Regla de Sarrus para hallar el determinante de $\begin{pmatrix} 2 & 0 & 1 \\ 3 & -1 & 4 \\ 0 & 5 & 2 \end{pmatrix}$.</li>
+        </ol>
+        <strong>C. Sistemas Lineales</strong>
+        <ol start="12">
+            <li>Escribe el siguiente sistema en forma matricial ($AX=B$):<br>$5x - 2y = 14$<br>$x + 3y = 7$</li>
+            <li>Resuelve el sistema anterior usando la <strong>Regla de Cramer</strong>.</li>
+            <li>Resuelve el mismo sistema pero calculando la <strong>Matriz Inversa</strong> de coeficientes.</li>
+            <li>Aplica la transformación lineal definida por $A = \begin{pmatrix} 2 & -1 \\ 1 & 1 \end{pmatrix}$ al vector de producción $v = \begin{pmatrix} 5 \\ 10 \end{pmatrix}$.</li>
+        </ol>
+    
+    </div>
+</div>
+<!-- ── DIAPOSITIVA DE CIERRE: ÁLGEBRA LINEAL ── -->
+<div class="slide">
+    <h2 style="color: #2a4939; text-align: center; margin-bottom: 20px;">¡Felicidades! Has completado el Módulo 3</h2>
+    <div class="contenido-texto" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 15px;">📊</div>
+        <p>Acabas de adquirir una de las herramientas más cotizadas en la economía moderna y la ciencia de datos. Ya no estás limitado a analizar una o dos variables a la vez.</p>
+        <p style="margin-top: 15px;">Tu caja de herramientas analíticas ahora incluye:</p>
+        <ul style="text-align: left; display: inline-block; margin-top: 10px;">
+            <li>El empaquetamiento y manipulación de datos masivos mediante operaciones matriciales.</li>
+            <li>El cálculo de determinantes para diagnosticar la viabilidad de un modelo matemático.</li>
+            <li>La resolución de sistemas económicos complejos (como el equilibrio de múltiples mercados) usando la Matriz Inversa y la Regla de Cramer.</li>
+            <li>La comprensión de cómo los datos evolucionan a través de transformaciones lineales.</li>
+        </ul>
+        <p style="margin-top: 25px; font-weight: bold;">El terreno está preparado. Estás listo para maximizar recursos escasos en el <strong>Módulo 4: Programación Lineal</strong>.</p>
+        <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
+    <button id="btnCompletarM1" style="background-color: #2a4939; color: #fff1da; padding: 14px 28px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: background 0.3s;">
+        Marcar Módulo 3 como Completado
+    </button>
+</div>
+    </div>
+</div>
+            <!-- ── NAVEGACIÓN ── -->
+            <div class="nav-buttons">
+                <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
+                <div class="puntos-nav" id="puntos"></div>
+                <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+            </div>
+
+        </div>
+    
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────── -->
+<footer>
+    <div class="footer-marca">Centro Popular de Estudios Económicos</div>
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="footer-badge">En construcción</span>
+        <span>© 2026</span>
+    </div>
+</footer>
+
+<script>
+    /* ── Menú ── */
+    function toggleMenu() {
+        const btn     = document.getElementById('menuBtn');
+        const panel   = document.getElementById('menuPanel');
+        const overlay = document.getElementById('menuOverlay');
+        const abierto = panel.classList.contains('abierto');
+        btn.classList.toggle('abierto', !abierto);
+        panel.classList.toggle('abierto', !abierto);
+        overlay.classList.toggle('visible', !abierto);
+        panel.setAttribute('aria-hidden', abierto ? 'true' : 'false');
+        document.body.style.overflow = abierto ? '' : 'hidden';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const panel = document.getElementById('menuPanel');
+            if (panel.classList.contains('abierto')) toggleMenu();
+        }
+    });
+
+    /* ── Diapositivas ── */
+    let currentSlide = 0;
+    const slides  = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slideCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progress = document.getElementById('progressBar');
+    const puntosContainer = document.getElementById('puntos');
+
+    // Generar puntos de navegación
+    slides.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.classList.add('punto');
+        if (i === 0) btn.classList.add('activo');
+        btn.addEventListener('click', () => goToSlide(i));
+        puntosContainer.appendChild(btn);
+    });
+
+    function updateUI() {
+        const total = slides.length;
+        counter.innerText = `${currentSlide + 1} / ${total}`;
+        prevBtn.disabled = (currentSlide === 0);
+        nextBtn.disabled = (currentSlide === total - 1);
+        progress.style.width = `${((currentSlide + 1) / total) * 100}%`;
+
+        document.querySelectorAll('.punto').forEach((p, i) => {
+            p.classList.toggle('activo', i === currentSlide);
+        });
+    }
+
+    function goToSlide(n) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = n;
+        slides[currentSlide].classList.add('active');
+        updateUI();
+    }
+
+    function changeSlide(n) {
+        goToSlide(currentSlide + n);
+    }
+
+    // Navegación con teclado
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+    });
+
+    updateUI();
+</script>
+</body>
+</html>
