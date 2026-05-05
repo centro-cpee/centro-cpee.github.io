@@ -475,43 +475,13 @@ footer {
 
     </div>
 </main>
-
-<!-- ── FOOTER ─────────────────────────────────────────── -->
-<footer>
-    <div class="footer-marca">Centro Popular de Estudios Económicos</div>
-    <div style="display:flex; align-items:center; gap:12px;">
-        <span class="footer-badge">En construcción</span>
-        <span>© 2026</span>
-    </div>
-</footer>
-
-<script>
-    function toggleMenu() {
-        const btn     = document.getElementById('menuBtn');
-        const panel   = document.getElementById('menuPanel');
-        const overlay = document.getElementById('menuOverlay');
-        const abierto = panel.classList.contains('abierto');
-
-        btn.classList.toggle('abierto', !abierto);
-        panel.classList.toggle('abierto', !abierto);
-        overlay.classList.toggle('visible', !abierto);
-        panel.setAttribute('aria-hidden', abierto ? 'true' : 'false');
-        document.body.style.overflow = abierto ? '' : 'hidden';
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const panel = document.getElementById('menuPanel');
-            if (panel.classList.contains('abierto')) toggleMenu();
-        }
-    });
-</script>
-<!-- CANDADO DE SEGURIDAD DEL LABORATORIO -->
+<!-- CEREBRO DE FIREBASE: SEGURIDAD Y GUARDADO DE PROGRESO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        // IMPORTAMOS FIRESTORE (La Base de Datos)
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        // Tus llaves del CPEE
         const firebaseConfig = {
             apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
             authDomain: "cpee-plataforma-a655a.firebaseapp.com",
@@ -523,16 +493,55 @@ footer {
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app); // Encendemos la libreta
 
-        // El vigilante de la puerta
-        onAuthStateChanged(auth, (user) => {
+        const btnCompletar = document.getElementById("btnCompletarM1");
+
+        // Función visual para cuando ya está terminado
+        function marcarBotonComoCompletado() {
+            btnCompletar.innerText = "✅ Módulo 1 Completado";
+            btnCompletar.style.backgroundColor = "#6b4c35"; // Cambia a café claro
+            btnCompletar.disabled = true;
+            btnCompletar.style.cursor = "default";
+        }
+
+        // El vigilante de la puerta y del progreso
+        onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                // Si NO hay usuario, lo regresamos a la pantalla de login.
-                // Como este archivo está adentro de la carpeta 'laboratorio', 
-                // usamos '../' para decirle que salga una carpeta hacia atrás.
+                // Si no tiene cuenta, lo corre
                 window.location.href = "../login.html";
+            } else {
+                // SI TIENE CUENTA, buscamos su página en la libreta
+                const docRef = doc(db, "progreso_usuarios", user.uid);
+                const docSnap = await getDoc(docRef);
+
+                // Verificamos si ya había completado el curso antes
+                if (docSnap.exists() && docSnap.data().modulo1_completado === true) {
+                    marcarBotonComoCompletado();
+                }
+
+                // Programamos el botón para que guarde al darle clic
+                btnCompletar.addEventListener("click", async () => {
+                    // Cambiamos el texto mientras guarda
+                    btnCompletar.innerText = "Guardando..."; 
+                    
+                    try {
+                        // Escribe en la libreta en la nube
+                        await setDoc(docRef, {
+                            correo: user.email,
+                            modulo1_completado: true,
+                            fecha_completado: new Date()
+                        }, { merge: true }); // El merge hace que no borre otros módulos que guardemos después
+                        
+                        marcarBotonComoCompletado();
+                        alert("¡Felicidades! Progreso guardado en la nube.");
+                    } catch (error) {
+                        console.error("Error al guardar: ", error);
+                        alert("Hubo un error al guardar tu progreso.");
+                        btnCompletar.innerText = "Marcar Módulo 1 como Completado";
+                    }
+                });
             }
-            // Si SÍ hay usuario, el código no hace nada y le permite ver la clase.
         });
     </script>
 </body>
