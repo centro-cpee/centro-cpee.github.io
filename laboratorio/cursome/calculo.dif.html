@@ -1015,35 +1015,120 @@ footer {
 <div class="slide">
     <h2>5.16 El Óptimo Económico (IMg = CMg)</h2>
     <div class="contenido-texto" style="font-size: 0.9rem;">
-        <p>El punto donde se maximiza el Beneficio $\pi(Q)$ ocurre mágicamente cuando el Ingreso Marginal iguala al Costo Marginal.</p>
+        <p>El punto donde se maximiza el Beneficio $\pi(Q)$ ocurre mágicamente cuando el Ingreso Marginal iguala al Costo Marginal. En ese momento exacto, la pendiente de la tangente se vuelve plana.</p>
         
-        <!-- INICIO DE GRÁFICA SVG: OPTIMIZACIÓN -->
-        <div style="text-align: center; margin: 10px 0;">
-            <svg viewBox="0 0 400 200" width="100%" max-width="400px" style="background-color: #fafafa; border: 1px solid #ddd; border-radius: 8px;">
-                <!-- Ejes -->
-                <line x1="40" y1="160" x2="360" y2="160" stroke="#888" stroke-width="2" />
-                <line x1="40" y1="160" x2="40" y2="20" stroke="#888" stroke-width="2" />
-                
-                <!-- Parábola de Beneficios -->
-                <path d="M 40 160 Q 200 -40 360 160" fill="none" stroke="#2a4939" stroke-width="3" />
-                
-                <!-- Tangente Plana en el Máximo -->
-                <line x1="150" y1="10" x2="250" y2="10" stroke="#f0ad4e" stroke-width="3" />
-                <circle cx="200" cy="10" r="5" fill="#d9534f" />
-                
-                <!-- Línea punteada hacia el eje X -->
-                <line x1="200" y1="10" x2="200" y2="160" stroke="#666" stroke-dasharray="4,4" />
-                
-                <!-- Etiquetas -->
-                <text x="220" y="25" font-size="12" font-weight="bold">π'(Q) = 0</text>
-                <text x="180" y="175" font-size="12" font-weight="bold">Q óptima</text>
-                <text x="5" y="50" font-size="12" transform="rotate(-90 20,90)">Beneficio (π)</text>
+        <div style="text-align: center; margin: 10px 0; background: #fafafa; border: 1px solid #ddd; border-radius: 12px; padding: 15px;">
+            <svg id="graficaOpt" viewBox="0 0 500 280" width="100%" style="max-height: 260px;">
+                <line x1="50" y1="250" x2="460" y2="250" stroke="#777" stroke-width="2"/>
+                <line x1="50" y1="250" x2="50" y2="30" stroke="#777" stroke-width="2"/>
+
+                <path id="curvaOpt" fill="none" stroke="#2a4939" stroke-width="4"/>
+
+                <line id="tangenteOpt" stroke="#f0ad4e" stroke-width="3"/>
+
+                <circle id="puntoOpt" r="6" fill="#d9534f"/>
+
+                <line id="verticalOpt" stroke="#666" stroke-width="1.5" stroke-dasharray="5 5"/>
+
+                <text x="440" y="270" font-size="12" font-weight="bold">Q</text>
+                <text x="20" y="40" font-size="12" font-weight="bold">π(Q)</text>
+
+                <text id="textoOpt" x="70" y="40" font-size="14" font-weight="bold" fill="#333"></text>
             </svg>
+            <p style="font-size: 0.8rem; color: #666; margin-top: 5px; font-style: italic;">
+                La animación se detiene cuando $\pi'(Q)=0$.<br>
+                Porque incluso las derivadas necesitan contemplar el vacío durante 5 segundos.
+            </p>
         </div>
-        
         <p>Matemáticamente: Si $\pi = Ingreso - Costo$, al derivar y aplicar el criterio ($\pi' = 0$), obtenemos que $Ingreso' - Costo' = 0$, lo que implica $IMg = CMg$.</p>
     </div>
 </div>
+
+<script>
+(function() {
+    const curva = document.getElementById("curvaOpt");
+    const tangente = document.getElementById("tangenteOpt");
+    const punto = document.getElementById("puntoOpt");
+    const vertical = document.getElementById("verticalOpt");
+    const texto = document.getElementById("textoOpt");
+
+    if (!curva) return; // Seguridad
+
+    // Función de Beneficio y su derivada
+    function f(x) { return -0.004 * Math.pow(x - 200, 2) + 170; }
+    function fp(x) { return -0.008 * (x - 200); }
+    
+    // Conversión SVG
+    function svgX(x) { return x + 50; }
+    function svgY(y) { return 250 - y; }
+
+    // Dibujar curva inicial
+    let d = "";
+    for (let x = 0; x <= 400; x++) {
+        let y = f(x);
+        d += (x === 0 ? "M " : "L ") + svgX(x) + " " + svgY(y) + " ";
+    }
+    curva.setAttribute("d", d);
+
+    // Variables de animación
+    let xAnim = 0;
+    let direccion = 1;
+    let pausado = false;
+
+    function animar() {
+        let y = f(xAnim);
+        let pendiente = fp(xAnim);
+
+        let px = svgX(xAnim);
+        let py = svgY(y);
+
+        // Actualizar punto
+        punto.setAttribute("cx", px);
+        punto.setAttribute("cy", py);
+
+        // Actualizar línea vertical
+        vertical.setAttribute("x1", px);
+        vertical.setAttribute("y1", py);
+        vertical.setAttribute("x2", px);
+        vertical.setAttribute("y2", 250);
+
+        // Actualizar tangente
+        let largo = 100; // Ajustado para que no se desborde visualmente
+        let dx = largo;
+        let dy = pendiente * largo;
+
+        tangente.setAttribute("x1", px - dx);
+        tangente.setAttribute("y1", py + dy);
+        tangente.setAttribute("x2", px + dx);
+        tangente.setAttribute("y2", py - dy);
+
+        // Actualizar texto
+        texto.textContent = `Q = ${xAnim.toFixed(1)}   |   π'(Q) = ${pendiente.toFixed(3)}`;
+
+        // Detener en el máximo
+        if (Math.abs(pendiente) < 0.01 && !pausado) {
+            pausado = true;
+            texto.textContent = `Q = ${xAnim.toFixed(1)}   |   π'(Q) = 0  ← ¡Beneficio Máximo!`;
+            
+            setTimeout(() => {
+                pausado = false;
+            }, 5000);
+        }
+
+        // Movimiento
+        if (!pausado) {
+            xAnim += direccion * 1.5; // Velocidad ajustada
+            if (xAnim >= 400 || xAnim <= 0) {
+                direccion *= -1;
+            }
+        }
+
+        requestAnimationFrame(animar);
+    }
+
+    animar();
+})();
+</script>
 
 <!-- ── DIAPOSITIVA 22 ── -->
 <div class="slide">
