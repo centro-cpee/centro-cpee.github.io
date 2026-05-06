@@ -1201,15 +1201,15 @@ footer {
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                // Si no tiene cuenta, lo manda a iniciar sesión (ajusta la ruta si tu login está en otra carpeta)
-                window.location.href = "login.html"; 
+                // La diagonal "/" le dice al navegador: "ve a la carpeta principal del proyecto"
+                window.location.href = "/login.html"; 
             } else {
                 const docRef = doc(db, "progreso_usuarios", user.uid);
                 const docSnap = await getDoc(docRef);
 
-                // 1. SEGURIDAD: Si no tiene la llave de matemáticas, lo pateamos a la página de inicio
+                // 1. SEGURIDAD: También le ponemos la diagonal al inicio del dashboard
                 if (!docSnap.exists() || docSnap.data().acceso_matematicas !== true) {
-                    window.location.href = "matematicas_inicio.html"; 
+                    window.location.href = "/matematicas_inicio.html"; 
                     return; // Detiene la ejecución del código
                 }
 

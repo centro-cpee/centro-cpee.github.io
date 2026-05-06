@@ -562,7 +562,7 @@ footer {
     <div class="header-inner">
         <div class="header-texto">
             <p class="header-eyebrow">Laboratorio · Matemáticas</p>
-            <h1>Módulo 2: Álgebra</h1>
+            <h1>Módulo 1: Fundamentos</h1>
         </div>
         <div class="modulo-badge">
             <span class="num">01</span>
@@ -586,370 +586,324 @@ footer {
 
         <!-- Tarjeta de diapositivas -->
         <div class="slide-container">
-<!-- ── TEMA 1: INTRODUCCIÓN AL ÁLGEBRA BÁSICA ── -->
-<!-- ── DIAPOSITIVA 1 ── -->
-<div class="slide active">
-    <h2>2.1 El Álgebra como Lenguaje Económico</h2>
-    <div class="contenido-texto">
-        <p>En aritmética trabajamos con números específicos ($5 + 3 = 8$). En álgebra, damos un salto hacia la generalización usando letras (variables) para representar cantidades que pueden cambiar.</p>
-        <p>En el análisis económico, las variables más comunes son:</p>
-        <ul>
-            <li>$P$: Precio de un bien o servicio.</li>
-            <li>$Q$: Cantidad producida o demandada.</li>
-            <li>$Y$: Ingreso (del inglés <em>Yield</em> o <em>Income</em>).</li>
-            <li>$C$: Costos de una empresa.</li>
-            <li>$\pi$: Beneficios o ganancias (Ingresos menos Costos).</li>
-        </ul>
-        <p>El álgebra nos permite escribir ecuaciones que muestran cómo se relacionan estas variables antes de conocer sus valores exactos. Para dominar los modelos económicos, primero debemos dominar las reglas de este lenguaje.</p>
-    </div>
-</div>
 
+            <!-- ── DIAPOSITIVA 1 ── -->
+            <div class="slide active">
+                <h2>¿Para qué sirven las matemáticas en economía?</h2>
+                <div class="contenido-texto">
+                    <p>En el análisis económico, las matemáticas cumplen funciones críticas que van más allá del simple cálculo:</p>
+                    <ul>
+                        <li>Nos permiten expresar suposiciones y conclusiones mediante símbolos y ecuaciones, evitando caer en ambigüedades.</li>
+                        <li>Al utilizar teoremas matemáticos, el analista se ve forzado a explicar todos los supuestos o condiciones necesarias para no perder el sentido económico.</li>
+                        <li>Las matemáticas nos permiten trabajar con <em>n</em> variables, permitiéndonos hacer modelos que reflejen la realidad.</li>
+                        <li>Herramientas como el cálculo sirven para optimizar (maximizar ganancias o minimizar costos) y el álgebra lineal para analizar la interdependencia entre los distintos sectores de una economía.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ── TEMA 1: LÓGICA PROPOSICIONAL (Sin tablas de verdad) ── -->
 <!-- ── DIAPOSITIVA 2 ── -->
 <div class="slide">
-    <h2>2.2 Leyes de los Exponentes</h2>
+    <h2>1.1 Lógica Proposicional: Conceptos Básicos</h2>
     <div class="contenido-texto">
-        <p>Los exponentes nos indican cuántas veces se multiplica una base por sí misma. Son fundamentales para calcular tasas de interés compuesto o modelar funciones de producción (como la de Cobb-Douglas).</p>
-        <p>Las reglas de oro que no puedes olvidar:</p>
+        <p>Iniciamos con la <strong>proposición</strong>: una afirmación que solo puede ser verdadera ($V$) o falsa ($F$). Los <strong>conectivos lógicos</strong> nos permiten crear argumentos complejos a partir de ideas simples:</p>
         <ul>
-            <li><strong>Multiplicación (se suman):</strong> $x^a \cdot x^b = x^{a+b}$</li>
-            <li><strong>División (se restan):</strong> $\frac{x^a}{x^b} = x^{a-b}$</li>
-            <li><strong>Potencia de potencia (se multiplican):</strong> $(x^a)^b = x^{a \cdot b}$</li>
-            <li><strong>Exponente cero:</strong> $x^0 = 1$ (para cualquier $x \neq 0$)</li>
-            <li><strong>Exponente negativo (se invierte):</strong> $x^{-a} = \frac{1}{x^a}$</li>
-            <li><strong>Exponente fraccionario (raíces):</strong> $x^{\frac{a}{b}} = \sqrt[b]{x^a}$</li>
+            <li><strong>Negación ($\neg p$):</strong> Afirma exactamente lo contrario a $p$.</li>
+            <li><strong>Conjunción ($p \land q$):</strong> "Y". Exige que ambas condiciones se cumplan estrictamente al mismo tiempo.</li>
+            <li><strong>Disyunción ($p \lor q$):</strong> "O". Es flexible; basta con que al menos una condición sea cierta para que todo el enunciado lo sea.</li>
+            <li><strong>Implicación ($p \implies q$):</strong> "Si $p$, entonces $q$". Establece una relación causa-efecto o de condición suficiente. Es la base de cualquier teorema matemático.</li>
+            <li><strong>Bicondicional ($p \iff q$):</strong> "Si y solo si". Significa que $p$ y $q$ son equivalentes; no puede ocurrir una sin la otra.</li>
         </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 3 ── -->
 <div class="slide">
-    <h2>Ejemplos Resueltos: Exponentes</h2>
+    <h2>1.2 Tautologías y Equivalencias</h2>
     <div class="contenido-texto">
-        <p><strong>Ejemplo 1: Simplificar factores de capital ($K$) y trabajo ($L$)</strong><br>
-        Multiplica: $(2K^3 L^2)(4K L^5)$<br>
-        <em>Paso 1:</em> Multiplica los coeficientes numéricos: $2 \cdot 4 = 8$<br>
-        <em>Paso 2:</em> Suma los exponentes de $K$: $K^3 \cdot K^1 = K^{3+1} = K^4$<br>
-        <em>Paso 3:</em> Suma los exponentes de $L$: $L^2 \cdot L^5 = L^{2+5} = L^7$<br>
-        <em>Resultado final:</em> $8K^4 L^7$</p>
-
-        <p><strong>Ejemplo 2: División y exponentes negativos</strong><br>
-        Simplifica: $\frac{15 Q^2 P^{-3}}{5 Q^5 P^{-1}}$<br>
-        <em>Paso 1:</em> Divide números: $\frac{15}{5} = 3$<br>
-        <em>Paso 2:</em> Resta exponentes de $Q$: $Q^{2-5} = Q^{-3}$<br>
-        <em>Paso 3:</em> Resta exponentes de $P$: $P^{-3 - (-1)} = P^{-3+1} = P^{-2}$<br>
-        <em>Resultado final:</em> $3 Q^{-3} P^{-2}$, o expresado sin negativos: $\frac{3}{Q^3 P^2}$</p>
+        <p>En lugar de memorizar escenarios mecánicos, en matemáticas buscamos identificar estructuras lógicas que siempre funcionan:</p>
+        <ul>
+            <li><strong>Tautología:</strong> Un argumento que siempre es verdadero por su pura estructura lógica, sin importar de qué estemos hablando. Por ejemplo, la frase "Llueve o no llueve" ($p \lor \neg p$) es una verdad absoluta indiscutible.</li>
+            <li><strong>Contradicción:</strong> Algo que es imposible por definición. Por ejemplo, "Subió y no subió" ($p \land \neg p$).</li>
+            <li><strong>Leyes de De Morgan:</strong> Son trucos de oro para negar ideas agrupadas.
+                <ul style="margin-top: 5px;">
+                    <li>Negar que pasaron <em>ambas</em> cosas ($\neg(p \land q)$), es lo mismo que decir que falló la primera <em>o</em> falló la segunda ($\neg p \lor \neg q$).</li>
+                    <li>Negar que pasó <em>al menos una</em> de las dos ($\neg(p \lor q)$), es lo mismo que decir que no pasó la primera <em>y</em> tampoco la segunda ($\neg p \land \neg q$).</li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 4 ── -->
 <div class="slide">
-    <h2>2.3 Operaciones con Polinomios</h2>
+    <h2>Práctica Autónoma: Lógica Proposicional</h2>
     <div class="contenido-texto">
-        <p>Un polinomio es una expresión algebraica formada por la suma o resta de varios términos. En economía, la función de beneficios de una empresa ($\pi$) suele ser la resta de dos polinomios: el Ingreso Total menos el Costo Total.</p>
-        <ul>
-            <li><strong>Suma y Resta:</strong> Solo puedes sumar o restar <em>términos semejantes</em> (aquellos que tienen exactamente las mismas letras y exponentes). $3Q^2$ y $5Q^2$ se pueden sumar, pero $3Q^2$ y $5Q$ no.</li>
-            <li><strong>Multiplicación:</strong> Todo término del primer paréntesis debe multiplicarse por todo término del segundo (propiedad distributiva). Ten mucho cuidado con la ley de los signos.</li>
-        </ul>
+        <p>Realiza los siguientes ejercicios analíticos en tu cuaderno:</p>
+        <ol>
+            <li><strong>Traducción:</strong> Sean $p$: "Hay inflación" y $q$: "El banco central interviene". Escribe en lenguaje natural las siguientes expresiones formales: 
+                <ul>
+                    <li>$p \implies q$</li>
+                    <li>$\neg q \implies \neg p$</li>
+                </ul>
+                ¿Tienen el mismo significado en la vida real?
+            </li>
+            <li><strong>Aplicación de De Morgan:</strong> Un reglamento dice: "Para aprobar necesitas entregar la tesis ($t$) Y pasar el examen ($e$)". Si un estudiante reprueba, ¿cómo expresas lógicamente lo que le faltó usando la Ley de De Morgan?</li>
+        </ol>
     </div>
 </div>
 
+<!-- ── TEMA 2: LÓGICA DE PREDICADOS (Simplificada) ── -->
 <!-- ── DIAPOSITIVA 5 ── -->
 <div class="slide">
-    <h2>Ejemplos Resueltos: Polinomios</h2>
+    <h2>1.3 Lógica de Predicados: De lo particular a lo general</h2>
     <div class="contenido-texto">
-        <p><strong>Ejemplo 1: Cálculo de Beneficios ($\pi = I - C$)</strong><br>
-        El Ingreso es $I = 50Q - 2Q^2$ y el Costo es $C = 10 + 5Q$. Calcula $\pi$.<br>
-        <em>Paso 1:</em> Plantea la resta: $\pi = (50Q - 2Q^2) - (10 + 5Q)$<br>
-        <em>Paso 2:</em> El signo menos cambia todos los signos del segundo paréntesis: $\pi = 50Q - 2Q^2 - 10 - 5Q$<br>
-        <em>Paso 3:</em> Agrupa términos semejantes (las $Q$ con las $Q$): $\pi = -2Q^2 + (50Q - 5Q) - 10$<br>
-        <em>Resultado final:</em> $\pi = -2Q^2 + 45Q - 10$</p>
-
-        <p><strong>Ejemplo 2: Multiplicación de binomios</strong><br>
-        Desarrolla: $(P + 3)(2P - 4)$<br>
-        <em>Paso 1:</em> Primeros términos: $P \cdot 2P = 2P^2$<br>
-        <em>Paso 2:</em> Externos e internos: $P(-4) + 3(2P) = -4P + 6P = 2P$<br>
-        <em>Paso 3:</em> Últimos términos: $3(-4) = -12$<br>
-        <em>Resultado final:</em> $2P^2 + 2P - 12$</p>
+        <p>Una proposición normal dice: <em>"Juan es estudiante"</em>. Es fácil saber si es verdad. Pero un <strong>predicado</strong> usa variables: <em>"$x$ es estudiante"</em>. No podemos saber si es verdad hasta saber quién es $x$ o a cuántos nos referimos.</p>
+        <p>Para eso usamos los <strong>cuantificadores</strong>, que nos dicen de cuántos elementos estamos hablando:</p>
+        <ul>
+            <li><strong>Cuantificador Universal ($\forall$):</strong> Significa "Para todos". <br>
+            <em>Ejemplo: $\forall x$, $x$ necesita comer. (Todos necesitan comer).</em></li>
+            <li><strong>Cuantificador Existencial ($\exists$):</strong> Significa "Existe al menos uno" (puede haber más, pero mínimo hay uno). <br>
+            <em>Ejemplo: $\exists x$ tal que $x$ tiene un millón de dólares. (Alguien es millonario).</em></li>
+        </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 6 ── -->
 <div class="slide">
-    <h2>2.4 Factorización</h2>
+    <h2>1.4 ¿Cómo contradecir a alguien? (Negación de Cuantificadores)</h2>
     <div class="contenido-texto">
-        <p>Factorizar es el proceso inverso de multiplicar: es descomponer una expresión en factores más pequeños. Es una herramienta vital para encontrar "puntos muertos" o equilibrios en economía.</p>
-        <p>Los tres métodos que más utilizarás son:</p>
-        <ol>
-            <li><strong>Factor Común:</strong> Extraer el término que se repite en todos lados. (Ej. $ax + ay = a(x+y)$).</li>
-            <li><strong>Diferencia de Cuadrados:</strong> Dos cosas al cuadrado restándose siempre se factorizan en binomios conjugados: $x^2 - y^2 = (x - y)(x + y)$.</li>
-            <li><strong>Trinomios de la forma $x^2 + bx + c$:</strong> Buscas dos números que sumados te den $b$ y multiplicados te den $c$.</li>
-        </ol>
+        <p>Negar cuantificadores es simplemente usar el sentido común para ganar un debate:</p>
+        <ul>
+            <li><strong>Para negar un "Todos" ($\forall$):</strong> <br>
+            Si yo afirmo: <em>"Todos los cisnes son blancos"</em>, tú no necesitas revisar cada cisne del mundo para demostrar que miento. Solo necesitas traerme <strong>un</strong> cisne que sea negro. <br>
+            <strong>Regla:</strong> $\neg (\forall x, P(x))$ se convierte en $\exists x, \neg P(x)$.</li>
+            <br>
+            <li><strong>Para negar un "Existe" ($\exists$):</strong> <br>
+            Si yo afirmo: <em>"Existe un monstruo debajo de la cama"</em>, para demostrar que miento, tú tienes que encender la luz y comprobar que <strong>ninguno</strong> de los rincones tiene un monstruo. <br>
+            <strong>Regla:</strong> $\neg (\exists x, P(x))$ se convierte en $\forall x, \neg P(x)$.</li>
+        </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 7 ── -->
 <div class="slide">
-    <h2>Ejemplos Resueltos: Factorización</h2>
+    <h2>Práctica Autónoma: Lógica de Predicados</h2>
     <div class="contenido-texto">
-        <p><strong>Ejemplo 1: Factor Común</strong><br>
-        Factoriza la función de costo total: $C = 15Q^3 - 5Q^2$<br>
-        <em>Paso 1:</em> El máximo común divisor de 15 y 5 es 5. La letra común con menor exponente es $Q^2$.<br>
-        <em>Paso 2:</em> Divides cada término entre $5Q^2$: $(15Q^3 / 5Q^2) = 3Q$ y $(-5Q^2 / 5Q^2) = -1$.<br>
-        <em>Resultado final:</em> $5Q^2(3Q - 1)$</p>
-
-        <p><strong>Ejemplo 2: Trinomio Cuadrático</strong><br>
-        Factoriza: $P^2 - 7P + 12$<br>
-        <em>Paso 1:</em> Abre dos paréntesis con $P$: $(P \quad)(P \quad)$<br>
-        <em>Paso 2:</em> Busca dos números que multiplicados den $+12$ y sumados den $-7$. Esos números son $-4$ y $-3$.<br>
-        <em>Resultado final:</em> $(P - 4)(P - 3)$</p>
+        <p>Pon a prueba tu intuición con estos ejercicios:</p>
+        <ol>
+            <li>Escribe usando los símbolos $\forall$ o $\exists$ la siguiente frase matemática: "Existe al menos un número real $x$ que, al multiplicarse por cero, da como resultado uno". ¿Es verdadera o falsa?</li>
+            <li>Un político afirma: "Todos los programas sociales reducen la pobreza" ($\forall x, R(x)$). Si fueras un investigador que quiere demostrar que el político miente, ¿qué tendrías que encontrar en los datos? Escribe tu objetivo usando símbolos lógicos.</li>
+            <li>Traduce la frase "No hay reglas sin excepciones" al lenguaje de cuantificadores usando $\forall$ (Todos) y $\exists$ (Existe).</li>
+        </ol>
     </div>
 </div>
-
+<!-- ── TEMA 3: MÉTODOS DE DEMOSTRACIÓN ── -->
 <!-- ── DIAPOSITIVA 8 ── -->
 <div class="slide">
-    <h2>2.5 Ecuaciones Lineales (De primer grado)</h2>
+    <h2>1.5 Métodos de Demostración: El arte de probar</h2>
     <div class="contenido-texto">
-        <p>Una ecuación es una balanza en equilibrio. Tu objetivo es encontrar el valor de la variable oculta (despejar). La regla universal del despeje es simple: <strong>Lo que le haces a un lado de la ecuación, tienes que hacérselo al otro.</strong></p>
+        <p>En matemáticas, no basta con que algo parezca cierto; hay que <strong>demostrarlo</strong> sin dejar lugar a dudas. Toda demostración parte de supuestos conocidos (hipótesis, $p$) para llegar a una conclusión irrebatible ($q$).</p>
         <ul>
-            <li>Si algo está sumando, pasa restando.</li>
-            <li>Si algo está multiplicando, pasa dividiendo a <em>todo</em> el otro lado.</li>
-            <li><strong>Tip clave:</strong> Si la variable que buscas está negativa, es más fácil pasarla al otro lado sumando antes de continuar.</li>
+            <li><strong>Demostración Directa:</strong> Es el camino recto. Asumimos que $p$ es verdadero y, mediante álgebra y lógica paso a paso, llegamos a $q$.<br>
+            <em>Ejemplo:</em> Demostrar que "Si $x$ es un número par, entonces $x^2$ es par". Asumes que $x = 2k$, lo elevas al cuadrado ($4k^2$) y factorizas un 2 para probarlo: $2(2k^2)$.</li>
         </ul>
+        <p>Pero a veces, el camino directo es muy complicado. Para eso existen las estrategias indirectas.</p>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 9 ── -->
 <div class="slide">
-    <h2>Ejemplos Resueltos: Ecuaciones Lineales</h2>
+    <h2>1.6 Demostración por Contrapositiva y Contradicción</h2>
     <div class="contenido-texto">
-        <p><strong>Ejemplo 1: Despeje directo</strong><br>
-        Resuelve: $4x - 8 = 12$<br>
-        <em>Paso 1:</em> Pasa el 8 sumando: $4x = 12 + 8 \implies 4x = 20$<br>
-        <em>Paso 2:</em> Pasa el 4 dividiendo: $x = \frac{20}{4} \implies x = 5$</p>
-
-        <p><strong>Ejemplo 2: Equilibrio de Mercado (Oferta = Demanda)</strong><br>
-        Sea la Demanda $Q_d = 100 - 2P$ y la Oferta $Q_s = 20 + 3P$. Encuentra el Precio de Equilibrio ($P$).<br>
-        <em>Paso 1:</em> Iguala ambas ecuaciones: $100 - 2P = 20 + 3P$<br>
-        <em>Paso 2:</em> Agrupa las $P$ de un lado y los números del otro: $100 - 20 = 3P + 2P$<br>
-        <em>Paso 3:</em> Simplifica: $80 = 5P$<br>
-        <em>Paso 4:</em> Despeja $P$: $P = \frac{80}{5} \implies P = 16$</p>
+        <p>Cuando probar $p \implies q$ es difícil, usamos trucos lógicos:</p>
+        <ul>
+            <li><strong>Por Contrapositiva:</strong> Lógicamente, decir "Si llueve, el piso se moja" es exactamente igual a decir "Si el piso NO está mojado, entonces NO llovió". <br>
+            En lugar de probar $p \implies q$, probamos su equivalente: $\neg q \implies \neg p$. A veces, trabajar con las negaciones hace el álgebra mucho más fácil.</li>
+            <br>
+            <li><strong>Por Contradicción (Reducción al absurdo):</strong> Es el método del investigador. Asumimos que lo que queremos probar es falso y seguimos las reglas matemáticas hasta llegar a algo imposible (como $1 = 0$). Como la matemática no se equivoca, nuestro supuesto inicial debió ser el error, probando así que la afirmación original era cierta.</li>
+        </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 10 ── -->
 <div class="slide">
-    <h2>2.6 Ecuaciones Cuadráticas y Fórmula General</h2>
+    <h2>Práctica Autónoma: Métodos de Demostración</h2>
     <div class="contenido-texto">
-        <p>Cuando la variable de tu ecuación está elevada al cuadrado ($ax^2 + bx + c = 0$), normalmente tendrás <strong>dos soluciones</strong>. Por ejemplo, una empresa podría tener beneficios iguales a cero en dos niveles de producción distintos.</p>
-        <p>Puedes resolverlas factorizando (como vimos antes) e igualando cada paréntesis a cero. Si la factorización es muy difícil, usamos la herramienta definitiva: la <strong>Fórmula General</strong>:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 15px 0;">
-            $$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
-        </p>
+        <p>Aplica la lógica de demostración en los siguientes casos:</p>
+        <ol>
+            <li><strong>Directa:</strong> Demuestra que la suma de dos números impares siempre da como resultado un número par. <em>(Pista: Un número impar se escribe como $2k + 1$).</em></li>
+            <li><strong>Contrapositiva:</strong> Queremos demostrar la frase: "Si $3x + 2$ es impar, entonces $x$ es impar". ¿Cuál sería la afirmación contrapositiva que tendrías que demostrar? Escríbela en lenguaje natural.</li>
+            <li><strong>Contradicción (Análisis de argumento):</strong> Un abogado dice: "Asumamos que mi cliente robó el banco. Si lo hizo, debió estar en la ciudad a las 3 PM. Pero las cámaras lo ubican en otro país a esa hora". ¿Por qué esto demuestra la inocencia del cliente usando reducción al absurdo?</li>
+        </ol>
     </div>
 </div>
 
+<!-- ── TEMA 4: TEORÍA DE CONJUNTOS ── -->
 <!-- ── DIAPOSITIVA 11 ── -->
 <div class="slide">
-    <h2>Ejemplos Resueltos: Ecuaciones Cuadráticas</h2>
+    <h2>1.7 Teoría de Conjuntos: El alfabeto de las matemáticas</h2>
     <div class="contenido-texto">
-        <p><strong>Ejemplo 1: Puntos de equilibrio resolviendo por factorización</strong><br>
-        Encuentra los valores de $Q$ donde los beneficios son cero: $Q^2 - 5Q + 6 = 0$<br>
-        <em>Paso 1:</em> Factoriza el trinomio (números que sumen -5 y multipliquen +6). Son -2 y -3.<br>
-        <em>Paso 2:</em> Escribe: $(Q - 2)(Q - 3) = 0$<br>
-        <em>Paso 3:</em> Para que la multiplicación sea cero, al menos un paréntesis debe ser cero. Igualamos: $Q - 2 = 0 \implies Q = 2$<br>
-        <em>Paso 4:</em> Igualamos el otro: $Q - 3 = 0 \implies Q = 3$<br>
-        <em>Resultado final:</em> La empresa no gana ni pierde produciendo 2 o 3 unidades.</p>
-
-        <p><strong>Ejemplo 2: Usando fórmula general en $2x^2 + 5x - 3 = 0$</strong><br>
-        <em>Paso 1:</em> Identifica $a=2, b=5, c=-3$.<br>
-        <em>Paso 2:</em> Sustituye: $x = \frac{-5 \pm \sqrt{5^2 - 4(2)(-3)}}{2(2)}$<br>
-        <em>Paso 3:</em> Simplifica la raíz: $\sqrt{25 + 24} = \sqrt{49} = 7$<br>
-        <em>Paso 4:</em> Calcula las dos raíces: $x_1 = \frac{-5 + 7}{4} = \frac{2}{4} = \frac{1}{2}$ y $x_2 = \frac{-5 - 7}{4} = \frac{-12}{4} = -3$</p>
+        <p>Un <strong>conjunto</strong> es simplemente una colección bien definida de objetos o números, a los que llamamos <strong>elementos</strong>. Casi toda la matemática moderna está escrita en lenguaje de conjuntos.</p>
+        <ul>
+            <li><strong>Pertenencia ($\in$):</strong> Indica que un elemento vive dentro del conjunto. Si $A = \{1, 2, 3\}$, entonces $2 \in A$ (2 pertenece a A), pero $5 \notin A$ (5 no pertenece a A).</li>
+            <li><strong>Subconjunto ($\subseteq$):</strong> Decimos que $B$ es subconjunto de $A$ si <em>todos</em> los elementos de $B$ también están dentro de $A$.</li>
+            <li><strong>Conjunto Vacío ($\emptyset$):</strong> Es el conjunto que no tiene ningún elemento. Es un concepto filosófico poderoso: la nada también es un conjunto y es subconjunto de todos los demás.</li>
+        </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 12 ── -->
 <div class="slide">
-    <h2>Práctica Autónoma: Álgebra Fundamental</h2>
-    <div class="contenido-texto" style="font-size: 0.9rem;">
-        <p>Resuelve en tu cuaderno paso a paso:</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div>
-                <strong>A. Leyes de los Exponentes</strong>
-                <ol>
-                    <li>$(3x^2)(4x^5)$</li>
-                    <li>$\frac{20y^7}{4y^3}$</li>
-                    <li>$(2P^3)^{-2}$</li>
-                </ol>
-                <strong>B. Polinomios</strong>
-                <ol start="4">
-                    <li>Suma: $(3Q^2 - 5Q + 2) + (Q^2 + 2Q - 8)$</li>
-                    <li>Multiplica: $(x - 5)(x + 5)$</li>
-                    <li>Resta: $(10P - 5) - (3P - 8)$</li>
-                </ol>
-            </div>
-            <div>
-                <strong>C. Factorización</strong>
-                <ol start="7">
-                    <li>$12x^3 - 4x^2$</li>
-                    <li>$P^2 - 25$</li>
-                    <li>$Q^2 - 8Q + 15$</li>
-                </ol>
-                <strong>D. Ecuaciones (Lineales y Cuadráticas)</strong>
-                <ol start="10">
-                    <li>$5x - 12 = 3x + 8$</li>
-                    <li>$3(P - 2) = 15$</li>
-                    <li>$x^2 - 9x + 14 = 0$</li>
-                    <li>$2Q^2 - 8 = 0$</li>
-                </ol>
-            </div>
-        </div>
-        <div style="margin-top: 15px;">
-            <strong>E. Aplicaciones Económicas</strong>
-            <ol start="14">
-                <li>Encuentra el precio de equilibrio si $Oferta = 10 + 4P$ y $Demanda = 100 - P$.</li>
-                <li>La función de beneficios es $\pi = -Q^2 + 10Q - 16$. Encuentra los dos niveles de producción ($Q$) donde los beneficios son cero ($\pi = 0$).</li>
-            </ol>
-        </div>
-    </div>
-</div>
-<!-- ── TEMA 2: FUNCIONES Y SUS PROPIEDADES ── -->
-<!-- ── DIAPOSITIVA 13 ── -->
-<div class="slide">
-    <h2>2.7 La Notación de Función: $f(x)$</h2>
+    <h2>1.8 Operaciones con Conjuntos</h2>
     <div class="contenido-texto">
-        <p>Hasta ahora hemos usado ecuaciones como $y = 2x + 3$. En matemáticas avanzadas, cambiamos la $y$ por la notación $f(x)$ (se lee "efe de equis").</p>
-        <p>Esto nos dice explícitamente que la variable dependiente (el resultado) está en <em>función</em> de la variable independiente ($x$).</p>
+        <p>Podemos combinar conjuntos de la misma forma que sumamos o restamos números. Estas operaciones están directamente conectadas con los conectivos lógicos que ya aprendimos :</p>
         <ul>
-            <li><strong>En matemáticas:</strong> $f(x) = x^2 + 5$</li>
-            <li><strong>En economía:</strong> $C(Q) = Q^2 + 5$ (El Costo está en función de la Cantidad).</li>
+            <li><strong>Unión ($A \cup B$):</strong> Junta todos los elementos de $A$ con los de $B$. Está conectada con la disyunción lógica "O" ($p \lor q$).</li>
+            <li><strong>Intersección ($A \cap B$):</strong> Toma <em>únicamente</em> los elementos que tienen en común. Está conectada con la conjunción lógica "Y" ($p \land q$).</li>
+            <li><strong>Diferencia ($A \setminus B$):</strong> A los elementos del conjunto $A$, le quitamos cualquiera que también esté en $B$.</li>
+            <li><strong>Complemento ($A^c$):</strong> Son todos los elementos del universo que NO están en $A$. Está conectado con la negación lógica ($\neg p$).</li>
         </ul>
-        <p><strong>Evaluar una función</strong> simplemente significa sustituir la variable independiente por un número. Si $C(Q) = 50 + 5Q$, entonces el costo de producir 10 unidades es $C(10) = 50 + 5(10) = 100$.</p>
     </div>
 </div>
 
+<!-- ── DIAPOSITIVA 13 ── -->
+<div class="slide">
+    <h2>Práctica Autónoma: Teoría de Conjuntos</h2>
+    <div class="contenido-texto">
+        <p>Sean los siguientes conjuntos. Universo $U = \{1, 2, 3, 4, 5, 6, 7, 8, 9\}$, $A = \{2, 4, 6, 8\}$ y $B = \{3, 4, 5, 6\}$.</p>
+        <ol>
+            <li>Encuentra los elementos que forman la intersección: $A \cap B$.</li>
+            <li>Encuentra los elementos que forman la diferencia: $A \setminus B$. ¿Es el mismo resultado que $B \setminus A$?</li>
+            <li>Calcula el complemento de $A$ ($A^c$) y luego encuentra la intersección de ese resultado con el conjunto $B$. Es decir, resuelve: $A^c \cap B$.</li>
+            <li>Analiza lógicamente: Si sabes que la intersección de dos conjuntos está vacía ($X \cap Y = \emptyset$), ¿qué puedes concluir sobre los elementos de $X$ y $Y$?</li>
+        </ol>
+    </div>
+</div>
+<!-- ── TEMA 5: RELACIONES ── -->
 <!-- ── DIAPOSITIVA 14 ── -->
 <div class="slide">
-    <h2>2.8 Dominio Algebraico y Económico</h2>
+    <h2>1.9 Producto Cartesiano y Relaciones</h2>
     <div class="contenido-texto">
-        <p>El <strong>Dominio</strong> son todos los valores que la variable $x$ tiene permitido tomar. Algebraicamente, buscamos evitar dos "explosiones" matemáticas:</p>
-        <ol>
-            <li><strong>División entre cero:</strong> El denominador jamás puede ser cero. Si $f(x) = \frac{10}{x - 2}$, el dominio son todos los reales <em>excepto</em> $x = 2$.</li>
-            <li><strong>Raíces negativas:</strong> No existen raíces cuadradas (o pares) de números negativos en los números reales. Si $f(x) = \sqrt{x - 5}$, forzosamente $x \geq 5$.</li>
-        </ol>
-        <p><em>Nota Económica:</em> A veces la matemática permite números negativos, pero la realidad no. Si $Q$ es "toneladas de acero", el <strong>dominio económico</strong> siempre será $Q \geq 0$, sin importar lo que diga el álgebra.</p>
+        <p>Antes de hablar de funciones, necesitamos entender cómo interactúan los elementos de dos conjuntos distintos.</p>
+        <ul>
+            <li><strong>Producto Cartesiano ($A \times B$):</strong> Es el conjunto de <em>todos</em> los pares ordenados $(a, b)$ que se pueden formar tomando el primer elemento del conjunto $A$ y el segundo del conjunto $B$. Es la base matemática de cualquier sistema de coordenadas.</li>
+            <li><strong>Relación:</strong> Una relación matemática de $A$ en $B$ es, formalmente, cualquier subconjunto del producto cartesiano. Es decir, es una regla que asocia <em>algunos</em> elementos de un conjunto con los de otro, sin restricciones estrictas.</li>
+        </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 15 ── -->
 <div class="slide">
-    <h2>2.9 Funciones Lineales: $f(x) = mx + b$</h2>
+    <h2>1.10 Propiedades de las Relaciones</h2>
     <div class="contenido-texto">
-        <p>Son líneas rectas y representan relaciones de cambio constante. Son la base de los modelos de oferta, demanda y restricciones presupuestarias.</p>
+        <p>Si analizamos una relación dentro de un mismo conjunto (elementos relacionándose entre sí mismos), esta puede tener ciertas propiedades lógicas:</p>
         <ul>
-            <li><strong>$m$ (Pendiente):</strong> Es la tasa de cambio. Te dice cuánto sube o baja $y$ por cada unidad extra de $x$. En economía, esto suele ser un concepto <em>marginal</em> (costo marginal constante, propensión marginal al consumo).</li>
-            <li><strong>$b$ (Ordenada al origen):</strong> Es el valor de $y$ cuando $x = 0$. Es el punto donde la línea corta el eje vertical. En economía, suele representar los <em>costos fijos</em> o el <em>consumo autónomo</em>.</li>
+            <li><strong>Reflexiva:</strong> Todo elemento está relacionado consigo mismo. ($x$ se relaciona con $x$). Ejemplo clásico: El signo de igualdad ($=$).</li>
+            <li><strong>Simétrica:</strong> Si $x$ está relacionado con $y$, entonces $y$ está forzosamente relacionado con $x$. Ejemplo: "Ser hermano de".</li>
+            <li><strong>Transitiva:</strong> Si $x$ se relaciona con $y$, y a su vez $y$ se relaciona con $z$, entonces $x$ se relaciona con $z$. Ejemplo: "Ser mayor que" ($>$).</li>
         </ul>
+        <p>Si una relación matemática cumple estas tres propiedades al mismo tiempo, se le llama <strong>Relación de Equivalencia</strong>.</p>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 16 ── -->
 <div class="slide">
-    <h2>2.10 Funciones Cuadráticas: $f(x) = ax^2 + bx + c$</h2>
+    <h2>Práctica Autónoma: Relaciones</h2>
     <div class="contenido-texto">
-        <p>Su gráfica es una <strong>parábola</strong> (una curva en forma de "U" o de arco). Aparecen cuando multiplicamos variables, como al calcular el Ingreso ($Precio \times Cantidad$).</p>
-        <ul>
-            <li>Si $a > 0$ (positivo), la parábola abre hacia arriba $\cup$. Tiene un punto mínimo (ideal para minimizar Costos).</li>
-            <li>Si $a < 0$ (negativo), la parábola abre hacia abajo $\cap$. Tiene un punto máximo (ideal para maximizar Beneficios).</li>
-        </ul>
-        <p>El punto más bajo o más alto se llama <strong>Vértice</strong>. La coordenada $x$ del vértice se calcula con una fórmula de oro:</p>
-        <p style="text-align: center; font-size: 1.2rem;">
-            $$ x_{v\acute{e}rtice} = \frac{-b}{2a} $$
-        </p>
+        <p>Analiza las siguientes relaciones y determina sus propiedades lógicas:</p>
+        <ol>
+            <li>Si $A = \{1, 2\}$ y $B = \{x, y\}$, escribe todos los pares ordenados que conforman el producto cartesiano $A \times B$.</li>
+            <li>Considera la relación "ser amigo de" en una red social como Facebook. Analiza lógicamente: ¿Es reflexiva? ¿Es simétrica? ¿Es transitiva? Justifica cada respuesta.</li>
+            <li>En el conjunto de los números naturales, analiza la relación "es múltiplo de" (ej. 4 es múltiplo de 2). Determina si esta relación cumple con las propiedades reflexiva, simétrica y transitiva.</li>
+        </ol>
     </div>
 </div>
 
+<!-- ── TEMA 6: FUNCIONES ── -->
 <!-- ── DIAPOSITIVA 17 ── -->
 <div class="slide">
-    <h2>2.11 Funciones Exponenciales y Logarítmicas</h2>
+    <h2>1.11 Funciones: La máquina matemática</h2>
     <div class="contenido-texto">
-        <p>Cuando la variable independiente ($x$) está en el exponente, tenemos un crecimiento o decaimiento explosivo. Son vitales para finanzas y macroeconomía.</p>
+        <p>Una <strong>función</strong> es un tipo muy especial y estricto de relación. Es una regla de correspondencia que asigna a <em>cada</em> elemento de un conjunto inicial <strong>exactamente un</strong> elemento de un conjunto final.</p>
         <ul>
-            <li><strong>Función Exponencial ($f(x) = a^x$):</strong> Modela el interés compuesto, la inflación o el crecimiento poblacional. La base más famosa es el número de Euler $e \approx 2.718$.</li>
-            <li><strong>Función Logarítmica ($f(x) = \ln(x)$):</strong> Es la función inversa de la exponencial. En econometría, aplicar logaritmos a una base de datos nos permite transformar curvas en líneas rectas y calcular <em>elasticidades</em> directamente.</li>
+            <li><strong>Dominio:</strong> Todos los valores de entrada permitidos (las $x$).</li>
+            <li><strong>Codominio y Rango:</strong> El codominio es el conjunto de llegada posible. El <strong>rango</strong> (o imagen) son los valores que <em>realmente</em> escupe la función (las $y$).</li>
         </ul>
+        <p><em>Regla de oro:</em> De un elemento del dominio solo puede salir una flecha. Una función es como una máquina predecible: no puedes meter un $2$ y que a veces te devuelva un $4$ y a veces un $5$.</p>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 18 ── -->
 <div class="slide">
-    <h2>Ejemplos Resueltos: Dominio y Evaluación</h2>
+    <h2>1.12 Inyectividad, Suprayectividad y Biyectividad</h2>
     <div class="contenido-texto">
-        <p><strong>Ejemplo 1: Encontrar el Dominio</strong><br>
-        Halla el dominio algebraico de $f(x) = \frac{3x}{x^2 - 16}$<br>
-        <em>Paso 1:</em> El denominador no puede ser cero, así que planteamos: $x^2 - 16 \neq 0$<br>
-        <em>Paso 2:</em> Despejamos (o factorizamos por diferencia de cuadrados): $x^2 \neq 16$<br>
-        <em>Paso 3:</em> Aplicamos raíz: $x \neq 4$ y $x \neq -4$.<br>
-        <em>Resultado:</em> El dominio son todos los números reales menos el 4 y el -4.</p>
-
-        <p><strong>Ejemplo 2: Evaluación Compuesta</strong><br>
-        Si $f(x) = x^2 - 3x$, evalúa $f(x + h)$<br>
-        <em>Paso 1:</em> Donde veas una $x$, abre paréntesis y mete $(x + h)$.<br>
-        <em>Paso 2:</em> $f(x+h) = (x + h)^2 - 3(x + h)$<br>
-        <em>Paso 3:</em> Desarrolla: $x^2 + 2xh + h^2 - 3x - 3h$. ¡Esta es la base del cálculo diferencial!</p>
+        
+        <p>Clasificamos las funciones según cómo interactúan con el conjunto de llegada:</p>
+        <ul>
+            <li><strong>Inyectiva (Uno a uno):</strong> Nunca dos elementos diferentes del dominio ($x$) dan el mismo resultado en el rango ($y$). <br>
+            <em>Formalmente:</em> Si $f(x_1) = f(x_2) \implies x_1 = x_2$.</li>
+            <li><strong>Suprayectiva (Sobre):</strong> El rango cubre la totalidad del codominio. Ningún elemento del conjunto de llegada se queda "solo" sin ser apuntado por la regla de la función.</li>
+            <li><strong>Biyectiva:</strong> Es inyectiva y suprayectiva al mismo tiempo. Es una correspondencia perfecta, sin que sobre ni falte nada. <em>Solo las funciones biyectivas tienen función inversa ($f^{-1}$).</em></li>
+        </ul>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 19 ── -->
 <div class="slide">
-    <h2>Ejemplos Resueltos: Vértice Cuadrático</h2>
+    <h2>1.13 Composición de Funciones</h2>
     <div class="contenido-texto">
-        <p><strong>Ejemplo 3: Maximizar Beneficios usando el Vértice</strong><br>
-        La función de beneficios de una fábrica de muebles es $\pi(Q) = -2Q^2 + 40Q - 50$. ¿Cuántos muebles ($Q$) deben producir para alcanzar la ganancia máxima?<br>
-        <em>Paso 1:</em> Identificamos coeficientes: $a = -2$, $b = 40$. Como $a$ es negativo, es una parábola triste $\cap$, el vértice será el punto máximo.<br>
-        <em>Paso 2:</em> Usamos la fórmula del vértice: $Q = \frac{-b}{2a}$<br>
-        <em>Paso 3:</em> Sustituimos: $Q = \frac{-40}{2(-2)} = \frac{-40}{-4} = 10$<br>
-        <em>Resultado:</em> Deben producir 10 muebles para maximizar ganancias.<br>
-        <em>Extra:</em> Para saber de cuánto será esa ganancia, evaluamos la función: $\pi(10) = -2(10)^2 + 40(10) - 50 = -200 + 400 - 50 = 150$.</p>
+        <p>A menudo necesitamos evaluar el resultado de una función directamente dentro de otra. Esto se llama <strong>composición</strong> y se denota como $(g \circ f)(x)$, que significa evaluar $g(f(x))$.</p>
+        <p>Funciona como una línea de ensamblaje en una fábrica:</p>
+        <ol>
+            <li>Tomas un valor $x$ y lo procesas en la máquina $f$.</li>
+            <li>La máquina $f$ te devuelve un resultado intermedio.</li>
+            <li>Tomas ese resultado intermedio y lo metes inmediatamente en la máquina $g$ para obtener el valor final.</li>
+        </ol>
+        <p><em>Ojo matemático:</em> En general, el orden de las operaciones altera el producto. Evaluar $g(f(x))$ casi nunca es igual a evaluar $f(g(x))$.</p>
     </div>
 </div>
 
 <!-- ── DIAPOSITIVA 20 ── -->
 <div class="slide">
-    <h2>Práctica Autónoma: Funciones y Propiedades</h2>
+    <h2>Práctica Autónoma: Funciones</h2>
     <div class="contenido-texto">
-        <p>Resuelve estos ejercicios analíticos:</p>
+        <p>Aplica los conceptos estrictos de funciones en estos ejercicios:</p>
         <ol>
-            <li><strong>Evaluación:</strong> Dada la función de demanda $P(Q) = 150 - 3Q^2$, evalúa $P(5)$ e interpreta el resultado en términos económicos.</li>
-            <li><strong>Dominio:</strong> Encuentra el dominio algebraico de la función $f(x) = \sqrt{2x - 10}$. <em>(Pista: lo de adentro de la raíz debe ser mayor o igual a cero).</em></li>
-            <li><strong>Optimización sin cálculo:</strong> Una empresa tiene costos dados por $C(Q) = 3Q^2 - 60Q + 500$. Encuentra la cantidad $Q$ que minimiza el costo utilizando la fórmula del vértice de una parábola.</li>
-            <li><strong>Funciones Lineales:</strong> Si la función de consumo es $C(Y) = 1000 + 0.75Y$ (donde $Y$ es el ingreso), ¿cuál es el valor de la pendiente y qué significado económico tiene? ¿Qué pasa si el ingreso es cero?</li>
+            <li>Identifica si la siguiente relación es una función: "A cada persona en un país se le asigna su número de teléfono celular". <em>(Pista: Analiza qué pasa si alguien tiene dos líneas a su nombre bajo la regla de "exactamente un" elemento).</em></li>
+            <li>Determina si la función $f(x) = x^2$ (definida para todos los números reales) es inyectiva. Justifica usando la definición formal matemática.</li>
+            <li>Sean $f(x) = 2x + 1$ y $g(x) = x^2$. Calcula:
+                <ul>
+                    <li>La composición $(g \circ f)(x)$</li>
+                    <li>La composición $(f \circ g)(x)$</li>
+                </ul>
+                ¿Los resultados son equivalentes?
+            </li>
         </ol>
     </div>
-
 </div>
-<!-- ── DIAPOSITIVA DE CIERRE: ÁLGEBRA ── -->
+
+<!-- ── DIAPOSITIVA 21: CIERRE DEL MÓDULO ── -->
 <div class="slide">
-    <h2 style="color: #2a4939; text-align: center; margin-bottom: 20px;">¡Felicidades! Has completado el Módulo 2</h2>
+    <h2 style="color: #2a4939; text-align: center; margin-bottom: 20px;">¡Felicidades! Has completado el Módulo 1</h2>
     <div class="contenido-texto" style="text-align: center;">
         <div style="font-size: 3rem; margin-bottom: 15px;">🎓</div>
-        <p>Has dominado el lenguaje universal de los modelos económicos. Ahora tienes la agilidad algebraica necesaria para no perderte en ninguna demostración matemática.</p>
-        <p style="margin-top: 15px;">A partir de hoy, eres capaz de:</p>
+        <p>Has construido los cimientos analíticos necesarios para adentrarte en las matemáticas superiores sin temor al rigor formal.</p>
+        <p style="margin-top: 15px;">Ahora dominas:</p>
         <ul style="text-align: left; display: inline-block; margin-top: 10px;">
-            <li>Simplificar modelos complejos usando las leyes de los exponentes y polinomios.</li>
-            <li>Encontrar puntos de equilibrio resolviendo ecuaciones lineales y cuadráticas.</li>
-            <li>Entender la notación funcional $f(x)$ y respetar el dominio económico de las variables.</li>
-            <li>Optimizar (maximizar ganancias o minimizar costos) identificando el vértice de funciones cuadráticas.</li>
+            <li>La estructura lógica para construir argumentos irrebatibles ($p \implies q$).</li>
+            <li>El uso correcto de los cuantificadores ($\forall, \exists$) y su negación.</li>
+            <li>Las estrategias matemáticas para demostrar la veracidad de una afirmación.</li>
+            <li>El lenguaje de los conjuntos, las relaciones y la definición estricta de una función.</li>
         </ul>
-        <p style="margin-top: 25px; font-weight: bold;">Estás listo para dar el salto a las múltiples dimensiones en el <strong>Módulo 3: Álgebra Lineal</strong>.</p>
+        <p style="margin-top: 25px; font-weight: bold;">Estás listo para iniciar el <strong>Módulo 2: Álgebra</strong>.</p>
         <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
-    <button id="btnCompletarM2" style="background-color: #2a4939; color: #fff1da; padding: 14px 28px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: background 0.3s;">
-        Marcar Módulo 2 como Completado
+    <button id="btnCompletarM1" style="background-color: #2a4939; color: #fff1da; padding: 14px 28px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: background 0.3s;">
+        Marcar Módulo 1 como Completado
     </button>
 </div>
     </div>
 </div>
-
             <!-- ── NAVEGACIÓN ── -->
             <div class="nav-buttons">
                 <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
@@ -1060,19 +1014,19 @@ footer {
         const db = getFirestore(app);
 
         // Conectamos con el botón físico usando su ID
-        const btnCompletar = document.getElementById("btnCompletarM2");
+        const btnCompletar = document.getElementById("btnCompletarM6");
 
         // Función para cambiar el aspecto cuando ya está guardado
         function marcarBotonComoCompletado() {
             if (btnCompletar) {
-                btnCompletar.innerText = "✅ Módulo 2 Completado";
+                btnCompletar.innerText = "✅ Módulo 6 Completado";
                 btnCompletar.style.backgroundColor = "#6b4c35";
                 btnCompletar.disabled = true;
                 btnCompletar.style.cursor = "default";
             }
         }
 
-        onAuthStateChanged(auth, async (user) => {
+       onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 // La diagonal "/" le dice al navegador: "ve a la carpeta principal del proyecto"
                 window.location.href = "/login.html"; 
@@ -1087,7 +1041,7 @@ footer {
                 }
 
                 // 2. Revisar si YA había completado este módulo antes
-                if (docSnap.data().modulo2_completado === true) {
+                if (docSnap.data().modulo6_completado === true) {
                     marcarBotonComoCompletado();
                 }
 
@@ -1099,16 +1053,16 @@ footer {
                         try {
                             await setDoc(docRef, {
                                 correo: user.email,
-                                modulo2_completado: true,
-                                fecha_completado_m2: new Date()
+                                modulo6_completado: true,
+                                fecha_completado_m6: new Date()
                             }, { merge: true }); 
                             
                             marcarBotonComoCompletado();
-                            alert("¡Felicidades! Tu progreso en el Módulo 2 ha sido guardado.");
+                            alert("¡Felicidades! Tu progreso en el Módulo 6 ha sido guardado.");
                         } catch (error) {
                             console.error("Error al guardar: ", error);
                             alert("Hubo un error al guardar tu progreso.");
-                            btnCompletar.innerText = "Marcar Módulo 2 como Completado";
+                            btnCompletar.innerText = "Marcar Módulo 6 como Completado";
                         }
                     });
                 }
