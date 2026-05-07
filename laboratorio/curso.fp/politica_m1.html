@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 1: Estado, Poder y Política — CPEE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+<style>
+/* SHARED BASE FOR POLITICA MODULES */
+:root {
+    --crema: #fff1da;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--crema); color: var(--negro); font-family: 'DM Sans', sans-serif; line-height: 1.7; overflow-x: hidden; }
+
+/* MENU */
+.menu-trigger { position: fixed; top: 22px; left: 24px; z-index: 1100; background: var(--cafe); border: none; border-radius: 8px; width: 44px; height: 44px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: background 0.2s; }
+.menu-trigger:hover { background: var(--verde); }
+.menu-trigger span { display: block; width: 20px; height: 2px; background: var(--crema); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease; transform-origin: center; }
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu-overlay { position: fixed; inset: 0; background: rgba(43,27,18,0.45); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; z-index: 1050; transition: opacity 0.3s ease; }
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
+.menu-panel { position: fixed; top: 0; left: 0; height: 100%; width: 280px; background: var(--cafe); z-index: 1090; transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; padding: 80px 0 40px; }
+.menu-panel.abierto { transform: translateX(0); }
+.menu-panel-logo { padding: 0 28px 32px; border-bottom: 1px solid rgba(215,196,165,0.2); margin-bottom: 12px; }
+.menu-panel-logo span { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: #D7C4A5; line-height: 1.3; display: block; }
+.menu-panel-logo em { font-family: 'Libre Baskerville', serif; font-size: 0.78rem; color: rgba(215,196,165,0.55); font-style: italic; }
+.menu-panel nav a { display: flex; align-items: center; gap: 12px; padding: 13px 28px; color: #D7C4A5; text-decoration: none; font-size: 0.95rem; font-weight: 400; border-left: 3px solid transparent; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.menu-panel nav a:hover { background: rgba(215,196,165,0.07); border-left-color: var(--verde-medio); color: #f0dfc0; }
+.menu-panel nav a .nav-num { font-size: 0.7rem; opacity: 0.4; font-weight: 500; min-width: 18px; }
+
+/* BREADCRUMB */
+.breadcrumb { padding: 18px 48px 18px 90px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.7; border-bottom: 1px solid rgba(43,27,18,0.08); flex-wrap: wrap; }
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--verde); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--verde); opacity: 1; }
+
+/* HEADER */
+header { position: relative; padding: 48px 48px 40px; border-bottom: 1px solid rgba(43,27,18,0.15); overflow: hidden; }
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before { content: ''; position: absolute; top: -40px; right: -60px; width: 260px; height: 260px; border-radius: 50%; border: 1px solid rgba(42,73,57,0.1); }
+.header-bg-deco::after { content: ''; position: absolute; top: 10px; right: 10px; width: 150px; height: 150px; border-radius: 50%; border: 1px solid rgba(42,73,57,0.07); }
+.header-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.header-texto { flex: 1; }
+.header-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--verde); margin-bottom: 12px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+.header-eyebrow::before { content: ''; display: block; width: 28px; height: 2px; background: var(--verde); }
+header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 400; line-height: 1.2; color: var(--cafe); opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+.modulo-badge { flex-shrink: 0; background: rgba(42,73,57,0.08); border: 1px solid rgba(42,73,57,0.15); border-radius: 10px; padding: 14px 20px; text-align: center; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; align-self: center; }
+.modulo-badge .num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--verde); line-height: 1; display: block; }
+.modulo-badge .etiqueta { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--verde); opacity: 0.6; }
+
+/* MAIN */
+main { max-width: 820px; margin: 0 auto; padding: 48px 48px 80px; }
+
+/* SLIDE WRAPPER */
+.slide-wrapper { opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.progress-bar-outer { height: 4px; background: rgba(43,27,18,0.1); border-radius: 4px; margin-bottom: 4px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: var(--verde); border-radius: 4px; transition: width 0.4s ease; }
+.progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.progress-texto { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.55; }
+.slide-counter-txt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; color: var(--verde); opacity: 0.75; }
+
+/* SLIDE CONTAINER */
+.slide-container { background: rgba(255,255,255,0.65); border: 1px solid rgba(43,27,18,0.1); border-radius: 12px; padding: 36px 40px 28px; min-height: 380px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(43,27,18,0.06); display: flex; flex-direction: column; gap: 20px; }
+.slide-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--verde); border-radius: 4px 0 0 4px; }
+
+/* SLIDES */
+.slide { display: none; animation: fadeSlide 0.4s ease; flex: 1; }
+.slide.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+/* SLIDE TYPE BADGE */
+.slide-tipo { display: inline-flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+.tipo-objetivo { background: rgba(42,73,57,0.1); color: var(--verde); }
+.tipo-teoria { background: rgba(43,27,18,0.08); color: var(--cafe); }
+.tipo-practica { background: rgba(107,76,53,0.1); color: var(--cafe-claro); }
+.tipo-ejercicio { background: rgba(42,73,57,0.08); color: var(--verde); }
+.tipo-reflexion { background: rgba(43,27,18,0.06); color: var(--texto-suave); }
+.tipo-recursos { background: rgba(42,73,57,0.06); color: var(--verde-medio); }
+.tipo-video { background: rgba(43,27,18,0.07); color: var(--cafe); }
+
+/* SLIDE CONTENT */
+.slide h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400; color: var(--cafe); margin-bottom: 18px; line-height: 1.3; padding-bottom: 12px; border-bottom: 1px solid rgba(43,27,18,0.1); }
+.contenido-texto { font-size: 0.925rem; color: var(--texto-suave); line-height: 1.85; }
+.contenido-texto p { margin-bottom: 12px; }
+.contenido-texto p:last-child { margin-bottom: 0; }
+.contenido-texto ul, .contenido-texto ol { padding-left: 20px; margin: 10px 0; }
+.contenido-texto li { margin-bottom: 8px; }
+.contenido-texto li::marker { color: var(--verde); }
+.contenido-texto strong { color: var(--cafe); font-weight: 600; }
+.contenido-texto em { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--cafe-claro); }
+
+/* SPECIAL BOXES */
+.caja-practica { background: rgba(42,73,57,0.05); border: 1px solid rgba(42,73,57,0.14); border-left: 4px solid var(--verde); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-practica strong { color: var(--verde); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-ejercicio { background: rgba(255,241,218,0.8); border: 1px solid rgba(43,27,18,0.14); border-left: 4px solid var(--cafe); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 12px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-ejercicio strong { color: var(--cafe); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-atencion { background: rgba(107,76,53,0.07); border-left: 4px solid var(--cafe-claro); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 14px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-atencion strong { color: var(--cafe-claro); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+/* REFLEXIÓN */
+.reflexion-lista { list-style: none; padding: 0; margin: 12px 0; }
+.reflexion-lista li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(43,27,18,0.07); font-size: 0.9rem; color: var(--texto-suave); line-height: 1.65; }
+.reflexion-lista li:last-child { border-bottom: none; }
+.reflexion-lista li::before { content: counter(item); counter-increment: item; flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(42,73,57,0.1); color: var(--verde); font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.reflexion-lista { counter-reset: item; }
+
+/* RECURSOS */
+.recursos-grid { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+.recurso-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.09); border-radius: 8px; font-size: 0.83rem; color: var(--texto-suave); }
+.recurso-item a { color: var(--verde); text-decoration: none; font-weight: 500; }
+.recurso-item a:hover { text-decoration: underline; }
+.recurso-item::before { content: '📄'; flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+
+/* VIDEO */
+.video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: rgba(43,27,18,0.05); margin: 12px 0; }
+.video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px; }
+.video-label { font-size: 0.72rem; color: var(--cafe-claro); opacity: 0.7; margin-top: 6px; font-style: italic; }
+
+/* NAV BUTTONS */
+.nav-buttons { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid rgba(43,27,18,0.08); }
+.btn-nav { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: var(--cafe); color: #D7C4A5; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; border-radius: 8px; transition: background 0.2s, transform 0.2s; }
+.btn-nav:hover:not(:disabled) { background: var(--verde); transform: translateY(-1px); }
+.btn-nav:disabled { background: rgba(43,27,18,0.1); color: rgba(43,27,18,0.3); cursor: not-allowed; transform: none; }
+.puntos-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.punto { width: 8px; height: 8px; border-radius: 50%; background: rgba(43,27,18,0.15); transition: background 0.3s, transform 0.3s; cursor: pointer; border: none; padding: 0; }
+.punto.activo { background: var(--verde); transform: scale(1.25); }
+
+/* MODULE NAV */
+.modulo-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 12px; }
+.btn-modulo { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.12); color: var(--texto-suave); text-decoration: none; font-size: 0.82rem; font-weight: 500; border-radius: 8px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.btn-modulo:hover { background: rgba(255,255,255,0.9); border-color: var(--verde); color: var(--verde); }
+.btn-modulo-inicio { background: var(--cafe); color: #D7C4A5; border-color: var(--cafe); }
+.btn-modulo-inicio:hover { background: var(--verde); border-color: var(--verde); color: var(--crema); }
+
+/* FOOTER */
+footer { border-top: 1px solid rgba(43,27,18,0.15); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.82rem; color: var(--cafe-claro); background: rgba(43,27,18,0.03); }
+.footer-marca { display: flex; align-items: center; gap: 10px; font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--cafe); }
+.footer-marca::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--verde); }
+.footer-badge { font-size: 0.72rem; padding: 4px 10px; border-radius: 20px; background: rgba(42,73,57,0.1); color: var(--verde); font-weight: 500; letter-spacing: 0.04em; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+    .breadcrumb { padding: 14px 20px 14px 80px; }
+    header { padding: 36px 24px 30px; }
+    main { padding: 32px 24px 60px; }
+    .slide-container { padding: 24px 20px 20px; }
+    .modulo-badge { display: none; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+}
+
+
+/* ─── SLIDE DE CIERRE ── */
+.slide-cierre { text-align:center; }
+.cierre-emoji { font-size:3.5rem; margin-bottom:18px; display:block; }
+.cierre-titulo { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--verde); margin-bottom:14px; }
+.cierre-resumen { font-size:0.9rem; color:var(--texto-suave); line-height:1.8; max-width:520px; margin:0 auto 24px; }
+.cierre-lista { text-align:left; display:inline-block; margin:12px auto 0; }
+.cierre-lista li { font-size:0.875rem; color:var(--texto-suave); margin-bottom:7px; }
+.cierre-lista li::marker { color:var(--verde); }
+.btn-completar {
+    display:inline-flex; align-items:center; gap:10px; margin-top:32px; padding:14px 32px;
+    background:var(--verde); color:var(--crema); border:none; border-radius:10px;
+    font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700; cursor:pointer;
+    transition:background 0.25s,transform 0.2s; box-shadow:0 4px 16px rgba(42,73,57,0.2);
+}
+.btn-completar:hover:not(:disabled) { background:var(--verde-medio); transform:translateY(-2px); }
+.btn-completar:disabled { background:var(--cafe-claro); cursor:default; opacity:0.75; }
+.siguiente-modulo-link { display:inline-block; margin-top:14px; font-size:0.85rem; color:var(--verde); text-decoration:none; font-weight:500; }
+.siguiente-modulo-link:hover { text-decoration:underline; }
+
+</style>
+</head>
+<body>
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo"><span>Centro Popular de<br>Estudios Económicos</span><em>Ciencia Social aplicada</em></div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../../quienes-somos/index.html"><span class="nav-num">01</span> ¿Quiénes somos?</a>
+        <a href="../../mision/index.html"><span class="nav-num">02</span> Nuestra misión</a>
+        <a href="../../colaboraciones/index.html"><span class="nav-num">03</span> Colaboraciones</a>
+    </nav>
+</aside>
+<div class="breadcrumb">
+    <a href="../../index.html">Inicio</a><span class="sep">/</span>
+    <a href="index.html">Laboratorio</a><span class="sep">/</span>
+    <a href="politica_inicio.html">Cómo Funciona el Poder en México</a><span class="sep">/</span>
+    <span class="actual">Módulo 1</span>
+</div>
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Laboratorio · Ciencia Política</p>
+            <h1>Módulo 1: Estado, Poder y Política</h1>
+        </div>
+        <div class="modulo-badge"><span class="num">01</span><span class="etiqueta">Módulo</span></div>
+    </div>
+</header>
+<main>
+<div class="slide-wrapper">
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+    <div class="progress-label">
+        <span class="progress-texto">Progreso del módulo</span>
+        <span class="slide-counter-txt" id="slideCounter"></span>
+    </div>
+    <div class="slide-container">
+<!-- SLIDE 1: OBJETIVO -->
+        <div class="slide active">
+            <span class="slide-tipo tipo-objetivo">🎯 Objetivo del módulo</span>
+            <h2>¿Qué vas a aprender aquí?</h2>
+            <div class="contenido-texto">
+                <p>Al terminar este módulo podrás <strong>distinguir con precisión qué es el Estado, el gobierno, el poder político y la legitimidad</strong> —conceptos que en el lenguaje cotidiano se confunden constantemente y que, sin embargo, son la base de cualquier análisis político serio.</p>
+                <div class="caja-practica">
+                    <strong>¿Por qué importa?</strong>
+                    Cuando alguien dice "el gobierno no funciona" o "México es una democracia de fachada", está usando —bien o mal— estos conceptos. Este módulo te dará las herramientas para evaluar si esas afirmaciones tienen sustento analítico o son solo opinión.
+                </div>
+                <p><strong>Contenidos:</strong></p>
+                <ul>
+                    <li>¿Qué es el Estado? Sus elementos constitutivos</li>
+                    <li>Diferencia entre Estado, gobierno y régimen político</li>
+                    <li>El poder: ¿qué es y cómo funciona?</li>
+                    <li>Legitimidad, legalidad y su relación</li>
+                    <li>Aplicación práctica al caso mexicano</li>
+                    <li>Ejercicio de análisis y reflexión</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: TEORÍA - EL ESTADO -->
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>¿Qué es el Estado?</h2>
+            <div class="contenido-texto">
+                <p>La definición más influyente en ciencia política sigue siendo la de <strong>Max Weber</strong> (1919): el Estado es una comunidad humana que reclama, con éxito, el <em>monopolio del uso legítimo de la fuerza física</em> dentro de un territorio determinado.</p>
+                <p>Tres elementos son <strong>constitutivos</strong> del Estado:</p>
+                <ul>
+                    <li><strong>Territorio:</strong> espacio geográfico sobre el que ejerce soberanía. Sin territorio definido no hay Estado.</li>
+                    <li><strong>Población:</strong> conjunto de personas que habitan ese territorio y están sujetas a su autoridad.</li>
+                    <li><strong>Gobierno (aparato de poder):</strong> el conjunto de instituciones que ejercen la autoridad en nombre del Estado.</li>
+                </ul>
+                <p>A estos tres, muchos teóricos agregan un cuarto: <strong>soberanía</strong>, que implica autonomía hacia el exterior (no subordinación a otro Estado) y supremacía hacia el interior (autoridad máxima).</p>
+                <div class="caja-atencion">
+                    <strong>Distinción clave</strong>
+                    El <strong>Estado</strong> es la institución permanente; el <strong>gobierno</strong> es el grupo que en un momento dado controla el aparato del Estado. Los gobiernos cambian; el Estado (en condiciones normales) persiste.
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: TEORÍA - PODER Y POLÍTICA -->
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>El poder político y sus formas</h2>
+            <div class="contenido-texto">
+                <p>El <strong>poder</strong> es la capacidad de un actor de imponer su voluntad sobre otros, incluso contra su resistencia (Weber). En política, el poder puede ejercerse de formas muy distintas:</p>
+                <ul>
+                    <li><strong>Coerción:</strong> uso de la fuerza o amenaza de fuerza (el Estado tiene el monopolio legítimo de esto).</li>
+                    <li><strong>Autoridad:</strong> el poder es aceptado como legítimo por quienes lo obedecen.</li>
+                    <li><strong>Influencia:</strong> capacidad de moldear decisiones sin ejercer autoridad formal (lobbies, medios, élites).</li>
+                    <li><strong>Poder blando:</strong> capacidad de atraer y convencer, no de obligar.</li>
+                </ul>
+                <p><strong>Legitimidad</strong> es el reconocimiento social de que el ejercicio del poder es correcto o aceptable. Weber distinguió tres tipos:</p>
+                <ul>
+                    <li><strong>Tradicional:</strong> basada en costumbre y herencia (monarquías históricas).</li>
+                    <li><strong>Carismática:</strong> basada en cualidades excepcionales del líder.</li>
+                    <li><strong>Legal-racional:</strong> basada en normas abstractas y procedimientos establecidos. <em>Es la base de los Estados modernos.</em></li>
+                </ul>
+                <div class="caja-atencion">
+                    <strong>Legalidad ≠ Legitimidad</strong>
+                    Un gobierno puede actuar legalmente (dentro del marco jurídico) pero carecer de legitimidad social. Y viceversa: un actor puede tener enorme legitimidad popular pero actuar fuera del marco legal. Esta tensión es permanente en la política mexicana.
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: TEORÍA - RÉGIMEN POLÍTICO -->
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>Estado, gobierno y régimen: tres niveles distintos</h2>
+            <div class="contenido-texto">
+                <p>Para analizar un sistema político con precisión hay que distinguir tres niveles:</p>
+                <ul>
+                    <li><strong>Estado:</strong> la institución permanente con monopolio de la fuerza legítima en un territorio. Incluye el aparato burocrático, judicial, militar y fiscal. <em>Ejemplo: el Estado mexicano existe desde 1821, con múltiples transformaciones.</em></li>
+                    <li><strong>Régimen político:</strong> el conjunto de reglas formales e informales que determinan quién accede al poder, cómo lo ejerce y cómo se le controla. Define si el sistema es democrático, autoritario, híbrido, etc.</li>
+                    <li><strong>Gobierno:</strong> los actores concretos que en un período determinado controlan el ejecutivo y las principales instituciones. <em>Ejemplo: el gobierno de Claudia Sheinbaum, 2024–2030.</em></li>
+                </ul>
+                <p>Esta distinción importa porque permite hacer afirmaciones más precisas. Criticar al <em>gobierno</em> no es lo mismo que cuestionar el <em>Estado</em> ni cambiar el <em>régimen</em>. En México, la transición de 2000 fue un cambio de <em>gobierno</em> (del PRI al PAN) pero también marcó el inicio de un cambio de <em>régimen</em>: del sistema hegemónico al pluralismo competitivo.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: PRÁCTICA -->
+        <div class="slide">
+            <span class="slide-tipo tipo-practica">🔍 Práctica</span>
+            <h2>¿Cómo aplica esto en México?</h2>
+            <div class="contenido-texto">
+                <p>El Estado mexicano es formalmente una <strong>república democrática, representativa y federal</strong>, según el artículo 40 de la Constitución. Esto significa:</p>
+                <ul>
+                    <li><strong>República:</strong> no hay monarquía; el poder público se ejerce por mandato popular y con rendición de cuentas.</li>
+                    <li><strong>Democrática:</strong> la soberanía reside en el pueblo y se ejerce a través de representantes elegidos.</li>
+                    <li><strong>Representativa:</strong> los ciudadanos eligen a quienes gobiernan, no gobiernan directamente.</li>
+                    <li><strong>Federal:</strong> el poder está distribuido entre la federación, 31 estados y la Ciudad de México.</li>
+                </ul>
+                <div class="caja-practica">
+                    <strong>La realidad del poder en México</strong>
+                    El Estado mexicano tardó décadas en construirse de forma efectiva tras la Revolución de 1910. Durante gran parte del siglo XX, el régimen fue <em>autoritario con fachada democrática</em>: había elecciones, pero el resultado estaba predeterminado por el PRI. La legitimidad descansaba no en la competencia electoral real, sino en la capacidad del régimen de distribuir recursos y cooptar a las élites. Entender esto es clave para comprender el México actual.
+                </div>
+                <p>Hoy el Estado mexicano enfrenta tensiones de legitimidad reales: cuestionamientos a la independencia judicial, debates sobre el papel de las fuerzas armadas en funciones civiles, y presión de poderes fácticos (crimen organizado, élites económicas, medios). El Estado existe y funciona, pero su solidez institucional es desigual según el territorio y el tema.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: EJERCICIO -->
+        <div class="slide">
+            <span class="slide-tipo tipo-ejercicio">✏️ Ejercicio</span>
+            <h2>Analiza estas afirmaciones</h2>
+            <div class="contenido-texto">
+                <p>Lee las siguientes afirmaciones y determina si son <strong>precisas, imprecisas o parcialmente correctas</strong>. Usa los conceptos del módulo para justificar tu respuesta.</p>
+                <div class="caja-ejercicio">
+                    <strong>Afirmación 1</strong>
+                    "México no tiene Estado porque hay zonas donde el crimen organizado controla el territorio."
+                </div>
+                <div class="caja-ejercicio">
+                    <strong>Afirmación 2</strong>
+                    "AMLO fue ilegítimo porque ganó con fraude."
+                </div>
+                <div class="caja-ejercicio">
+                    <strong>Afirmación 3</strong>
+                    "En México no hay democracia porque el gobierno controla los medios."
+                </div>
+                <p style="margin-top:14px"><strong>Guía de análisis:</strong></p>
+                <ul>
+                    <li>¿Qué concepto usa la afirmación? ¿Lo usa correctamente?</li>
+                    <li>¿Qué evidencia se necesitaría para sostener o refutar la afirmación?</li>
+                    <li>¿Qué matices importantes omite?</li>
+                </ul>
+                <div class="caja-practica">
+                    <strong>Pista para la afirmación 1</strong>
+                    Un Estado puede tener fallas en el control territorial en ciertas zonas y seguir existiendo como Estado. La pregunta es si el Estado retiene la <em>supremacía última</em> o si hay actores que lo desafían sistemáticamente.
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: REFLEXIÓN -->
+        <div class="slide">
+            <span class="slide-tipo tipo-reflexion">💬 Reflexión</span>
+            <h2>Preguntas para pensar más allá del módulo</h2>
+            <div class="contenido-texto">
+                <ul class="reflexion-lista">
+                    <li>¿En qué medida el Estado mexicano ejerce efectivamente el monopolio de la fuerza legítima en todo su territorio? ¿Qué casos concretos cuestionan o confirman esa afirmación?</li>
+                    <li>¿Puede un gobierno elegido democráticamente perder legitimidad? ¿Cuándo y cómo ocurre eso?</li>
+                    <li>¿Qué diferencia hay entre decir "no confío en el gobierno actual" y "el Estado mexicano no funciona"? ¿Por qué importa esa distinción?</li>
+                    <li>¿El hecho de que en México existan zonas donde el crimen organizado cobra "impuestos" y regula actividades implica que existen "Estados paralelos"? ¿Qué elementos de un Estado les faltan o les sobran a esos actores?</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: RECURSOS Y VIDEO -->
+        <div class="slide">
+            <span class="slide-tipo tipo-recursos">📚 Recursos</span>
+            <h2>Lecturas y video recomendados</h2>
+            <div class="contenido-texto">
+                <p><strong>Lecturas fundamentales:</strong></p>
+                <div class="recursos-grid">
+                    <div class="recurso-item">Weber, M. (1919). <em>El político y el científico.</em> Capítulo I: "La política como vocación". Disponible en múltiples ediciones digitales — busca el PDF en tu buscador favorito.</div>
+                    <div class="recurso-item">Bobbio, N. (1987). <em>Estado, gobierno y sociedad.</em> FCE. Capítulos 1 y 2. Introduce con claridad las distinciones conceptuales básicas.</div>
+                    <div class="recurso-item">Constitución Política de los Estados Unidos Mexicanos. Art. 39–41. <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/CPEUM.pdf" target="_blank">Disponible en diputados.gob.mx</a></div>
+                </div>
+                <p style="margin-top:16px"><strong>Video recomendado:</strong></p>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube-nocookie.com/embed/0fivQUlC7-8" title="El Estado: definición y elementos — UNAM" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <p class="video-label">Si el video no carga, busca en YouTube: "elementos del Estado Max Weber UNAM" o "¿Qué es el Estado? Ciencia Política"</p>
+            </div>
+        </div>
+        <div class="slide">
+            <div class="slide-cierre">
+                <span class="cierre-emoji">🎓</span>
+                <p class="cierre-titulo">¡Módulo 1 completado!</p>
+                <p class="cierre-resumen">Ahora distingues con precisión qué es el Estado, el gobierno y el régimen político. Comprendes los conceptos de poder, legitimidad y legalidad, y puedes aplicarlos críticamente al caso mexicano.</p>
+                <button class="btn-completar" id="btnCompletarM1">Marcar Módulo 1 como Completado</button>
+                <br><a href="politica_m2.html" class="siguiente-modulo-link">Continuar → Módulo 2: Estructura del Estado Mexicano</a>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <div class="puntos-nav" id="puntos"></div>
+            <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+    <div class="modulo-nav">
+        <span style="opacity:0.3;font-size:0.82rem">← Inicio del curso</span>
+        <a href="politica_inicio.html" class="btn-modulo btn-modulo-inicio">↑ Índice del curso</a>
+        <a href="politica_m2.html" class="btn-modulo">Módulo 2 →</a>
+    </div>
+</div>
+</main>
+<footer>
+    <div class="footer-marca">Centro Popular de Estudios Económicos</div>
+    <div style="display:flex;align-items:center;gap:12px;"><span class="footer-badge">En construcción</span><span>© 2026</span></div>
+</footer>
+<script>function toggleMenu() {
+    const btn=document.getElementById('menuBtn'),panel=document.getElementById('menuPanel'),overlay=document.getElementById('menuOverlay'),abierto=panel.classList.contains('abierto');
+    btn.classList.toggle('abierto',!abierto); panel.classList.toggle('abierto',!abierto); overlay.classList.toggle('visible',!abierto);
+    panel.setAttribute('aria-hidden',abierto?'true':'false'); document.body.style.overflow=abierto?'':'hidden';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=document.getElementById('menuPanel');if(p.classList.contains('abierto'))toggleMenu();}});</script>
+<script>let currentSlide=0;
+const slides=document.querySelectorAll('.slide'),counter=document.getElementById('slideCounter'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn'),progress=document.getElementById('progressBar'),puntosContainer=document.getElementById('puntos');
+slides.forEach((_,i)=>{const btn=document.createElement('button');btn.classList.add('punto');if(i===0)btn.classList.add('activo');btn.addEventListener('click',()=>goToSlide(i));puntosContainer.appendChild(btn);});
+function updateUI(){const t=slides.length;counter.innerText=`${currentSlide+1} / ${t}`;prevBtn.disabled=currentSlide===0;nextBtn.disabled=currentSlide===t-1;progress.style.width=`${((currentSlide+1)/t)*100}%`;document.querySelectorAll('.punto').forEach((p,i)=>p.classList.toggle('activo',i===currentSlide));}
+function goToSlide(n){slides[currentSlide].classList.remove('active');currentSlide=n;slides[currentSlide].classList.add('active');updateUI();}
+function changeSlide(n){goToSlide(currentSlide+n);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&currentSlide<slides.length-1)changeSlide(1);if(e.key==='ArrowLeft'&&currentSlide>0)changeSlide(-1);});
+updateUI();</script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+        authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+        projectId: "cpee-plataforma-a655a",
+        storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+        messagingSenderId: "684415102099",
+        appId: "1:684415102099:web:3f2b649a34386677a87166"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    const btnCompletar = document.getElementById("btnCompletarM1");
+
+    function marcarCompletado() {
+        if (btnCompletar) {
+            btnCompletar.innerHTML = "✅ Módulo 1 Completado";
+            btnCompletar.style.background = "var(--cafe-claro)";
+            btnCompletar.disabled = true;
+            btnCompletar.style.cursor = "default";
+        }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "/login.html";
+            return;
+        }
+        const docRef  = doc(db, "progreso_usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        // 1. Verificar acceso al curso
+        if (!docSnap.exists() || docSnap.data().acceso_politica !== true) {
+            window.location.href = "/laboratorio/politica_inicio.html";
+            return;
+        }
+
+        // 2. Si ya completó, marcar el botón
+        if (docSnap.data().modulo1_politica_completado === true) {
+            marcarCompletado();
+        }
+
+        // 3. Activar el botón para guardar progreso
+        if (btnCompletar) {
+            btnCompletar.addEventListener("click", async () => {
+                btnCompletar.innerText = "Guardando...";
+                try {
+                    await setDoc(docRef, {
+                        correo: user.email,
+                        modulo1_politica_completado: true,
+                        fecha_completado_politica_m1: new Date()
+                    }, { merge: true });
+                    marcarCompletado();
+                    alert("¡Módulo 1 guardado en tu progreso!");
+                } catch (error) {
+                    console.error("Error al guardar: ", error);
+                    alert("Hubo un error al guardar tu progreso. Intenta de nuevo.");
+                    btnCompletar.innerText = "Marcar Módulo 1 como Completado";
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

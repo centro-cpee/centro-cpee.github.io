@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Evaluación Final - CPEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cafe: #2b1b12;
+            --verde: #2a4939;
+            --crema: #fff1da;
+            --naranja: #d35a34;
+            --texto-suave: #4a3f35;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--crema);
+            color: var(--cafe);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--verde);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .instrucciones {
+            text-align: center;
+            color: var(--texto-suave);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--crema);
+        }
+        .pregunta-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-left: 4px solid var(--verde);
+            border-radius: 4px;
+        }
+        .pregunta-texto {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .opciones label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .opciones label:hover {
+            border-color: var(--verde);
+            background: #f0f7f4;
+        }
+        .opciones input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--verde);
+        }
+        .btn-enviar {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--naranja);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+        .btn-enviar:hover {
+            background: #b54726;
+        }
+        .btn-enviar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        /* Pantalla de bloqueo */
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--crema);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo">
+        <h2 id="bloqueo-texto" style="font-family: 'DM Serif Display', serif; color: var(--cafe); font-size: 2rem;">Verificando tu progreso...</h2>
+        <p id="bloqueo-subtexto">Analizando tus credenciales en el sistema.</p>
+        <button id="btn-volver" style="display:none; margin-top: 20px; padding: 10px 20px; background: var(--verde); color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="window.location.href='../lab.html'">Volver al Laboratorio</button>
+    </div>
+
+    <div class="container" id="contenedor-examen" style="display: none;">
+        <h1>Evaluación Final</h1>
+        <div class="instrucciones">
+            <p>Demuestra lo que has aprendido. Tienes un máximo de <strong>3 intentos</strong> para aprobar. <br>Necesitas al menos <strong>16 aciertos (8.0)</strong> para obtener tu constancia.</p>
+            <p style="color: var(--naranja); font-weight: bold;" id="intentos-restantes-texto"></p>
+        </div>
+
+        <form id="formulario-evaluacion">
+            
+            <div class="pregunta-card">
+                <div class="pregunta-texto">1. Un estudiante tiene 800 pesos y debe elegir entre comprar un curso de Excel o asistir a un festival de música. Decide comprar el curso. ¿Cuál es el costo de oportunidad?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q1" value="A" required> A) Los 800 pesos gastados.</label>
+                    <label><input type="radio" name="q1" value="B"> B) El festival al que renunció.</label>
+                    <label><input type="radio" name="q1" value="C"> C) El conocimiento que adquirirá.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">2. Una ciudad necesita 10,000 litros de agua diarios, pero solo dispone de 6,000 litros. Este problema representa:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q2" value="A" required> A) Inflación.</label>
+                    <label><input type="radio" name="q2" value="B"> B) Escasez.</label>
+                    <label><input type="radio" name="q2" value="C"> C) Productividad marginal.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">3. La ganancia se calcula como: Ganancia = Ingresos - Costos. Si los ingresos son 2000 pesos y los costos son: Costos = 500 + 20Q. Si Q=40, ¿cuál es la ganancia?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q3" value="A" required> A) 700 pesos.</label>
+                    <label><input type="radio" name="q3" value="B"> B) 1500 pesos.</label>
+                    <label><input type="radio" name="q3" value="C"> C) 2500 pesos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">4. La demanda de un producto sigue la ecuación: Qd = 120 - 4P. Si el precio es de 15 pesos, ¿cuál será la cantidad demandada?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q4" value="A" required> A) 60 unidades.</label>
+                    <label><input type="radio" name="q4" value="B"> B) 120 unidades.</label>
+                    <label><input type="radio" name="q4" value="C"> C) 15 unidades.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">5. Una empresa compra: 5 unidades de un producto que cuesta 12 pesos y 4 unidades de otro que cuesta 10 pesos. ¿Cuál es el gasto total?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q5" value="A" required> A) 100 pesos.</label>
+                    <label><input type="radio" name="q5" value="B"> B) 88 pesos.</label>
+                    <label><input type="radio" name="q5" value="C"> C) 120 pesos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">6. Resuelve la ecuación: 4X + 8 = 32</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q6" value="A" required> A) X = 4</label>
+                    <label><input type="radio" name="q6" value="B"> B) X = 6</label>
+                    <label><input type="radio" name="q6" value="C"> C) X = 8</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">7. Una empresa fabrica celulares y tiene la restricción: 5X + 10Y ≤ 100. Si produce Y=5, ¿cuál es la cantidad máxima de X que puede producir?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q7" value="A" required> A) 5</label>
+                    <label><input type="radio" name="q7" value="B"> B) 10</label>
+                    <label><input type="radio" name="q7" value="C"> C) 15</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">8. Una empresa tiene un presupuesto máximo de 900 pesos. ¿Cuál desigualdad representa correctamente esta situación?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q8" value="A" required> A) X ≤ 900</label>
+                    <label><input type="radio" name="q8" value="B"> B) X ≥ 900</label>
+                    <label><input type="radio" name="q8" value="C"> C) X = 900</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">9. El costo marginal de una empresa es: CMg = 6Q. Si actualmente produce Q=7, ¿cuál es su costo marginal?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q9" value="A" required> A) 42 pesos.</label>
+                    <label><input type="radio" name="q9" value="B"> B) 13 pesos.</label>
+                    <label><input type="radio" name="q9" value="C"> C) 49 pesos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">10. Una empresa tiene IMg = 80 y CMg = 20Q. ¿En qué cantidad se maximiza la ganancia?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q10" value="A" required> A) Q = 2</label>
+                    <label><input type="radio" name="q10" value="B"> B) Q = 4</label>
+                    <label><input type="radio" name="q10" value="C"> C) Q = 20</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">11. Resuelve la siguiente integral inmediata: ∫ 4x³ dx</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q11" value="A" required> A) x⁴ + C</label>
+                    <label><input type="radio" name="q11" value="B"> B) 4x⁴ + C</label>
+                    <label><input type="radio" name="q11" value="C"> C) 12x² + C</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">12. Un consumidor estaba dispuesto a pagar 150 pesos por unos audífonos, pero el precio de mercado fue de 110 pesos. ¿Cuál es su excedente del consumidor?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q12" value="A" required> A) 40 pesos.</label>
+                    <label><input type="radio" name="q12" value="B"> B) 110 pesos.</label>
+                    <label><input type="radio" name="q12" value="C"> C) 260 pesos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">13. La productividad marginal del trabajo de una fábrica es igual a 12. ¿Qué significa esto?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q13" value="A" required> A) Cada trabajador produce exactamente 12 unidades en total.</label>
+                    <label><input type="radio" name="q13" value="B"> B) Contratar un trabajador adicional aumenta la producción en 12 unidades.</label>
+                    <label><input type="radio" name="q13" value="C"> C) La fábrica necesita 12 trabajadores para producir.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">14. Un consumidor tiene 200 pesos. El bien X cuesta 25 pesos y decide no comprar ningún otro bien. ¿Cuál es la cantidad máxima de X que puede comprar?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q14" value="A" required> A) 8 unidades.</label>
+                    <label><input type="radio" name="q14" value="B"> B) 25 unidades.</label>
+                    <label><input type="radio" name="q14" value="C"> C) 200 unidades.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">15. Una persona solo consume pizza. Tiene 180 pesos y cada pizza cuesta 30 pesos. Decide gastar todo su dinero únicamente en pizza. Este caso representa:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q15" value="A" required> A) Rendimientos decrecientes.</label>
+                    <label><input type="radio" name="q15" value="B"> B) Solución de esquina.</label>
+                    <label><input type="radio" name="q15" value="C"> C) Regresión espuria.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">16. En un problema de optimización, el multiplicador de Lagrange es igual a 5. Esto significa que:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q16" value="A" required> A) Un peso adicional de presupuesto aumenta la utilidad máxima en 5 unidades.</label>
+                    <label><input type="radio" name="q16" value="B"> B) La utilidad disminuirá en 5 unidades.</label>
+                    <label><input type="radio" name="q16" value="C"> C) El presupuesto no afecta la utilidad.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">17. En una empresa: 6 trabajadores ganan 7,000 pesos y el dueño gana 300,000 pesos. ¿Qué medida representa mejor el ingreso típico de los trabajadores?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q17" value="A" required> A) La media.</label>
+                    <label><input type="radio" name="q17" value="B"> B) La mediana.</label>
+                    <label><input type="radio" name="q17" value="C"> C) La desviación estándar.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">18. Un intervalo de confianza al 95% para el salario promedio es: [18,000, 24,000]. Un político afirma que el salario promedio real es de 40,000 pesos. ¿Cuál es la mejor conclusión?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q18" value="A" required> A) La afirmación parece inconsistente con la estimación estadística.</label>
+                    <label><input type="radio" name="q18" value="B"> B) La afirmación debe ser correcta porque 40,000 es mayor.</label>
+                    <label><input type="radio" name="q18" value="C"> C) El intervalo demuestra que todas las personas ganan exactamente entre 18,000 y 24,000.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">19. Un gobierno redujo el impuesto a las pequeñas empresas. Un año después: la inversión privada aumentó, el desempleo disminuyó, pero el déficit público creció porque se recaudaron menos impuestos. ¿Cuál es la conclusión más completa?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q19" value="A" required> A) La política tuvo efectos positivos sobre la actividad económica, pero también generó un costo fiscal importante.</label>
+                    <label><input type="radio" name="q19" value="B"> B) La política fue totalmente inútil porque el gobierno dejó de recaudar dinero.</label>
+                    <label><input type="radio" name="q19" value="C"> C) Reducir impuestos siempre elimina automáticamente el desempleo.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">20. El país de “Nova Terra” aplicó un impuesto a la comida ultraprocesada. Cinco años después, el consumo de estos cayó 25% (reducción estadísticamente significativa), las enfermedades bajaron y se construyeron hospitales en zonas pobres. Sin embargo, las familias de bajos ingresos ahora gastan una proporción mucho mayor de su salario en estos productos que las ricas, y pequeñas tiendas quebraron. ¿Cuál es la interpretación socioeconómica MÁS completa?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q20" value="A" required> A) La política generó beneficios de salud pública y financiamiento, pero también produjo efectos regresivos sobre familias pobres y costos económicos sobre pequeños negocios.</label>
+                    <label><input type="radio" name="q20" value="B"> B) La política fue perfecta porque cualquier reducción en el consumo automáticamente mejora toda la economía sin efectos negativos.</label>
+                    <label><input type="radio" name="q20" value="C"> C) Como el consumo cayó, eso demuestra que ningún grupo social fue perjudicado económicamente.</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btn-enviar">Terminar Examen y Calificar</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+            authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+            projectId: "cpee-plataforma-a655a",
+            storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+            messagingSenderId: "684415102099",
+            appId: "1:684415102099:web:3f2b649a34386677a87166"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Referencias UI
+        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
+        const contenedorExamen = document.getElementById('contenedor-examen');
+        const txtBloqueo = document.getElementById('bloqueo-texto');
+        const subTxtBloqueo = document.getElementById('bloqueo-subtexto');
+        const btnVolver = document.getElementById('btn-volver');
+        const txtIntentos = document.getElementById('intentos-restantes-texto');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        // Respuestas Correctas
+        const respuestasCorrectas = {
+            q1: "B", q2: "B", q3: "A", q4: "A", q5: "A",
+            q6: "B", q7: "B", q8: "A", q9: "A", q10: "B",
+            q11: "A", q12: "A", q13: "B", q14: "A", q15: "B",
+            q16: "A", q17: "B", q18: "A", q19: "A", q20: "A"
+        };
+
+        let userRef;
+        let userData;
+
+        onAuthStateChanged(auth, async (user) => {
+            // Rutas ajustadas basándonos en tu estructura de carpetas
+            if (!user) {
+                window.location.href = "../../login.html"; // Dos niveles arriba
+                return;
+            }
+
+            userRef = doc(db, "progreso_usuarios", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (!docSnap.exists()) {
+                window.location.href = "../lab.html"; // Un nivel arriba
+                return;
+            }
+
+            userData = docSnap.data();
+
+            // 1. Verificar si ya lo pasó
+            if (userData.examen_aprobado === true) {
+                txtBloqueo.innerText = "¡Ya aprobaste la evaluación!";
+                txtBloqueo.style.color = "var(--verde)";
+                subTxtBloqueo.innerText = "Tu constancia está lista para ser generada.";
+                btnVolver.innerText = "Ir a solicitar mi Constancia";
+                // Enlace directo asumiendo que constancia.html estará en cursome
+                btnVolver.onclick = () => window.location.href = "constancia.html";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 2. Verificar que TODOS los módulos (1 al 11) estén completos
+            const modulosRequeridos = [
+                'modulo1_completado', 'modulo2_completado', 'modulo3_completado',
+                'modulo4_completado', 'modulo5_completado', 'modulo6_completado',
+                'modulo7_completado', 'modulo8_completado', 'modulo9_completado',
+                'modulo10_completado', 'modulo11_completado'
+            ];
+            
+            let faltaModulo = false;
+            for (let mod of modulosRequeridos) {
+                if (!userData[mod]) {
+                    faltaModulo = true;
+                    break;
+                }
+            }
+
+            if (faltaModulo) {
+                txtBloqueo.innerText = "Acceso Denegado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Aún te faltan módulos por terminar. Completa la ruta del 1 al 11 para desbloquear el examen.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 3. Verificar intentos
+            let intentos = userData.intentos_examen || 0;
+            if (intentos >= 3) {
+                txtBloqueo.innerText = "Límite de intentos alcanzado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Has agotado tus 3 intentos. Por favor, comunícate con el administrador.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // Si pasa todo, le damos acceso
+            pantallaBloqueo.style.display = "none";
+            contenedorExamen.style.display = "block";
+            txtIntentos.innerText = `Intento ${intentos + 1} de 3`;
+        });
+
+        // Lógica al enviar el examen
+        document.getElementById('formulario-evaluacion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Calificando...";
+
+            const formData = new FormData(e.target);
+            let aciertos = 0;
+
+            for (let [pregunta, respuesta] of formData.entries()) {
+                if (respuestasCorrectas[pregunta] === respuesta) {
+                    aciertos++;
+                }
+            }
+
+            let calificacion = (aciertos / 20) * 10;
+            let intentosActuales = (userData.intentos_examen || 0) + 1;
+
+            if (calificacion >= 8.0) {
+                // APROBADO
+                await setDoc(userRef, {
+                    examen_aprobado: true,
+                    calificacion_final: calificacion,
+                    intentos_examen: intentosActuales
+                }, { merge: true });
+
+                alert(`¡Felicidades! Obtuviste ${aciertos}/20 (${calificacion}). Has aprobado el curso.`);
+                window.location.href = "constancia.html";
+            } else {
+                // REPROBADO
+                await setDoc(userRef, {
+                    intentos_examen: intentosActuales
+                }, { merge: true });
+
+                if (intentosActuales >= 3) {
+                    alert(`Calificación: ${calificacion}. Has agotado tus 3 intentos. El examen ha sido bloqueado.`);
+                    window.location.reload();
+                } else {
+                    alert(`Obtuviste ${aciertos}/20 (${calificacion}). Necesitas al menos 16 aciertos (8.0). Te quedan ${3 - intentosActuales} intentos.`);
+                    window.location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

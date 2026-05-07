@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 5: Partidos Políticos y Sistema Electoral — CPEE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+<style>
+/* SHARED BASE FOR POLITICA MODULES */
+:root {
+    --crema: #fff1da;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--crema); color: var(--negro); font-family: 'DM Sans', sans-serif; line-height: 1.7; overflow-x: hidden; }
+
+/* MENU */
+.menu-trigger { position: fixed; top: 22px; left: 24px; z-index: 1100; background: var(--cafe); border: none; border-radius: 8px; width: 44px; height: 44px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: background 0.2s; }
+.menu-trigger:hover { background: var(--verde); }
+.menu-trigger span { display: block; width: 20px; height: 2px; background: var(--crema); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease; transform-origin: center; }
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu-overlay { position: fixed; inset: 0; background: rgba(43,27,18,0.45); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; z-index: 1050; transition: opacity 0.3s ease; }
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
+.menu-panel { position: fixed; top: 0; left: 0; height: 100%; width: 280px; background: var(--cafe); z-index: 1090; transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; padding: 80px 0 40px; }
+.menu-panel.abierto { transform: translateX(0); }
+.menu-panel-logo { padding: 0 28px 32px; border-bottom: 1px solid rgba(215,196,165,0.2); margin-bottom: 12px; }
+.menu-panel-logo span { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: #D7C4A5; line-height: 1.3; display: block; }
+.menu-panel-logo em { font-family: 'Libre Baskerville', serif; font-size: 0.78rem; color: rgba(215,196,165,0.55); font-style: italic; }
+.menu-panel nav a { display: flex; align-items: center; gap: 12px; padding: 13px 28px; color: #D7C4A5; text-decoration: none; font-size: 0.95rem; font-weight: 400; border-left: 3px solid transparent; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.menu-panel nav a:hover { background: rgba(215,196,165,0.07); border-left-color: var(--verde-medio); color: #f0dfc0; }
+.menu-panel nav a .nav-num { font-size: 0.7rem; opacity: 0.4; font-weight: 500; min-width: 18px; }
+
+/* BREADCRUMB */
+.breadcrumb { padding: 18px 48px 18px 90px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.7; border-bottom: 1px solid rgba(43,27,18,0.08); flex-wrap: wrap; }
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--verde); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--verde); opacity: 1; }
+
+/* HEADER */
+header { position: relative; padding: 48px 48px 40px; border-bottom: 1px solid rgba(43,27,18,0.15); overflow: hidden; }
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before { content: ''; position: absolute; top: -40px; right: -60px; width: 260px; height: 260px; border-radius: 50%; border: 1px solid rgba(42,73,57,0.1); }
+.header-bg-deco::after { content: ''; position: absolute; top: 10px; right: 10px; width: 150px; height: 150px; border-radius: 50%; border: 1px solid rgba(42,73,57,0.07); }
+.header-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.header-texto { flex: 1; }
+.header-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--verde); margin-bottom: 12px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+.header-eyebrow::before { content: ''; display: block; width: 28px; height: 2px; background: var(--verde); }
+header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 400; line-height: 1.2; color: var(--cafe); opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+.modulo-badge { flex-shrink: 0; background: rgba(42,73,57,0.08); border: 1px solid rgba(42,73,57,0.15); border-radius: 10px; padding: 14px 20px; text-align: center; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; align-self: center; }
+.modulo-badge .num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--verde); line-height: 1; display: block; }
+.modulo-badge .etiqueta { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--verde); opacity: 0.6; }
+
+/* MAIN */
+main { max-width: 820px; margin: 0 auto; padding: 48px 48px 80px; }
+
+/* SLIDE WRAPPER */
+.slide-wrapper { opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.progress-bar-outer { height: 4px; background: rgba(43,27,18,0.1); border-radius: 4px; margin-bottom: 4px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: var(--verde); border-radius: 4px; transition: width 0.4s ease; }
+.progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.progress-texto { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.55; }
+.slide-counter-txt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; color: var(--verde); opacity: 0.75; }
+
+/* SLIDE CONTAINER */
+.slide-container { background: rgba(255,255,255,0.65); border: 1px solid rgba(43,27,18,0.1); border-radius: 12px; padding: 36px 40px 28px; min-height: 380px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(43,27,18,0.06); display: flex; flex-direction: column; gap: 20px; }
+.slide-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--verde); border-radius: 4px 0 0 4px; }
+
+/* SLIDES */
+.slide { display: none; animation: fadeSlide 0.4s ease; flex: 1; }
+.slide.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+/* SLIDE TYPE BADGE */
+.slide-tipo { display: inline-flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+.tipo-objetivo { background: rgba(42,73,57,0.1); color: var(--verde); }
+.tipo-teoria { background: rgba(43,27,18,0.08); color: var(--cafe); }
+.tipo-practica { background: rgba(107,76,53,0.1); color: var(--cafe-claro); }
+.tipo-ejercicio { background: rgba(42,73,57,0.08); color: var(--verde); }
+.tipo-reflexion { background: rgba(43,27,18,0.06); color: var(--texto-suave); }
+.tipo-recursos { background: rgba(42,73,57,0.06); color: var(--verde-medio); }
+.tipo-video { background: rgba(43,27,18,0.07); color: var(--cafe); }
+
+/* SLIDE CONTENT */
+.slide h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400; color: var(--cafe); margin-bottom: 18px; line-height: 1.3; padding-bottom: 12px; border-bottom: 1px solid rgba(43,27,18,0.1); }
+.contenido-texto { font-size: 0.925rem; color: var(--texto-suave); line-height: 1.85; }
+.contenido-texto p { margin-bottom: 12px; }
+.contenido-texto p:last-child { margin-bottom: 0; }
+.contenido-texto ul, .contenido-texto ol { padding-left: 20px; margin: 10px 0; }
+.contenido-texto li { margin-bottom: 8px; }
+.contenido-texto li::marker { color: var(--verde); }
+.contenido-texto strong { color: var(--cafe); font-weight: 600; }
+.contenido-texto em { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--cafe-claro); }
+
+/* SPECIAL BOXES */
+.caja-practica { background: rgba(42,73,57,0.05); border: 1px solid rgba(42,73,57,0.14); border-left: 4px solid var(--verde); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-practica strong { color: var(--verde); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-ejercicio { background: rgba(255,241,218,0.8); border: 1px solid rgba(43,27,18,0.14); border-left: 4px solid var(--cafe); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 12px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-ejercicio strong { color: var(--cafe); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-atencion { background: rgba(107,76,53,0.07); border-left: 4px solid var(--cafe-claro); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 14px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-atencion strong { color: var(--cafe-claro); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+/* REFLEXIÓN */
+.reflexion-lista { list-style: none; padding: 0; margin: 12px 0; }
+.reflexion-lista li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(43,27,18,0.07); font-size: 0.9rem; color: var(--texto-suave); line-height: 1.65; }
+.reflexion-lista li:last-child { border-bottom: none; }
+.reflexion-lista li::before { content: counter(item); counter-increment: item; flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(42,73,57,0.1); color: var(--verde); font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.reflexion-lista { counter-reset: item; }
+
+/* RECURSOS */
+.recursos-grid { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+.recurso-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.09); border-radius: 8px; font-size: 0.83rem; color: var(--texto-suave); }
+.recurso-item a { color: var(--verde); text-decoration: none; font-weight: 500; }
+.recurso-item a:hover { text-decoration: underline; }
+.recurso-item::before { content: '📄'; flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+
+/* VIDEO */
+.video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: rgba(43,27,18,0.05); margin: 12px 0; }
+.video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px; }
+.video-label { font-size: 0.72rem; color: var(--cafe-claro); opacity: 0.7; margin-top: 6px; font-style: italic; }
+
+/* NAV BUTTONS */
+.nav-buttons { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid rgba(43,27,18,0.08); }
+.btn-nav { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: var(--cafe); color: #D7C4A5; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; border-radius: 8px; transition: background 0.2s, transform 0.2s; }
+.btn-nav:hover:not(:disabled) { background: var(--verde); transform: translateY(-1px); }
+.btn-nav:disabled { background: rgba(43,27,18,0.1); color: rgba(43,27,18,0.3); cursor: not-allowed; transform: none; }
+.puntos-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.punto { width: 8px; height: 8px; border-radius: 50%; background: rgba(43,27,18,0.15); transition: background 0.3s, transform 0.3s; cursor: pointer; border: none; padding: 0; }
+.punto.activo { background: var(--verde); transform: scale(1.25); }
+
+/* MODULE NAV */
+.modulo-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 12px; }
+.btn-modulo { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.12); color: var(--texto-suave); text-decoration: none; font-size: 0.82rem; font-weight: 500; border-radius: 8px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.btn-modulo:hover { background: rgba(255,255,255,0.9); border-color: var(--verde); color: var(--verde); }
+.btn-modulo-inicio { background: var(--cafe); color: #D7C4A5; border-color: var(--cafe); }
+.btn-modulo-inicio:hover { background: var(--verde); border-color: var(--verde); color: var(--crema); }
+
+/* FOOTER */
+footer { border-top: 1px solid rgba(43,27,18,0.15); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.82rem; color: var(--cafe-claro); background: rgba(43,27,18,0.03); }
+.footer-marca { display: flex; align-items: center; gap: 10px; font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--cafe); }
+.footer-marca::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--verde); }
+.footer-badge { font-size: 0.72rem; padding: 4px 10px; border-radius: 20px; background: rgba(42,73,57,0.1); color: var(--verde); font-weight: 500; letter-spacing: 0.04em; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+    .breadcrumb { padding: 14px 20px 14px 80px; }
+    header { padding: 36px 24px 30px; }
+    main { padding: 32px 24px 60px; }
+    .slide-container { padding: 24px 20px 20px; }
+    .modulo-badge { display: none; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+}
+
+
+/* ─── SLIDE DE CIERRE ── */
+.slide-cierre { text-align:center; }
+.cierre-emoji { font-size:3.5rem; margin-bottom:18px; display:block; }
+.cierre-titulo { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--verde); margin-bottom:14px; }
+.cierre-resumen { font-size:0.9rem; color:var(--texto-suave); line-height:1.8; max-width:520px; margin:0 auto 24px; }
+.cierre-lista { text-align:left; display:inline-block; margin:12px auto 0; }
+.cierre-lista li { font-size:0.875rem; color:var(--texto-suave); margin-bottom:7px; }
+.cierre-lista li::marker { color:var(--verde); }
+.btn-completar {
+    display:inline-flex; align-items:center; gap:10px; margin-top:32px; padding:14px 32px;
+    background:var(--verde); color:var(--crema); border:none; border-radius:10px;
+    font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700; cursor:pointer;
+    transition:background 0.25s,transform 0.2s; box-shadow:0 4px 16px rgba(42,73,57,0.2);
+}
+.btn-completar:hover:not(:disabled) { background:var(--verde-medio); transform:translateY(-2px); }
+.btn-completar:disabled { background:var(--cafe-claro); cursor:default; opacity:0.75; }
+.siguiente-modulo-link { display:inline-block; margin-top:14px; font-size:0.85rem; color:var(--verde); text-decoration:none; font-weight:500; }
+.siguiente-modulo-link:hover { text-decoration:underline; }
+
+</style>
+</head>
+<body>
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo"><span>Centro Popular de<br>Estudios Económicos</span><em>Ciencia Social aplicada</em></div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../../quienes-somos/index.html"><span class="nav-num">01</span> ¿Quiénes somos?</a>
+        <a href="../../mision/index.html"><span class="nav-num">02</span> Nuestra misión</a>
+        <a href="../../colaboraciones/index.html"><span class="nav-num">03</span> Colaboraciones</a>
+    </nav>
+</aside>
+<div class="breadcrumb">
+    <a href="../../index.html">Inicio</a><span class="sep">/</span>
+    <a href="index.html">Laboratorio</a><span class="sep">/</span>
+    <a href="politica_inicio.html">Cómo Funciona el Poder en México</a><span class="sep">/</span>
+    <span class="actual">Módulo 5</span>
+</div>
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Laboratorio · Ciencia Política</p>
+            <h1>Módulo 5: Partidos Políticos y Sistema Electoral</h1>
+        </div>
+        <div class="modulo-badge"><span class="num">05</span><span class="etiqueta">Módulo</span></div>
+    </div>
+</header>
+<main>
+<div class="slide-wrapper">
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+    <div class="progress-label">
+        <span class="progress-texto">Progreso del módulo</span>
+        <span class="slide-counter-txt" id="slideCounter"></span>
+    </div>
+    <div class="slide-container">
+<div class="slide active">
+            <span class="slide-tipo tipo-objetivo">🎯 Objetivo del módulo</span>
+            <h2>¿Qué aprenderás aquí?</h2>
+            <div class="contenido-texto">
+<p>Al terminar entenderás <strong>cómo funciona el sistema electoral mexicano, qué papel juegan los partidos políticos y qué instituciones garantizan (o deberían garantizar) la limpieza de las elecciones</strong>.</p>
+<div class="caja-practica"><strong>Pregunta guía</strong>
+¿Las reglas electorales en México favorecen la representación real de la ciudadanía o crean distorsiones que benefician a ciertos partidos? ¿Qué tan independientes son realmente el INE y el TEPJF?</div>
+<ul>
+<li>El INE: estructura, funciones e independencia</li>
+<li>Sistema electoral mixto: mayoría y representación proporcional</li>
+<li>El financiamiento de partidos</li>
+<li>El TEPJF y la justicia electoral</li>
+<li>El sistema de partidos actual</li>
+</ul>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>El INE: árbitro electoral</h2>
+            <div class="contenido-texto">
+<p>El <strong>Instituto Nacional Electoral (INE)</strong> —antes IFE— es el organismo constitucional autónomo encargado de organizar las elecciones federales. Su misión central es garantizar elecciones libres, auténticas y periódicas.</p>
+<p>Fue creado como IFE en 1990 y reformado en 2014 para convertirse en INE, con atribuciones sobre elecciones locales. Sus funciones incluyen:</p>
+<ul>
+<li>Organizar y vigilar los procesos electorales federales.</li>
+<li>Registrar y fiscalizar a los partidos políticos.</li>
+<li>Distribuir el financiamiento público a partidos.</li>
+<li>Operar el padrón electoral (más de 97 millones de inscritos).</li>
+<li>Capacitar a los funcionarios de casilla y contar los votos.</li>
+</ul>
+<p>El Consejo General del INE está formado por 11 consejeros electorales propuestos por los partidos y ratificados por la Cámara de Diputados. Su independencia depende críticamente de la calidad del proceso de designación.</p>
+<div class="caja-atencion"><strong>La reforma electoral de 2023 ("Plan B" y sus implicaciones)</strong>
+El gobierno de AMLO impulsó varias reformas al sistema electoral que el INE y la sociedad civil resistieron activamente. La SCJN anuló la primera reforma ("Plan B"). En 2023 se redujo el presupuesto del INE y se modificaron las reglas de designación de consejeros. Esto generó movilizaciones ciudadanas masivas en defensa del INE, una de las más grandes en la historia reciente del país.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>El sistema electoral: cómo se eligen diputados y senadores</h2>
+            <div class="contenido-texto">
+<p>México usa un <strong>sistema mixto</strong> que combina dos principios de representación:</p>
+<p><strong>Para diputados (500 en total):</strong></p>
+<ul>
+<li><strong>300 por mayoría relativa:</strong> un diputado por cada distrito electoral. Gana el candidato más votado, sin importar si tiene mayoría absoluta. Favorece a los partidos grandes.</li>
+<li><strong>200 por representación proporcional:</strong> elegidos por listas de partido en 5 circunscripciones. Busca corregir las distorsiones del sistema mayoritario y dar representación a partidos medianos y pequeños.</li>
+</ul>
+<p><strong>Para senadores (128 en total):</strong></p>
+<ul>
+<li><strong>64 por mayoría relativa:</strong> 2 por cada estado (el partido que gana la entidad lleva los 2).</li>
+<li><strong>32 por primera minoría:</strong> uno por estado para el partido que quedó en segundo lugar.</li>
+<li><strong>32 por representación proporcional:</strong> lista nacional.</li>
+</ul>
+<div class="caja-practica"><strong>¿Qué consecuencias tiene este sistema?</strong>
+El sistema favorece a los partidos con implantación territorial amplia. También genera un fenómeno importante: la "sobrerrepresentación" — un partido puede obtener el 40% de los votos y terminar con el 55% de los escaños. La Constitución limita la sobrerrepresentación a 8 puntos porcentuales, aunque esta regla es objeto de debate permanente.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>El financiamiento de partidos y sus problemas</h2>
+            <div class="contenido-texto">
+<p>Los partidos políticos en México reciben financiamiento público significativo, calculado sobre la base del número de ciudadanos en el padrón electoral. La lógica es reducir la dependencia de intereses privados y garantizar competencia equitativa.</p>
+<p>El monto total se divide así:</p>
+<ul>
+<li><strong>30%</strong> se distribuye en partes iguales entre todos los partidos con registro nacional.</li>
+<li><strong>70%</strong> se distribuye en proporción a los votos obtenidos en la última elección de diputados.</li>
+</ul>
+<p>Esto implica que los partidos grandes reciben mucho más que los pequeños, lo que tiende a reproducir las estructuras de poder existentes.</p>
+<div class="caja-atencion"><strong>El problema del financiamiento ilícito</strong>
+A pesar del financiamiento público, los casos de financiamiento ilegal son recurrentes en México. El caso OHL, Odebrecht y múltiples escándalos de "facturas falsas" han mostrado que el financiamiento legal coexiste con circuitos de dinero opaco. El INE tiene facultades de fiscalización, pero sus resoluciones sancionadoras han sido irregulares en su aplicación.</div>
+<div class="caja-practica"><strong>Un dato revelador</strong>
+En 2024, los partidos con registro nacional recibieron más de 10,000 millones de pesos en financiamiento público. México es uno de los países con mayor financiamiento público por elector del mundo. Sin embargo, esto no ha eliminado la corrupción política ni mejorado necesariamente la calidad de la representación.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-practica">🔍 Práctica</span>
+            <h2>El sistema de partidos actual</h2>
+            <div class="contenido-texto">
+<p>El sistema de partidos mexicano ha pasado de ser hegemónico (PRI dominante) a uno de pluralismo multipartidista fragmentado. Los partidos con registro nacional más relevantes:</p>
+<ul>
+<li><strong>Morena (Movimiento Regeneración Nacional):</strong> fundado por AMLO en 2014, actualmente el partido dominante. Gobierno federal y mayoría en el Congreso.</li>
+<li><strong>PAN (Partido Acción Nacional):</strong> fundado en 1939, conservador-liberal. Gobernó la presidencia 2000–2012. Primera fuerza de oposición.</li>
+<li><strong>PRI (Partido Revolucionario Institucional):</strong> de hegemónico a tercera o cuarta fuerza. Tras múltiples escándalos de corrupción, redujo drásticamente su base electoral.</li>
+<li><strong>MC (Movimiento Ciudadano):</strong> de centro, con base en Jalisco y algunas ciudades. Posicionado como alternativa al bloque Morena y al PAN-PRI.</li>
+<li><strong>PRD:</strong> fundado por Cárdenas tras 1988. En declive acelerado, perdió registro nacional en 2024.</li>
+<li><strong>PVEM y PT:</strong> aliados históricos de Morena, con representación en el Congreso.</li>
+</ul>
+<div class="caja-practica"><strong>Tendencia clave</strong>
+El sistema mexicano tiende hacia la bipolarización: Morena + aliados vs. la oposición. Esto reproduce, en cierta medida, la lógica del sistema hegemónico, pero con competencia electoral real. El riesgo es que la polarización impida la colaboración institucional y debilite los acuerdos básicos sobre reglas del juego democrático.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-ejercicio">✏️ Ejercicio</span>
+            <h2>Analiza los resultados electorales de 2024</h2>
+            <div class="contenido-texto">
+<p>Con los datos de las elecciones de junio de 2024, realiza el siguiente análisis:</p>
+<div class="caja-ejercicio"><strong>Ejercicio 1: Sobrerrepresentación</strong>
+Busca los resultados de la Cámara de Diputados de 2024. ¿Qué porcentaje de votos obtuvo Morena + aliados? ¿Qué porcentaje de escaños obtuvo? ¿Hay sobrerrepresentación? ¿Supera los 8 puntos que limita la Constitución?</div>
+<div class="caja-ejercicio"><strong>Ejercicio 2: Fragmentación territorial</strong>
+¿En qué estados tiene más fuerza cada partido? Identifica al menos 3 estados donde el partido predominante no sea Morena. ¿Qué factores políticos, económicos o sociales pueden explicar esa diferencia?</div>
+<div class="caja-ejercicio"><strong>Ejercicio 3: Participación electoral</strong>
+¿Cuál fue la participación electoral en 2024? ¿Qué porcentaje de ciudadanos inscritos no votó? ¿Cómo se compara con elecciones anteriores? ¿Qué factores explican la abstención?</div>
+<p><strong>Fuentes:</strong> <a href="https://www.ine.mx" target="_blank" style="color:var(--verde)">ine.mx</a> y <a href="https://prep2024.ine.mx" target="_blank" style="color:var(--verde)">prep2024.ine.mx</a></p>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-reflexion">💬 Reflexión</span>
+            <h2>Preguntas para ir más allá</h2>
+            <div class="contenido-texto">
+<ul class="reflexion-lista">
+<li>¿Un sistema donde los partidos reciben millones de pesos de financiamiento público pero siguen siendo oligárquicos e impenetrables para la ciudadanía ordinaria es realmente democrático?</li>
+<li>¿El sistema de representación proporcional corrige las distorsiones del sistema mayoritario o genera nuevos problemas (listas cerradas sin rendición de cuentas directa a los electores)?</li>
+<li>¿Es posible tener un sistema electoral limpio en un país con altos niveles de pobreza y clientelismo? ¿Qué se necesitaría para romper esa relación?</li>
+<li>¿La elección popular de jueces —aprobada en 2024— crea incentivos para que los jueces busquen popularidad en lugar de aplicar el derecho? ¿Qué consecuencias tendría eso en casos políticamente sensibles?</li>
+</ul>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-recursos">📚 Recursos</span>
+            <h2>Lecturas y video recomendados</h2>
+            <div class="contenido-texto">
+<p><strong>Lecturas:</strong></p>
+<div class="recursos-grid">
+<div class="recurso-item">Woldenberg, J. (2012). <em>Historia mínima de la transición democrática en México.</em> El Colegio de México. Narración accesible y bien documentada.</div>
+<div class="recurso-item">Becerra, R., Salazar, P. y Woldenberg, J. (2000). <em>La mecánica del cambio político en México.</em> Cal y Arena. Análisis de las reformas electorales.</div>
+<div class="recurso-item">INE. <em>Atlas de Resultados Electorales Federales.</em> <a href="https://atlas.ine.mx" target="_blank">atlas.ine.mx</a> — visualización interactiva de resultados.</div>
+</div>
+<p style="margin-top:16px"><strong>Video recomendado — Sistema electoral mexicano:</strong></p>
+<div class="video-wrapper">
+<iframe src="https://www.youtube-nocookie.com/embed/ZFFG8_7SJHM" title="Sistema Electoral Mexicano INE" allowfullscreen loading="lazy"></iframe>
+</div>
+<p class="video-label">Si no carga, busca: "sistema electoral mexicano INE cómo funciona elecciones" en YouTube.</p>
+</div>
+        </div>
+        <div class="slide">
+            <div class="slide-cierre">
+                <span class="cierre-emoji">🎓</span>
+                <p class="cierre-titulo">¡Módulo 5 completado!</p>
+                <p class="cierre-resumen">Entiendes cómo funcionan el INE, el sistema electoral mixto, el financiamiento de partidos y el TEPJF. Puedes analizar resultados electorales con criterio.</p>
+                <button class="btn-completar" id="btnCompletarM5">Marcar Módulo 5 como Completado</button>
+                <br><a href="politica_m6.html" class="siguiente-modulo-link">Continuar → Módulo 6: Cómo se Toman las Decisiones Públicas</a>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <div class="puntos-nav" id="puntos"></div>
+            <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+    <div class="modulo-nav">
+        <a href="politica_m4.html" class="btn-modulo">← Módulo 4</a>
+        <a href="politica_inicio.html" class="btn-modulo btn-modulo-inicio">↑ Índice del curso</a>
+        <a href="politica_m6.html" class="btn-modulo">Módulo 6 →</a>
+    </div>
+</div>
+</main>
+<footer>
+    <div class="footer-marca">Centro Popular de Estudios Económicos</div>
+    <div style="display:flex;align-items:center;gap:12px;"><span class="footer-badge">En construcción</span><span>© 2026</span></div>
+</footer>
+<script>function toggleMenu() {
+    const btn=document.getElementById('menuBtn'),panel=document.getElementById('menuPanel'),overlay=document.getElementById('menuOverlay'),abierto=panel.classList.contains('abierto');
+    btn.classList.toggle('abierto',!abierto); panel.classList.toggle('abierto',!abierto); overlay.classList.toggle('visible',!abierto);
+    panel.setAttribute('aria-hidden',abierto?'true':'false'); document.body.style.overflow=abierto?'':'hidden';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=document.getElementById('menuPanel');if(p.classList.contains('abierto'))toggleMenu();}});</script>
+<script>let currentSlide=0;
+const slides=document.querySelectorAll('.slide'),counter=document.getElementById('slideCounter'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn'),progress=document.getElementById('progressBar'),puntosContainer=document.getElementById('puntos');
+slides.forEach((_,i)=>{const btn=document.createElement('button');btn.classList.add('punto');if(i===0)btn.classList.add('activo');btn.addEventListener('click',()=>goToSlide(i));puntosContainer.appendChild(btn);});
+function updateUI(){const t=slides.length;counter.innerText=`${currentSlide+1} / ${t}`;prevBtn.disabled=currentSlide===0;nextBtn.disabled=currentSlide===t-1;progress.style.width=`${((currentSlide+1)/t)*100}%`;document.querySelectorAll('.punto').forEach((p,i)=>p.classList.toggle('activo',i===currentSlide));}
+function goToSlide(n){slides[currentSlide].classList.remove('active');currentSlide=n;slides[currentSlide].classList.add('active');updateUI();}
+function changeSlide(n){goToSlide(currentSlide+n);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&currentSlide<slides.length-1)changeSlide(1);if(e.key==='ArrowLeft'&&currentSlide>0)changeSlide(-1);});
+updateUI();</script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+        authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+        projectId: "cpee-plataforma-a655a",
+        storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+        messagingSenderId: "684415102099",
+        appId: "1:684415102099:web:3f2b649a34386677a87166"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    const btnCompletar = document.getElementById("btnCompletarM5");
+
+    function marcarCompletado() {
+        if (btnCompletar) {
+            btnCompletar.innerHTML = "✅ Módulo 5 Completado";
+            btnCompletar.style.background = "var(--cafe-claro)";
+            btnCompletar.disabled = true;
+            btnCompletar.style.cursor = "default";
+        }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "/login.html";
+            return;
+        }
+        const docRef  = doc(db, "progreso_usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        // 1. Verificar acceso al curso
+        if (!docSnap.exists() || docSnap.data().acceso_politica !== true) {
+            window.location.href = "/laboratorio/politica_inicio.html";
+            return;
+        }
+
+        // 2. Si ya completó, marcar el botón
+        if (docSnap.data().modulo5_politica_completado === true) {
+            marcarCompletado();
+        }
+
+        // 3. Activar el botón para guardar progreso
+        if (btnCompletar) {
+            btnCompletar.addEventListener("click", async () => {
+                btnCompletar.innerText = "Guardando...";
+                try {
+                    await setDoc(docRef, {
+                        correo: user.email,
+                        modulo5_politica_completado: true,
+                        fecha_completado_politica_m5: new Date()
+                    }, { merge: true });
+                    marcarCompletado();
+                    alert("¡Módulo 5 guardado en tu progreso!");
+                } catch (error) {
+                    console.error("Error al guardar: ", error);
+                    alert("Hubo un error al guardar tu progreso. Intenta de nuevo.");
+                    btnCompletar.innerText = "Marcar Módulo 5 como Completado";
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 6: Cómo se Toman las Decisiones Públicas — CPEE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+<style>
+/* SHARED BASE FOR POLITICA MODULES */
+:root {
+    --crema: #fff1da;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--crema); color: var(--negro); font-family: 'DM Sans', sans-serif; line-height: 1.7; overflow-x: hidden; }
+
+/* MENU */
+.menu-trigger { position: fixed; top: 22px; left: 24px; z-index: 1100; background: var(--cafe); border: none; border-radius: 8px; width: 44px; height: 44px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: background 0.2s; }
+.menu-trigger:hover { background: var(--verde); }
+.menu-trigger span { display: block; width: 20px; height: 2px; background: var(--crema); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease; transform-origin: center; }
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu-overlay { position: fixed; inset: 0; background: rgba(43,27,18,0.45); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; z-index: 1050; transition: opacity 0.3s ease; }
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
+.menu-panel { position: fixed; top: 0; left: 0; height: 100%; width: 280px; background: var(--cafe); z-index: 1090; transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; padding: 80px 0 40px; }
+.menu-panel.abierto { transform: translateX(0); }
+.menu-panel-logo { padding: 0 28px 32px; border-bottom: 1px solid rgba(215,196,165,0.2); margin-bottom: 12px; }
+.menu-panel-logo span { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: #D7C4A5; line-height: 1.3; display: block; }
+.menu-panel-logo em { font-family: 'Libre Baskerville', serif; font-size: 0.78rem; color: rgba(215,196,165,0.55); font-style: italic; }
+.menu-panel nav a { display: flex; align-items: center; gap: 12px; padding: 13px 28px; color: #D7C4A5; text-decoration: none; font-size: 0.95rem; font-weight: 400; border-left: 3px solid transparent; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.menu-panel nav a:hover { background: rgba(215,196,165,0.07); border-left-color: var(--verde-medio); color: #f0dfc0; }
+.menu-panel nav a .nav-num { font-size: 0.7rem; opacity: 0.4; font-weight: 500; min-width: 18px; }
+
+/* BREADCRUMB */
+.breadcrumb { padding: 18px 48px 18px 90px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.7; border-bottom: 1px solid rgba(43,27,18,0.08); flex-wrap: wrap; }
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--verde); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--verde); opacity: 1; }
+
+/* HEADER */
+header { position: relative; padding: 48px 48px 40px; border-bottom: 1px solid rgba(43,27,18,0.15); overflow: hidden; }
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before { content: ''; position: absolute; top: -40px; right: -60px; width: 260px; height: 260px; border-radius: 50%; border: 1px solid rgba(42,73,57,0.1); }
+.header-bg-deco::after { content: ''; position: absolute; top: 10px; right: 10px; width: 150px; height: 150px; border-radius: 50%; border: 1px solid rgba(42,73,57,0.07); }
+.header-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.header-texto { flex: 1; }
+.header-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--verde); margin-bottom: 12px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+.header-eyebrow::before { content: ''; display: block; width: 28px; height: 2px; background: var(--verde); }
+header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 400; line-height: 1.2; color: var(--cafe); opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+.modulo-badge { flex-shrink: 0; background: rgba(42,73,57,0.08); border: 1px solid rgba(42,73,57,0.15); border-radius: 10px; padding: 14px 20px; text-align: center; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; align-self: center; }
+.modulo-badge .num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--verde); line-height: 1; display: block; }
+.modulo-badge .etiqueta { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--verde); opacity: 0.6; }
+
+/* MAIN */
+main { max-width: 820px; margin: 0 auto; padding: 48px 48px 80px; }
+
+/* SLIDE WRAPPER */
+.slide-wrapper { opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.progress-bar-outer { height: 4px; background: rgba(43,27,18,0.1); border-radius: 4px; margin-bottom: 4px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: var(--verde); border-radius: 4px; transition: width 0.4s ease; }
+.progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.progress-texto { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.55; }
+.slide-counter-txt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; color: var(--verde); opacity: 0.75; }
+
+/* SLIDE CONTAINER */
+.slide-container { background: rgba(255,255,255,0.65); border: 1px solid rgba(43,27,18,0.1); border-radius: 12px; padding: 36px 40px 28px; min-height: 380px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(43,27,18,0.06); display: flex; flex-direction: column; gap: 20px; }
+.slide-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--verde); border-radius: 4px 0 0 4px; }
+
+/* SLIDES */
+.slide { display: none; animation: fadeSlide 0.4s ease; flex: 1; }
+.slide.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+/* SLIDE TYPE BADGE */
+.slide-tipo { display: inline-flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+.tipo-objetivo { background: rgba(42,73,57,0.1); color: var(--verde); }
+.tipo-teoria { background: rgba(43,27,18,0.08); color: var(--cafe); }
+.tipo-practica { background: rgba(107,76,53,0.1); color: var(--cafe-claro); }
+.tipo-ejercicio { background: rgba(42,73,57,0.08); color: var(--verde); }
+.tipo-reflexion { background: rgba(43,27,18,0.06); color: var(--texto-suave); }
+.tipo-recursos { background: rgba(42,73,57,0.06); color: var(--verde-medio); }
+.tipo-video { background: rgba(43,27,18,0.07); color: var(--cafe); }
+
+/* SLIDE CONTENT */
+.slide h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400; color: var(--cafe); margin-bottom: 18px; line-height: 1.3; padding-bottom: 12px; border-bottom: 1px solid rgba(43,27,18,0.1); }
+.contenido-texto { font-size: 0.925rem; color: var(--texto-suave); line-height: 1.85; }
+.contenido-texto p { margin-bottom: 12px; }
+.contenido-texto p:last-child { margin-bottom: 0; }
+.contenido-texto ul, .contenido-texto ol { padding-left: 20px; margin: 10px 0; }
+.contenido-texto li { margin-bottom: 8px; }
+.contenido-texto li::marker { color: var(--verde); }
+.contenido-texto strong { color: var(--cafe); font-weight: 600; }
+.contenido-texto em { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--cafe-claro); }
+
+/* SPECIAL BOXES */
+.caja-practica { background: rgba(42,73,57,0.05); border: 1px solid rgba(42,73,57,0.14); border-left: 4px solid var(--verde); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-practica strong { color: var(--verde); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-ejercicio { background: rgba(255,241,218,0.8); border: 1px solid rgba(43,27,18,0.14); border-left: 4px solid var(--cafe); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 12px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-ejercicio strong { color: var(--cafe); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-atencion { background: rgba(107,76,53,0.07); border-left: 4px solid var(--cafe-claro); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 14px 0; font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-atencion strong { color: var(--cafe-claro); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+/* REFLEXIÓN */
+.reflexion-lista { list-style: none; padding: 0; margin: 12px 0; }
+.reflexion-lista li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(43,27,18,0.07); font-size: 0.9rem; color: var(--texto-suave); line-height: 1.65; }
+.reflexion-lista li:last-child { border-bottom: none; }
+.reflexion-lista li::before { content: counter(item); counter-increment: item; flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(42,73,57,0.1); color: var(--verde); font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.reflexion-lista { counter-reset: item; }
+
+/* RECURSOS */
+.recursos-grid { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+.recurso-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.09); border-radius: 8px; font-size: 0.83rem; color: var(--texto-suave); }
+.recurso-item a { color: var(--verde); text-decoration: none; font-weight: 500; }
+.recurso-item a:hover { text-decoration: underline; }
+.recurso-item::before { content: '📄'; flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+
+/* VIDEO */
+.video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: rgba(43,27,18,0.05); margin: 12px 0; }
+.video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px; }
+.video-label { font-size: 0.72rem; color: var(--cafe-claro); opacity: 0.7; margin-top: 6px; font-style: italic; }
+
+/* NAV BUTTONS */
+.nav-buttons { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid rgba(43,27,18,0.08); }
+.btn-nav { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: var(--cafe); color: #D7C4A5; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; border-radius: 8px; transition: background 0.2s, transform 0.2s; }
+.btn-nav:hover:not(:disabled) { background: var(--verde); transform: translateY(-1px); }
+.btn-nav:disabled { background: rgba(43,27,18,0.1); color: rgba(43,27,18,0.3); cursor: not-allowed; transform: none; }
+.puntos-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.punto { width: 8px; height: 8px; border-radius: 50%; background: rgba(43,27,18,0.15); transition: background 0.3s, transform 0.3s; cursor: pointer; border: none; padding: 0; }
+.punto.activo { background: var(--verde); transform: scale(1.25); }
+
+/* MODULE NAV */
+.modulo-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 12px; }
+.btn-modulo { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.12); color: var(--texto-suave); text-decoration: none; font-size: 0.82rem; font-weight: 500; border-radius: 8px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.btn-modulo:hover { background: rgba(255,255,255,0.9); border-color: var(--verde); color: var(--verde); }
+.btn-modulo-inicio { background: var(--cafe); color: #D7C4A5; border-color: var(--cafe); }
+.btn-modulo-inicio:hover { background: var(--verde); border-color: var(--verde); color: var(--crema); }
+
+/* FOOTER */
+footer { border-top: 1px solid rgba(43,27,18,0.15); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.82rem; color: var(--cafe-claro); background: rgba(43,27,18,0.03); }
+.footer-marca { display: flex; align-items: center; gap: 10px; font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--cafe); }
+.footer-marca::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--verde); }
+.footer-badge { font-size: 0.72rem; padding: 4px 10px; border-radius: 20px; background: rgba(42,73,57,0.1); color: var(--verde); font-weight: 500; letter-spacing: 0.04em; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+    .breadcrumb { padding: 14px 20px 14px 80px; }
+    header { padding: 36px 24px 30px; }
+    main { padding: 32px 24px 60px; }
+    .slide-container { padding: 24px 20px 20px; }
+    .modulo-badge { display: none; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+}
+
+
+/* ─── SLIDE DE CIERRE ── */
+.slide-cierre { text-align:center; }
+.cierre-emoji { font-size:3.5rem; margin-bottom:18px; display:block; }
+.cierre-titulo { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--verde); margin-bottom:14px; }
+.cierre-resumen { font-size:0.9rem; color:var(--texto-suave); line-height:1.8; max-width:520px; margin:0 auto 24px; }
+.cierre-lista { text-align:left; display:inline-block; margin:12px auto 0; }
+.cierre-lista li { font-size:0.875rem; color:var(--texto-suave); margin-bottom:7px; }
+.cierre-lista li::marker { color:var(--verde); }
+.btn-completar {
+    display:inline-flex; align-items:center; gap:10px; margin-top:32px; padding:14px 32px;
+    background:var(--verde); color:var(--crema); border:none; border-radius:10px;
+    font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700; cursor:pointer;
+    transition:background 0.25s,transform 0.2s; box-shadow:0 4px 16px rgba(42,73,57,0.2);
+}
+.btn-completar:hover:not(:disabled) { background:var(--verde-medio); transform:translateY(-2px); }
+.btn-completar:disabled { background:var(--cafe-claro); cursor:default; opacity:0.75; }
+.siguiente-modulo-link { display:inline-block; margin-top:14px; font-size:0.85rem; color:var(--verde); text-decoration:none; font-weight:500; }
+.siguiente-modulo-link:hover { text-decoration:underline; }
+
+</style>
+</head>
+<body>
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo"><span>Centro Popular de<br>Estudios Económicos</span><em>Ciencia Social aplicada</em></div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../../quienes-somos/index.html"><span class="nav-num">01</span> ¿Quiénes somos?</a>
+        <a href="../../mision/index.html"><span class="nav-num">02</span> Nuestra misión</a>
+        <a href="../../colaboraciones/index.html"><span class="nav-num">03</span> Colaboraciones</a>
+    </nav>
+</aside>
+<div class="breadcrumb">
+    <a href="../../index.html">Inicio</a><span class="sep">/</span>
+    <a href="index.html">Laboratorio</a><span class="sep">/</span>
+    <a href="politica_inicio.html">Cómo Funciona el Poder en México</a><span class="sep">/</span>
+    <span class="actual">Módulo 6</span>
+</div>
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Laboratorio · Ciencia Política</p>
+            <h1>Módulo 6: Cómo se Toman las Decisiones Públicas</h1>
+        </div>
+        <div class="modulo-badge"><span class="num">06</span><span class="etiqueta">Módulo</span></div>
+    </div>
+</header>
+<main>
+<div class="slide-wrapper">
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+    <div class="progress-label">
+        <span class="progress-texto">Progreso del módulo</span>
+        <span class="slide-counter-txt" id="slideCounter"></span>
+    </div>
+    <div class="slide-container">
+<div class="slide active">
+            <span class="slide-tipo tipo-objetivo">🎯 Objetivo del módulo</span>
+            <h2>¿Qué aprenderás aquí?</h2>
+            <div class="contenido-texto">
+<p>Al terminar entenderás <strong>cómo se forman y ejecutan las políticas públicas en México</strong>: quién define los problemas, quién tiene poder para poner un tema en la agenda, cómo se decide, quién implementa y cómo —o si— se evalúa.</p>
+<div class="caja-practica"><strong>Pregunta guía</strong>
+¿Las políticas públicas en México responden a las necesidades reales de la población o a los intereses de grupos con acceso al poder? ¿Qué tan racional es realmente el proceso de toma de decisiones?</div>
+<ul>
+<li>El ciclo de las políticas públicas</li>
+<li>La agenda: ¿quién define los problemas?</li>
+<li>El presupuesto como instrumento de poder</li>
+<li>Actores en el proceso decisional</li>
+<li>Implementación y sus fallas recurrentes</li>
+</ul>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>El ciclo de las políticas públicas</h2>
+            <div class="contenido-texto">
+<p>El modelo clásico del ciclo de políticas públicas divide el proceso en fases:</p>
+<ul>
+<li><strong>1. Formación de la agenda:</strong> identificación de un problema como "público" y merecedor de atención gubernamental. Esta fase es la más política: no todo problema social se convierte en problema público.</li>
+<li><strong>2. Formulación:</strong> diseño de alternativas de solución. Aquí intervienen técnicos, consultores, grupos de interés y académicos.</li>
+<li><strong>3. Adopción (decisión):</strong> selección de una alternativa por parte de la autoridad competente (Ejecutivo, Congreso, dependencia).</li>
+<li><strong>4. Implementación:</strong> puesta en práctica de la política. Es la fase donde más frecuentemente se pierde el sentido original de la política.</li>
+<li><strong>5. Evaluación:</strong> análisis de resultados. En México, esta fase es la más débil: la cultura de evaluación rigurosa es incipiente.</li>
+</ul>
+<div class="caja-atencion"><strong>Cuidado con el modelo lineal</strong>
+El ciclo es un modelo analítico, no una descripción de cómo ocurren las cosas en la realidad. En la práctica, las fases se superponen, se saltan o se repiten. Las decisiones no siempre son racionales: responden a urgencias políticas, presiones de grupos de interés, ciclos electorales y restricciones presupuestales.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>¿Quién define la agenda? El poder de nombrar los problemas</h2>
+            <div class="contenido-texto">
+<p>La formación de la agenda es quizá la fase más política del ciclo. Un problema social puede existir durante décadas sin convertirse en agenda gubernamental. La pregunta es: <strong>¿qué hace que un problema se vuelva prioritario?</strong></p>
+<p>Algunos mecanismos clave:</p>
+<ul>
+<li><strong>Crisis o eventos focales:</strong> un desastre, un escándalo o una tragedia que hace imposible ignorar un problema. Ejemplo: Ayotzinapa (2014) colocó en la agenda la desaparición forzada de manera ineludible.</li>
+<li><strong>Presión organizada:</strong> cuando un grupo afectado logra organizarse y hacer visible su problema. Ejemplo: el movimiento de víctimas de violencia logró colocar el tema de seguridad en la agenda de varias elecciones.</li>
+<li><strong>Cambio de gobierno:</strong> cada administración redefine prioridades. Con AMLO llegaron a la agenda la pobreza rural y los programas de transferencias directas; salieron de ella ciertos proyectos de infraestructura.</li>
+<li><strong>Medios de comunicación:</strong> su cobertura amplifica o silencia problemas. Un problema sin cobertura mediática difícilmente entra en la agenda.</li>
+</ul>
+<div class="caja-practica"><strong>El poder de NO poner algo en la agenda</strong>
+El politólogo Peter Bachrach acuñó el concepto de "non-decision making": a veces el ejercicio más poderoso del poder es impedir que ciertos temas lleguen a la mesa. Durante décadas, la reforma fiscal progresiva en México fue un "no-tema": existía el problema pero no entraba en la agenda porque los actores con poder para bloquearlo lo hacían.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Teoría</span>
+            <h2>El presupuesto: la política pública más importante</h2>
+            <div class="contenido-texto">
+<p>El <strong>Presupuesto de Egresos de la Federación (PEF)</strong> es el documento que determina cuánto dinero va a cada función del gobierno. Es, en términos prácticos, la política pública más importante del año.</p>
+<p>El proceso presupuestal en México:</p>
+<ul>
+<li>La <strong>SHCP (Secretaría de Hacienda)</strong> elabora el proyecto de presupuesto en coordinación con las dependencias.</li>
+<li>El Ejecutivo lo envía a la Cámara de Diputados antes del 8 de septiembre.</li>
+<li>La Cámara lo aprueba (o modifica) antes del 15 de noviembre.</li>
+<li>El Senado no participa en la aprobación del PEF (es una facultad exclusiva de la Cámara).</li>
+</ul>
+<div class="caja-practica"><strong>La discrecionalidad presupuestaria como poder político</strong>
+El ejecutivo tiene cierto margen de maniobra en la ejecución del gasto: puede reasignar partidas dentro de ciertos límites. Esto ha sido usado históricamente como instrumento de control político sobre estados y municipios. La transparencia en el ejercicio del gasto sigue siendo una demanda ciudadana fundamental.</div>
+<div class="caja-atencion"><strong>El gasto federalizado</strong>
+Aproximadamente el 50% del PEF se transfiere a estados y municipios (ramo 28 y ramo 33). El control sobre esas transferencias —y la auditoría de su uso— es uno de los principales cuellos de botella de la rendición de cuentas en México.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-practica">🔍 Práctica</span>
+            <h2>Por qué falla la implementación</h2>
+            <div class="contenido-texto">
+<p>En México —como en muchos países en desarrollo— hay una brecha enorme entre el diseño de las políticas y su implementación real. Las razones más frecuentes:</p>
+<ul>
+<li><strong>Capacidad institucional débil:</strong> muchas dependencias no tienen el personal capacitado, los sistemas de información o los recursos logísticos para ejecutar los programas según se diseñaron.</li>
+<li><strong>Desvío de recursos:</strong> el clientelismo y la corrupción en la implementación desvían fondos hacia objetivos políticos o de enriquecimiento personal.</li>
+<li><strong>Diseño deficiente:</strong> políticas diseñadas en la capital sin conocimiento suficiente de las realidades locales que deben cambiar.</li>
+<li><strong>Conflictos de competencia:</strong> cuando una política requiere coordinación entre niveles de gobierno (federal, estatal, municipal) los conflictos de jurisdicción y de incentivos pueden paralizarla.</li>
+</ul>
+<div class="caja-practica"><strong>Ejemplo: los programas sociales de AMLO</strong>
+Sembrando Vida, Jóvenes Construyendo el Futuro y la Pensión para el Bienestar fueron transferencias directas sin intermediarios (sin depender de las dependencias estatales). La lógica era eliminar la corrupción en la cadena de implementación. El resultado fue cierta reducción de intermediarios, pero también menor focalización y mayor dependencia política clientelar directa con los beneficiarios.</div>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-ejercicio">✏️ Ejercicio</span>
+            <h2>Analiza una política pública real</h2>
+            <div class="contenido-texto">
+<p>Selecciona una política pública mexicana reciente y aplícale el ciclo de análisis.</p>
+<p><strong>Opciones sugeridas:</strong> Sembrando Vida, el Tren Maya, el programa de becas Benito Juárez, la estrategia de seguridad "abrazos no balazos", o el sistema de salud IMSS-Bienestar.</p>
+<div class="caja-ejercicio"><strong>Paso 1: Diagnóstico del problema</strong>
+¿Qué problema social busca atender esta política? ¿Está bien diagnosticado? ¿Qué evidencia existe sobre la magnitud del problema?</div>
+<div class="caja-ejercicio"><strong>Paso 2: Diseño</strong>
+¿Cómo pretende la política resolver el problema? ¿Cuál es la teoría del cambio implícita (si hago X, ocurrirá Y)?</div>
+<div class="caja-ejercicio"><strong>Paso 3: Implementación</strong>
+¿Cómo se ejecutó? ¿Quiénes son los operadores? ¿Hay reportes de desvíos, fallas o éxitos?</div>
+<div class="caja-ejercicio"><strong>Paso 4: Evaluación</strong>
+¿Existe alguna evaluación independiente de esta política? Si no, ¿qué indicadores usarías para medirla?</div>
+<p style="margin-top:12px"><strong>Fuentes útiles:</strong> CONEVAL (coneval.org.mx), ASF (asf.gob.mx), CIDE.</p>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-reflexion">💬 Reflexión</span>
+            <h2>Preguntas para ir más allá</h2>
+            <div class="contenido-texto">
+<ul class="reflexion-lista">
+<li>¿Las políticas públicas en México responden más a evidencia técnica o a lógicas políticas (ciclos electorales, presión de grupos de interés, ideología del gobernante)? ¿Debería ser diferente?</li>
+<li>La reforma educativa de 2013 (Peña Nieto) fue diseñada con apoyo técnico del CIDE y de la OCDE, y fue revertida en 2019 (AMLO). ¿Qué nos dice eso sobre la relación entre conocimiento técnico y decisión política?</li>
+<li>¿Es posible que una política pública sea técnicamente eficiente pero políticamente ilegítima? ¿Y al revés? Da un ejemplo de cada caso.</li>
+<li>¿Por qué México no tiene una cultura sólida de evaluación de políticas públicas? ¿Qué actores se benefician de la opacidad en los resultados?</li>
+</ul>
+</div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-recursos">📚 Recursos</span>
+            <h2>Lecturas y video recomendados</h2>
+            <div class="contenido-texto">
+<p><strong>Lecturas:</strong></p>
+<div class="recursos-grid">
+<div class="recurso-item">Aguilar Villanueva, L. (1992). <em>La hechura de las políticas.</em> Porrúa. Antología clásica sobre el proceso de políticas públicas con aplicaciones al caso mexicano.</div>
+<div class="recurso-item">CONEVAL. <em>Informes de evaluación de programas sociales.</em> <a href="https://www.coneval.org.mx" target="_blank">coneval.org.mx</a> — fuente primaria de evaluación en México.</div>
+<div class="recurso-item">Presupuesto de Egresos de la Federación. <a href="https://www.transparenciapresupuestaria.gob.mx" target="_blank">transparenciapresupuestaria.gob.mx</a></div>
+</div>
+<p style="margin-top:16px"><strong>Video recomendado — Políticas públicas:</strong></p>
+<div class="video-wrapper">
+<iframe src="https://www.youtube-nocookie.com/embed/GpGZJ5FBNPY" title="Políticas Públicas ciclo decisional" allowfullscreen loading="lazy"></iframe>
+</div>
+<p class="video-label">Si no carga, busca: "ciclo de las políticas públicas formulación implementación evaluación" en YouTube.</p>
+</div>
+        </div>
+        <div class="slide">
+            <div class="slide-cierre">
+                <span class="cierre-emoji">🎓</span>
+                <p class="cierre-titulo">¡Módulo 6 completado!</p>
+                <p class="cierre-resumen">Dominas el ciclo de políticas públicas y puedes analizar quién define la agenda, cómo se decide el presupuesto y por qué falla la implementación en México.</p>
+                <button class="btn-completar" id="btnCompletarM6">Marcar Módulo 6 como Completado</button>
+                <br><a href="politica_m7.html" class="siguiente-modulo-link">Continuar → Módulo 7: Actores Reales del Poder</a>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <div class="puntos-nav" id="puntos"></div>
+            <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+    <div class="modulo-nav">
+        <a href="politica_m5.html" class="btn-modulo">← Módulo 5</a>
+        <a href="politica_inicio.html" class="btn-modulo btn-modulo-inicio">↑ Índice del curso</a>
+        <a href="politica_m7.html" class="btn-modulo">Módulo 7 →</a>
+    </div>
+</div>
+</main>
+<footer>
+    <div class="footer-marca">Centro Popular de Estudios Económicos</div>
+    <div style="display:flex;align-items:center;gap:12px;"><span class="footer-badge">En construcción</span><span>© 2026</span></div>
+</footer>
+<script>function toggleMenu() {
+    const btn=document.getElementById('menuBtn'),panel=document.getElementById('menuPanel'),overlay=document.getElementById('menuOverlay'),abierto=panel.classList.contains('abierto');
+    btn.classList.toggle('abierto',!abierto); panel.classList.toggle('abierto',!abierto); overlay.classList.toggle('visible',!abierto);
+    panel.setAttribute('aria-hidden',abierto?'true':'false'); document.body.style.overflow=abierto?'':'hidden';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=document.getElementById('menuPanel');if(p.classList.contains('abierto'))toggleMenu();}});</script>
+<script>let currentSlide=0;
+const slides=document.querySelectorAll('.slide'),counter=document.getElementById('slideCounter'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn'),progress=document.getElementById('progressBar'),puntosContainer=document.getElementById('puntos');
+slides.forEach((_,i)=>{const btn=document.createElement('button');btn.classList.add('punto');if(i===0)btn.classList.add('activo');btn.addEventListener('click',()=>goToSlide(i));puntosContainer.appendChild(btn);});
+function updateUI(){const t=slides.length;counter.innerText=`${currentSlide+1} / ${t}`;prevBtn.disabled=currentSlide===0;nextBtn.disabled=currentSlide===t-1;progress.style.width=`${((currentSlide+1)/t)*100}%`;document.querySelectorAll('.punto').forEach((p,i)=>p.classList.toggle('activo',i===currentSlide));}
+function goToSlide(n){slides[currentSlide].classList.remove('active');currentSlide=n;slides[currentSlide].classList.add('active');updateUI();}
+function changeSlide(n){goToSlide(currentSlide+n);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&currentSlide<slides.length-1)changeSlide(1);if(e.key==='ArrowLeft'&&currentSlide>0)changeSlide(-1);});
+updateUI();</script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+        authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+        projectId: "cpee-plataforma-a655a",
+        storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+        messagingSenderId: "684415102099",
+        appId: "1:684415102099:web:3f2b649a34386677a87166"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    const btnCompletar = document.getElementById("btnCompletarM6");
+
+    function marcarCompletado() {
+        if (btnCompletar) {
+            btnCompletar.innerHTML = "✅ Módulo 6 Completado";
+            btnCompletar.style.background = "var(--cafe-claro)";
+            btnCompletar.disabled = true;
+            btnCompletar.style.cursor = "default";
+        }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "/login.html";
+            return;
+        }
+        const docRef  = doc(db, "progreso_usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        // 1. Verificar acceso al curso
+        if (!docSnap.exists() || docSnap.data().acceso_politica !== true) {
+            window.location.href = "/laboratorio/politica_inicio.html";
+            return;
+        }
+
+        // 2. Si ya completó, marcar el botón
+        if (docSnap.data().modulo6_politica_completado === true) {
+            marcarCompletado();
+        }
+
+        // 3. Activar el botón para guardar progreso
+        if (btnCompletar) {
+            btnCompletar.addEventListener("click", async () => {
+                btnCompletar.innerText = "Guardando...";
+                try {
+                    await setDoc(docRef, {
+                        correo: user.email,
+                        modulo6_politica_completado: true,
+                        fecha_completado_politica_m6: new Date()
+                    }, { merge: true });
+                    marcarCompletado();
+                    alert("¡Módulo 6 guardado en tu progreso!");
+                } catch (error) {
+                    console.error("Error al guardar: ", error);
+                    alert("Hubo un error al guardar tu progreso. Intenta de nuevo.");
+                    btnCompletar.innerText = "Marcar Módulo 6 como Completado";
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
