@@ -587,321 +587,308 @@ footer {
         <!-- Tarjeta de diapositivas -->
         <div class="slide-container">
 
-            <!-- ── DIAPOSITIVA 1 ── -->
             <div class="slide active">
-                <h2>¿Para qué sirven las matemáticas en economía?</h2>
-                <div class="contenido-texto">
-                    <p>En el análisis económico, las matemáticas cumplen funciones críticas que van más allá del simple cálculo:</p>
-                    <ul>
-                        <li>Nos permiten expresar suposiciones y conclusiones mediante símbolos y ecuaciones, evitando caer en ambigüedades.</li>
-                        <li>Al utilizar teoremas matemáticos, el analista se ve forzado a explicar todos los supuestos o condiciones necesarias para no perder el sentido económico.</li>
-                        <li>Las matemáticas nos permiten trabajar con <em>n</em> variables, permitiéndonos hacer modelos que reflejen la realidad.</li>
-                        <li>Herramientas como el cálculo sirven para optimizar (maximizar ganancias o minimizar costos) y el álgebra lineal para analizar la interdependencia entre los distintos sectores de una economía.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- ── TEMA 1: LÓGICA PROPOSICIONAL (Sin tablas de verdad) ── -->
-<!-- ── DIAPOSITIVA 2 ── -->
-<div class="slide">
-    <h2>1.1 Lógica Proposicional: Conceptos Básicos</h2>
+    <h2>8.1 La Realidad de la Optimización Económica</h2>
     <div class="contenido-texto">
-        <p>Iniciamos con la <strong>proposición</strong>: una afirmación que solo puede ser verdadera ($V$) o falsa ($F$). Los <strong>conectivos lógicos</strong> nos permiten crear argumentos complejos a partir de ideas simples:</p>
+        <p>En el cálculo tradicional, te enseñan a encontrar el punto exacto donde la pendiente es cero (un valle o una cima). Usando Lagrange, aprendimos a encontrar ese punto "sujetos a" gastar exactamente todo nuestro presupuesto.</p>
+        <p><strong>Pero la economía real no funciona con igualdades estrictas ($=$), funciona con desigualdades ($\leq, \geq$):</strong></p>
         <ul>
-            <li><strong>Negación ($\neg p$):</strong> Afirma exactamente lo contrario a $p$.</li>
-            <li><strong>Conjunción ($p \land q$):</strong> "Y". Exige que ambas condiciones se cumplan estrictamente al mismo tiempo.</li>
-            <li><strong>Disyunción ($p \lor q$):</strong> "O". Es flexible; basta con que al menos una condición sea cierta para que todo el enunciado lo sea.</li>
-            <li><strong>Implicación ($p \implies q$):</strong> "Si $p$, entonces $q$". Establece una relación causa-efecto o de condición suficiente. Es la base de cualquier teorema matemático.</li>
-            <li><strong>Bicondicional ($p \iff q$):</strong> "Si y solo si". Significa que $p$ y $q$ son equivalentes; no puede ocurrir una sin la otra.</li>
+            <li>No estás <em>obligado</em> a gastar todo tu sueldo, puedes gastar <em>menos o igual</em> a tu ingreso ($Gasto \leq Ingreso$).</li>
+            <li>No puedes consumir cantidades negativas de pan. Tu consumo debe ser <em>mayor o igual</em> a cero ($X \geq 0$).</li>
         </ul>
+        <p>A este mundo de límites asimétricos le llamamos <strong>Optimización No Lineal con Desigualdades</strong>.</p>
     </div>
 </div>
 
-<!-- ── DIAPOSITIVA 3 ── -->
 <div class="slide">
-    <h2>1.2 Tautologías y Equivalencias</h2>
+    <h2>8.2 Óptimos Locales vs. Globales</h2>
     <div class="contenido-texto">
-        <p>En lugar de memorizar escenarios mecánicos, en matemáticas buscamos identificar estructuras lógicas que siempre funcionan:</p>
+        <p>Antes de meter restricciones, debemos asegurarnos de no estar ciegos. La primera derivada ($f'=0$) solo encuentra lugares "planos", pero no te dice si es la montaña más alta del mundo o solo una pequeña colina.</p>
         <ul>
-            <li><strong>Tautología:</strong> Un argumento que siempre es verdadero por su pura estructura lógica, sin importar de qué estemos hablando. Por ejemplo, la frase "Llueve o no llueve" ($p \lor \neg p$) es una verdad absoluta indiscutible.</li>
-            <li><strong>Contradicción:</strong> Algo que es imposible por definición. Por ejemplo, "Subió y no subió" ($p \land \neg p$).</li>
-            <li><strong>Leyes de De Morgan:</strong> Son trucos de oro para negar ideas agrupadas.
-                <ul style="margin-top: 5px;">
-                    <li>Negar que pasaron <em>ambas</em> cosas ($\neg(p \land q)$), es lo mismo que decir que falló la primera <em>o</em> falló la segunda ($\neg p \lor \neg q$).</li>
-                    <li>Negar que pasó <em>al menos una</em> de las dos ($\neg(p \lor q)$), es lo mismo que decir que no pasó la primera <em>y</em> tampoco la segunda ($\neg p \land \neg q$).</li>
-                </ul>
-            </li>
+            <li><strong>Óptimo Local:</strong> Es el mejor punto... pero solo si lo comparas con sus vecinos inmediatos.</li>
+            <li><strong>Óptimo Global:</strong> Es el campeón absoluto. El punto más alto (o bajo) de toda la función en todo su dominio.</li>
         </ul>
+        <p>Si una empresa se conforma con un óptimo local, podría estar ganando $\$1,000$ creyendo que es lo máximo, ignorando que otra estrategia (el óptimo global) le daría $\$10,000$.</p>
     </div>
 </div>
 
-<!-- ── DIAPOSITIVA 4 ── -->
 <div class="slide">
-    <h2>Práctica Autónoma: Lógica Proposicional</h2>
-    <div class="contenido-texto">
-        <p>Realiza los siguientes ejercicios analíticos en tu cuaderno:</p>
-        <ol>
-            <li><strong>Traducción:</strong> Sean $p$: "Hay inflación" y $q$: "El banco central interviene". Escribe en lenguaje natural las siguientes expresiones formales: 
-                <ul>
-                    <li>$p \implies q$</li>
-                    <li>$\neg q \implies \neg p$</li>
-                </ul>
-                ¿Tienen el mismo significado en la vida real?
-            </li>
-            <li><strong>Aplicación de De Morgan:</strong> Un reglamento dice: "Para aprobar necesitas entregar la tesis ($t$) Y pasar el examen ($e$)". Si un estudiante reprueba, ¿cómo expresas lógicamente lo que le faltó usando la Ley de De Morgan?</li>
-        </ol>
-    </div>
-</div>
-
-<!-- ── TEMA 2: LÓGICA DE PREDICADOS (Simplificada) ── -->
-<!-- ── DIAPOSITIVA 5 ── -->
-<div class="slide">
-    <h2>1.3 Lógica de Predicados: De lo particular a lo general</h2>
-    <div class="contenido-texto">
-        <p>Una proposición normal dice: <em>"Juan es estudiante"</em>. Es fácil saber si es verdad. Pero un <strong>predicado</strong> usa variables: <em>"$x$ es estudiante"</em>. No podemos saber si es verdad hasta saber quién es $x$ o a cuántos nos referimos.</p>
-        <p>Para eso usamos los <strong>cuantificadores</strong>, que nos dicen de cuántos elementos estamos hablando:</p>
-        <ul>
-            <li><strong>Cuantificador Universal ($\forall$):</strong> Significa "Para todos". <br>
-            <em>Ejemplo: $\forall x$, $x$ necesita comer. (Todos necesitan comer).</em></li>
-            <li><strong>Cuantificador Existencial ($\exists$):</strong> Significa "Existe al menos uno" (puede haber más, pero mínimo hay uno). <br>
-            <em>Ejemplo: $\exists x$ tal que $x$ tiene un millón de dólares. (Alguien es millonario).</em></li>
-        </ul>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 6 ── -->
-<div class="slide">
-    <h2>1.4 ¿Cómo contradecir a alguien? (Negación de Cuantificadores)</h2>
-    <div class="contenido-texto">
-        <p>Negar cuantificadores es simplemente usar el sentido común para ganar un debate:</p>
-        <ul>
-            <li><strong>Para negar un "Todos" ($\forall$):</strong> <br>
-            Si yo afirmo: <em>"Todos los cisnes son blancos"</em>, tú no necesitas revisar cada cisne del mundo para demostrar que miento. Solo necesitas traerme <strong>un</strong> cisne que sea negro. <br>
-            <strong>Regla:</strong> $\neg (\forall x, P(x))$ se convierte en $\exists x, \neg P(x)$.</li>
-            <br>
-            <li><strong>Para negar un "Existe" ($\exists$):</strong> <br>
-            Si yo afirmo: <em>"Existe un monstruo debajo de la cama"</em>, para demostrar que miento, tú tienes que encender la luz y comprobar que <strong>ninguno</strong> de los rincones tiene un monstruo. <br>
-            <strong>Regla:</strong> $\neg (\exists x, P(x))$ se convierte en $\forall x, \neg P(x)$.</li>
-        </ul>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 7 ── -->
-<div class="slide">
-    <h2>Práctica Autónoma: Lógica de Predicados</h2>
-    <div class="contenido-texto">
-        <p>Pon a prueba tu intuición con estos ejercicios:</p>
-        <ol>
-            <li>Escribe usando los símbolos $\forall$ o $\exists$ la siguiente frase matemática: "Existe al menos un número real $x$ que, al multiplicarse por cero, da como resultado uno". ¿Es verdadera o falsa?</li>
-            <li>Un político afirma: "Todos los programas sociales reducen la pobreza" ($\forall x, R(x)$). Si fueras un investigador que quiere demostrar que el político miente, ¿qué tendrías que encontrar en los datos? Escribe tu objetivo usando símbolos lógicos.</li>
-            <li>Traduce la frase "No hay reglas sin excepciones" al lenguaje de cuantificadores usando $\forall$ (Todos) y $\exists$ (Existe).</li>
-        </ol>
-    </div>
-</div>
-<!-- ── TEMA 3: MÉTODOS DE DEMOSTRACIÓN ── -->
-<!-- ── DIAPOSITIVA 8 ── -->
-<div class="slide">
-    <h2>1.5 Métodos de Demostración: El arte de probar</h2>
-    <div class="contenido-texto">
-        <p>En matemáticas, no basta con que algo parezca cierto; hay que <strong>demostrarlo</strong> sin dejar lugar a dudas. Toda demostración parte de supuestos conocidos (hipótesis, $p$) para llegar a una conclusión irrebatible ($q$).</p>
-        <ul>
-            <li><strong>Demostración Directa:</strong> Es el camino recto. Asumimos que $p$ es verdadero y, mediante álgebra y lógica paso a paso, llegamos a $q$.<br>
-            <em>Ejemplo:</em> Demostrar que "Si $x$ es un número par, entonces $x^2$ es par". Asumes que $x = 2k$, lo elevas al cuadrado ($4k^2$) y factorizas un 2 para probarlo: $2(2k^2)$.</li>
-        </ul>
-        <p>Pero a veces, el camino directo es muy complicado. Para eso existen las estrategias indirectas.</p>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 9 ── -->
-<div class="slide">
-    <h2>1.6 Demostración por Contrapositiva y Contradicción</h2>
-    <div class="contenido-texto">
-        <p>Cuando probar $p \implies q$ es difícil, usamos trucos lógicos:</p>
-        <ul>
-            <li><strong>Por Contrapositiva:</strong> Lógicamente, decir "Si llueve, el piso se moja" es exactamente igual a decir "Si el piso NO está mojado, entonces NO llovió". <br>
-            En lugar de probar $p \implies q$, probamos su equivalente: $\neg q \implies \neg p$. A veces, trabajar con las negaciones hace el álgebra mucho más fácil.</li>
-            <br>
-            <li><strong>Por Contradicción (Reducción al absurdo):</strong> Es el método del investigador. Asumimos que lo que queremos probar es falso y seguimos las reglas matemáticas hasta llegar a algo imposible (como $1 = 0$). Como la matemática no se equivoca, nuestro supuesto inicial debió ser el error, probando así que la afirmación original era cierta.</li>
-        </ul>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 10 ── -->
-<div class="slide">
-    <h2>Práctica Autónoma: Métodos de Demostración</h2>
-    <div class="contenido-texto">
-        <p>Aplica la lógica de demostración en los siguientes casos:</p>
-        <ol>
-            <li><strong>Directa:</strong> Demuestra que la suma de dos números impares siempre da como resultado un número par. <em>(Pista: Un número impar se escribe como $2k + 1$).</em></li>
-            <li><strong>Contrapositiva:</strong> Queremos demostrar la frase: "Si $3x + 2$ es impar, entonces $x$ es impar". ¿Cuál sería la afirmación contrapositiva que tendrías que demostrar? Escríbela en lenguaje natural.</li>
-            <li><strong>Contradicción (Análisis de argumento):</strong> Un abogado dice: "Asumamos que mi cliente robó el banco. Si lo hizo, debió estar en la ciudad a las 3 PM. Pero las cámaras lo ubican en otro país a esa hora". ¿Por qué esto demuestra la inocencia del cliente usando reducción al absurdo?</li>
-        </ol>
-    </div>
-</div>
-
-<!-- ── TEMA 4: TEORÍA DE CONJUNTOS ── -->
-<!-- ── DIAPOSITIVA 11 ── -->
-<div class="slide">
-    <h2>1.7 Teoría de Conjuntos: El alfabeto de las matemáticas</h2>
-    <div class="contenido-texto">
-        <p>Un <strong>conjunto</strong> es simplemente una colección bien definida de objetos o números, a los que llamamos <strong>elementos</strong>. Casi toda la matemática moderna está escrita en lenguaje de conjuntos.</p>
-        <ul>
-            <li><strong>Pertenencia ($\in$):</strong> Indica que un elemento vive dentro del conjunto. Si $A = \{1, 2, 3\}$, entonces $2 \in A$ (2 pertenece a A), pero $5 \notin A$ (5 no pertenece a A).</li>
-            <li><strong>Subconjunto ($\subseteq$):</strong> Decimos que $B$ es subconjunto de $A$ si <em>todos</em> los elementos de $B$ también están dentro de $A$.</li>
-            <li><strong>Conjunto Vacío ($\emptyset$):</strong> Es el conjunto que no tiene ningún elemento. Es un concepto filosófico poderoso: la nada también es un conjunto y es subconjunto de todos los demás.</li>
-        </ul>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 12 ── -->
-<div class="slide">
-    <h2>1.8 Operaciones con Conjuntos</h2>
-    <div class="contenido-texto">
-        <p>Podemos combinar conjuntos de la misma forma que sumamos o restamos números. Estas operaciones están directamente conectadas con los conectivos lógicos que ya aprendimos :</p>
-        <ul>
-            <li><strong>Unión ($A \cup B$):</strong> Junta todos los elementos de $A$ con los de $B$. Está conectada con la disyunción lógica "O" ($p \lor q$).</li>
-            <li><strong>Intersección ($A \cap B$):</strong> Toma <em>únicamente</em> los elementos que tienen en común. Está conectada con la conjunción lógica "Y" ($p \land q$).</li>
-            <li><strong>Diferencia ($A \setminus B$):</strong> A los elementos del conjunto $A$, le quitamos cualquiera que también esté en $B$.</li>
-            <li><strong>Complemento ($A^c$):</strong> Son todos los elementos del universo que NO están en $A$. Está conectado con la negación lógica ($\neg p$).</li>
-        </ul>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 13 ── -->
-<div class="slide">
-    <h2>Práctica Autónoma: Teoría de Conjuntos</h2>
-    <div class="contenido-texto">
-        <p>Sean los siguientes conjuntos. Universo $U = \{1, 2, 3, 4, 5, 6, 7, 8, 9\}$, $A = \{2, 4, 6, 8\}$ y $B = \{3, 4, 5, 6\}$.</p>
-        <ol>
-            <li>Encuentra los elementos que forman la intersección: $A \cap B$.</li>
-            <li>Encuentra los elementos que forman la diferencia: $A \setminus B$. ¿Es el mismo resultado que $B \setminus A$?</li>
-            <li>Calcula el complemento de $A$ ($A^c$) y luego encuentra la intersección de ese resultado con el conjunto $B$. Es decir, resuelve: $A^c \cap B$.</li>
-            <li>Analiza lógicamente: Si sabes que la intersección de dos conjuntos está vacía ($X \cap Y = \emptyset$), ¿qué puedes concluir sobre los elementos de $X$ y $Y$?</li>
-        </ol>
-    </div>
-</div>
-<!-- ── TEMA 5: RELACIONES ── -->
-<!-- ── DIAPOSITIVA 14 ── -->
-<div class="slide">
-    <h2>1.9 Producto Cartesiano y Relaciones</h2>
-    <div class="contenido-texto">
-        <p>Antes de hablar de funciones, necesitamos entender cómo interactúan los elementos de dos conjuntos distintos.</p>
-        <ul>
-            <li><strong>Producto Cartesiano ($A \times B$):</strong> Es el conjunto de <em>todos</em> los pares ordenados $(a, b)$ que se pueden formar tomando el primer elemento del conjunto $A$ y el segundo del conjunto $B$. Es la base matemática de cualquier sistema de coordenadas.</li>
-            <li><strong>Relación:</strong> Una relación matemática de $A$ en $B$ es, formalmente, cualquier subconjunto del producto cartesiano. Es decir, es una regla que asocia <em>algunos</em> elementos de un conjunto con los de otro, sin restricciones estrictas.</li>
-        </ul>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 15 ── -->
-<div class="slide">
-    <h2>1.10 Propiedades de las Relaciones</h2>
-    <div class="contenido-texto">
-        <p>Si analizamos una relación dentro de un mismo conjunto (elementos relacionándose entre sí mismos), esta puede tener ciertas propiedades lógicas:</p>
-        <ul>
-            <li><strong>Reflexiva:</strong> Todo elemento está relacionado consigo mismo. ($x$ se relaciona con $x$). Ejemplo clásico: El signo de igualdad ($=$).</li>
-            <li><strong>Simétrica:</strong> Si $x$ está relacionado con $y$, entonces $y$ está forzosamente relacionado con $x$. Ejemplo: "Ser hermano de".</li>
-            <li><strong>Transitiva:</strong> Si $x$ se relaciona con $y$, y a su vez $y$ se relaciona con $z$, entonces $x$ se relaciona con $z$. Ejemplo: "Ser mayor que" ($>$).</li>
-        </ul>
-        <p>Si una relación matemática cumple estas tres propiedades al mismo tiempo, se le llama <strong>Relación de Equivalencia</strong>.</p>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 16 ── -->
-<div class="slide">
-    <h2>Práctica Autónoma: Relaciones</h2>
-    <div class="contenido-texto">
-        <p>Analiza las siguientes relaciones y determina sus propiedades lógicas:</p>
-        <ol>
-            <li>Si $A = \{1, 2\}$ y $B = \{x, y\}$, escribe todos los pares ordenados que conforman el producto cartesiano $A \times B$.</li>
-            <li>Considera la relación "ser amigo de" en una red social como Facebook. Analiza lógicamente: ¿Es reflexiva? ¿Es simétrica? ¿Es transitiva? Justifica cada respuesta.</li>
-            <li>En el conjunto de los números naturales, analiza la relación "es múltiplo de" (ej. 4 es múltiplo de 2). Determina si esta relación cumple con las propiedades reflexiva, simétrica y transitiva.</li>
-        </ol>
-    </div>
-</div>
-
-<!-- ── TEMA 6: FUNCIONES ── -->
-<!-- ── DIAPOSITIVA 17 ── -->
-<div class="slide">
-    <h2>1.11 Funciones: La máquina matemática</h2>
-    <div class="contenido-texto">
-        <p>Una <strong>función</strong> es un tipo muy especial y estricto de relación. Es una regla de correspondencia que asigna a <em>cada</em> elemento de un conjunto inicial <strong>exactamente un</strong> elemento de un conjunto final.</p>
-        <ul>
-            <li><strong>Dominio:</strong> Todos los valores de entrada permitidos (las $x$).</li>
-            <li><strong>Codominio y Rango:</strong> El codominio es el conjunto de llegada posible. El <strong>rango</strong> (o imagen) son los valores que <em>realmente</em> escupe la función (las $y$).</li>
-        </ul>
-        <p><em>Regla de oro:</em> De un elemento del dominio solo puede salir una flecha. Una función es como una máquina predecible: no puedes meter un $2$ y que a veces te devuelva un $4$ y a veces un $5$.</p>
-    </div>
-</div>
-
-<!-- ── DIAPOSITIVA 18 ── -->
-<div class="slide">
-    <h2>1.12 Inyectividad, Suprayectividad y Biyectividad</h2>
-    <div class="contenido-texto">
+    <h2>8.3 Visualizando la Trampa Local</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
+        <p>El cálculo tradicional te detiene en el primer pico que encuentra. Para garantizar que llegaste al pico más alto, necesitamos el concepto de <strong>Concavidad Global</strong>.</p>
         
-        <p>Clasificamos las funciones según cómo interactúan con el conjunto de llegada:</p>
+        <div style="text-align: center; margin: 15px 0;">
+            <svg viewBox="0 0 400 200" width="100%" max-width="350px" style="background-color: #fafafa; border: 1px solid #ddd; border-radius: 8px;">
+                <line x1="30" y1="180" x2="360" y2="180" stroke="#888" stroke-width="2" />
+                <line x1="30" y1="180" x2="30" y2="20" stroke="#888" stroke-width="2" />
+                
+                <path d="M 30 150 C 80 50, 120 150, 180 140 C 230 130, 270 20, 340 30" fill="none" stroke="#2a4939" stroke-width="3" />
+                
+                <circle cx="85" cy="88" r="5" fill="#f0ad4e" stroke="#333" />
+                <line x1="60" y1="88" x2="110" y2="88" stroke="#f0ad4e" stroke-width="2" />
+                <line x1="285" y1="31" x2="335" y2="31" stroke="#d9534f" stroke-width="2" />
+                <circle cx="310" cy="31" r="5" fill="#d9534f" stroke="#333" />
+                
+                <text x="85" y="75" font-size="11" font-weight="bold" text-anchor="middle">Máximo Local</text>
+                <text x="310" y="20" font-size="11" font-weight="bold" text-anchor="middle" fill="#d9534f">Máximo Global</text>
+            </svg>
+        </div>
+        
+        <p>Si la función es estrictamente cóncava (tiene forma de una sola campana gigante en todo su dominio), entonces cualquier óptimo local que encuentres está garantizado matemáticamente a ser el <strong>Óptimo Global</strong>.</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.4 El Teorema de la Envolvente</h2>
+    <div class="contenido-texto">
+        <p>Este es uno de los teoremas más elegantes de la economía. Responde a la pregunta: <em>¿Qué le pasa a mi ganancia MÁXIMA si cambia el precio de un insumo?</em></p>
+        <p>Si el precio del acero sube, la empresa ajustará su producción y cambiará su uso de máquinas y trabajadores para defenderse. Calcular todo ese efecto en cadena es un infierno algebraico.</p>
+        <p><strong>El Teorema de la Envolvente dice:</strong> ¡Ignora los ajustes! Si ya estabas en el punto óptimo, el efecto total sobre tu ganancia máxima ante un cambio en un parámetro es simplemente el efecto "directo". Los efectos indirectos de reajustar tus variables se cancelan mutuamente (porque la pendiente en el óptimo es cero).</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>Ejemplos Resueltos: Lema de Hotelling</h2>
+    <div class="contenido-texto">
+        <p><strong>Ejemplo 1: Aplicación del Teorema de la Envolvente</strong><br>
+        Sea $\pi^*(P, w)$ la función de beneficios <em>máximos</em> de una empresa, donde $P$ es el precio de su producto y $w$ es el salario que paga.</p>
+        <p>Según el Teorema de la Envolvente (conocido aquí como el Lema de Hotelling), si quieres saber cuántas unidades va a ofrecer (Oferta $Q^*$), solo tienes que derivar la función de beneficios máximos respecto al precio $P$:</p>
+        <p style="text-align: center; font-size: 1.2rem;">
+            $$ Q^* = \frac{\partial \pi^*(P, w)}{\partial P} $$
+        </p>
+        <p>Y si derivas respecto al salario $w$, obtienes exactamente la cantidad de trabajadores que va a demandar (con signo negativo). ¡Te ahorra resolver todo el sistema de ecuaciones de Lagrange!</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.5 Restricciones Activas vs. Inactivas</h2>
+    <div class="contenido-texto">
+        <p>Imagina que tienes un presupuesto de $\$100$ para comprar libros. Tu restricción es $Gasto \leq 100$. Hay dos escenarios posibles en la realidad:</p>
+        <ol>
+            <li><strong>Restricción Activa (Se cumple con Igualdad):</strong> Encuentras tantos libros buenos que gastas exactamente los $\$100$. La restricción te "apretó" o te "mordió". Aquí, $\lambda > 0$ (tener un dólar extra sí te daría más felicidad).</li>
+            <li><strong>Restricción Inactiva (Holgura):</strong> Solo encuentras 2 libros que te gustan y gastas $\$40$. Te sobran $\$60$. La restricción no te afectó en absoluto (estás holgado). Aquí, $\lambda = 0$ (tener un dólar extra no te daría más felicidad, ¡ya te sobraba dinero!).</li>
+        </ol>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.6 Visualizando las Restricciones</h2>
+    <div class="contenido-texto" style="font-size: 0.85rem;">
+        <p>Si el "óptimo libre" (donde serías más feliz sin pensar en dinero) está fuera de tu alcance, la restricción está activa. Si está dentro de tu presupuesto, está inactiva.</p>
+        
+        <div style="display: flex; justify-content: space-between; text-align: center; margin: 15px 0;">
+            <svg viewBox="0 0 150 150" width="48%" style="background-color: #fafafa; border: 1px solid #ddd; border-radius: 8px;">
+                <polygon points="10,140 120,140 10,30" fill="rgba(42, 73, 57, 0.2)" />
+                <line x1="10" y1="30" x2="120" y2="140" stroke="#d9534f" stroke-width="2" />
+                <circle cx="40" cy="110" r="15" fill="none" stroke="#0275d8" stroke-width="1" />
+                <circle cx="40" cy="110" r="4" fill="#0275d8" />
+                <text x="40" y="140" font-size="10" font-weight="bold" text-anchor="middle">Inactiva (λ=0)</text>
+            </svg>
+            
+            <svg viewBox="0 0 150 150" width="48%" style="background-color: #fafafa; border: 1px solid #ddd; border-radius: 8px;">
+                <polygon points="10,140 120,140 10,30" fill="rgba(42, 73, 57, 0.2)" />
+                <line x1="10" y1="30" x2="120" y2="140" stroke="#d9534f" stroke-width="2" />
+                <circle cx="120" cy="30" r="25" fill="none" stroke="#0275d8" stroke-width="1" stroke-dasharray="2,2"/>
+                <circle cx="65" cy="85" r="4" fill="#f0ad4e" stroke="#333" />
+                <text x="65" y="105" font-size="10" font-weight="bold" text-anchor="middle">Activa (λ>0)</text>
+            </svg>
+        </div>
+        
+        <p>Lagrange normal asume que siempre estás en el escenario de la derecha. Las condiciones KKT te permiten descubrir matemáticamente en cuál de los dos escenarios estás.</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.7 Condiciones de Karush-Kuhn-Tucker (KKT)</h2>
+    <div class="contenido-texto">
+        <p>Para un problema de maximización: $\max f(x,y)$ sujeto a $g(x,y) \leq M$ y a $x,y \geq 0$.</p>
+        <p>Construimos el mismo Lagrangiano que conocemos: $\mathcal{L} = f(x,y) + \lambda [M - g(x,y)]$. Las reglas de KKT dictan lo siguiente:</p>
+        <ol>
+            <li><strong>Condiciones de Primer Orden:</strong> $\mathcal{L}_x \leq 0$, $\mathcal{L}_y \leq 0$.</li>
+            <li><strong>Condición de Holgura Complementaria:</strong> $\lambda [M - g(x,y)] = 0$. (Esta es la magia: o $\lambda$ es cero porque te sobra dinero, o el corchete es cero porque gastaste exactamente $M$).</li>
+            <li><strong>No negatividad del Multiplicador:</strong> $\lambda \geq 0$.</li>
+        </ol>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.8 ¿Cómo se resuelve KKT en la práctica?</h2>
+    <div class="contenido-texto">
+        <p>Dado que no sabemos si la restricción te va a "morder" (activa) o no (inactiva), el método de KKT requiere plantear <strong>Casos Hipotéticos</strong>.</p>
         <ul>
-            <li><strong>Inyectiva (Uno a uno):</strong> Nunca dos elementos diferentes del dominio ($x$) dan el mismo resultado en el rango ($y$). <br>
-            <em>Formalmente:</em> Si $f(x_1) = f(x_2) \implies x_1 = x_2$.</li>
-            <li><strong>Suprayectiva (Sobre):</strong> El rango cubre la totalidad del codominio. Ningún elemento del conjunto de llegada se queda "solo" sin ser apuntado por la regla de la función.</li>
-            <li><strong>Biyectiva:</strong> Es inyectiva y suprayectiva al mismo tiempo. Es una correspondencia perfecta, sin que sobre ni falte nada. <em>Solo las funciones biyectivas tienen función inversa ($f^{-1}$).</em></li>
+            <li><strong>Caso 1: Asumimos que la restricción está Activa.</strong> Obligamos a que $g(x,y) = M$. Resolvemos como un Lagrange normal. Si al final verificamos que $\lambda > 0$ y $x,y \geq 0$, ¡ganamos! Encontramos el óptimo.</li>
+            <li><strong>Caso 2: Asumimos que la restricción está Inactiva.</strong> Obligamos a que $\lambda = 0$. Esto convierte el problema en una optimización "libre" sin restricciones (solo derivar e igualar a cero). Si el punto que encontramos respeta el presupuesto original sin pasarse, entonces ese era el óptimo real.</li>
         </ul>
     </div>
 </div>
 
-<!-- ── DIAPOSITIVA 19 ── -->
 <div class="slide">
-    <h2>1.13 Composición de Funciones</h2>
+    <h2>8.9 Restricciones de No Negatividad</h2>
     <div class="contenido-texto">
-        <p>A menudo necesitamos evaluar el resultado de una función directamente dentro de otra. Esto se llama <strong>composición</strong> y se denota como $(g \circ f)(x)$, que significa evaluar $g(f(x))$.</p>
-        <p>Funciona como una línea de ensamblaje en una fábrica:</p>
-        <ol>
-            <li>Tomas un valor $x$ y lo procesas en la máquina $f$.</li>
-            <li>La máquina $f$ te devuelve un resultado intermedio.</li>
-            <li>Tomas ese resultado intermedio y lo metes inmediatamente en la máquina $g$ para obtener el valor final.</li>
-        </ol>
-        <p><em>Ojo matemático:</em> En general, el orden de las operaciones altera el producto. Evaluar $g(f(x))$ casi nunca es igual a evaluar $f(g(x))$.</p>
+        <p>La segunda capa de realidad en KKT es que $x \geq 0$ e $y \geq 0$. En los modelos matemáticos puros, si un bien es muy caro, la computadora podría sugerirte comprar $-5$ manzanas para tener más dinero. ¡En la realidad no puedes consumir en negativo!</p>
+        <p>Si la matemática te empuja hacia lo negativo, la restricción de $x \geq 0$ actúa como una pared de concreto. Te detienes exactamente en $0$.</p>
+        <p>Cuando el óptimo ocurre gastando todo en el Bien Y y exactamente cero en el Bien X ($x=0, y>0$), le llamamos una <strong>Solución de Esquina</strong>.</p>
     </div>
 </div>
 
-<!-- ── DIAPOSITIVA 20 ── -->
 <div class="slide">
-    <h2>Práctica Autónoma: Funciones</h2>
+    <h2>8.10 Visualizando la Solución de Esquina</h2>
+    <div class="contenido-texto" style="font-size: 0.85rem;">
+        <p>Ocurre típicamente con <strong>Bienes Sustitutos Perfectos</strong> (ej. Coca-Cola vs. Pepsi). Si a ti te dan exactamente igual ambos, simplemente comprarás el que sea más barato. Tus curvas de indiferencia son líneas rectas.</p>
+        
+        <div style="text-align: center; margin: 15px 0;">
+            <svg viewBox="0 0 400 220" width="100%" max-width="350px" style="background-color: #fafafa; border: 1px solid #ddd; border-radius: 8px;">
+                <line x1="50" y1="180" x2="360" y2="180" stroke="#888" stroke-width="2" />
+                <line x1="50" y1="180" x2="50" y2="20" stroke="#888" stroke-width="2" />
+                
+                <line x1="50" y1="40" x2="200" y2="180" stroke="#d9534f" stroke-width="2" />
+                
+                <line x1="50" y1="80" x2="280" y2="180" stroke="#2a4939" stroke-width="1" opacity="0.4" />
+                <line x1="50" y1="40" x2="360" y2="175" stroke="#2a4939" stroke-width="3" /> <circle cx="50" cy="40" r="6" fill="#f0ad4e" stroke="#333" />
+                <text x="65" y="35" font-size="11" font-weight="bold">Óptimo (x=0, y>0)</text>
+                
+                <text x="185" y="195" font-size="11" fill="#d9534f">Presupuesto</text>
+                <text x="340" y="165" font-size="11" font-weight="bold" fill="#2a4939">Utilidad</text>
+                <text x="340" y="200" font-size="12" font-weight="bold">Pepsi (X)</text>
+                <text x="10" y="30" font-size="12" font-weight="bold" transform="rotate(-90 20,40)">Coca (Y)</text>
+            </svg>
+        </div>
+        
+        <p>Como las curvas nunca pueden ser tangentes, buscas la curva verde más alta que aún toque la línea roja de presupuesto. Ese punto choca inevitablemente contra el muro del eje Y.</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.11 Condición Matemática de Esquina</h2>
     <div class="contenido-texto">
-        <p>Aplica los conceptos estrictos de funciones en estos ejercicios:</p>
+        <p>En el Módulo 7 vimos que el óptimo interior exige que la Relación Marginal de Sustitución ($RMS$) sea exactamente igual a la relación de precios ($P_x / P_y$).</p>
+        <p>En una solución de esquina (comprando solo Y y nada de X), esta igualdad se rompe. Lo que sucede es que:</p>
+        <p style="text-align: center; font-size: 1.2rem;">
+            $$ RMS < \frac{P_x}{P_y} $$
+        </p>
+        <p><strong>Interpretación:</strong> La valoración personal que le das al Bien X ($RMS$) es estrictamente menor a lo que el mercado te cobra por él ($P_x/P_y$). Por lo tanto, el mercado te parece un robo y decides no comprar ni una sola unidad de X.</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>Ejemplos Resueltos: Solución de Esquina</h2>
+    <div class="contenido-texto" style="font-size: 0.95rem;">
+        <p><strong>Ejemplo 2: Sustitutos Perfectos</strong><br>
+        Utilidad: $U(x,y) = 2x + y$. (Amas el doble el Bien X que el Bien Y).<br>
+        Precios: $P_x = 10, P_y = 2$. Ingreso: $M = 40$.</p>
+        <p><em>Paso 1: Calcular la RMS.</em><br>
+        $U_x = 2$, $U_y = 1 \implies RMS = \frac{U_x}{U_y} = \frac{2}{1} = 2$.<br>
+        (Para ti, X vale el doble que Y).</p>
+        <p><em>Paso 2: Calcular el Precio Relativo del Mercado.</em><br>
+        $\frac{P_x}{P_y} = \frac{10}{2} = 5$.<br>
+        (El mercado dice que X cuesta 5 veces más que Y).</p>
+        <p><em>Paso 3: Comparar y Concluir.</em><br>
+        $RMS (2) < P_x/P_y (5)$. Para ti X vale el doble, pero te lo cobran 5 veces más caro. Es un pésimo trato. Gasto $0$ en X.<br>
+        Todo tu dinero va al bien Y: $y^* = \frac{40}{2} = 20$.<br>
+        <strong>Óptimo: $(0, 20)$.</strong></p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.12 Funciones Cóncavas y Convexas en Optimizacíon</h2>
+    <div class="contenido-texto">
+        <p>Para que los resultados de KKT sean verdaderos máximos globales, la economía exige que tus funciones tengan ciertas formas lógicas:</p>
+        <ul>
+            <li><strong>La Función Objetivo debe ser Cóncava:</strong> Por ejemplo, la Función de Utilidad $U(x,y)$. En economía esto significa "Utilidad Marginal Decreciente". Cada taco extra te hace feliz, pero menos que el anterior.</li>
+            <li><strong>El Conjunto Factible debe ser Convexo:</strong> El área de combinaciones que puedes comprar debe ser un bloque sólido sin hoyos. Esto asegura que los promedios siempre sean mejores que los extremos.</li>
+        </ul>
+        <p>Si violas esto (ej. tienes rendimientos crecientes explosivos), la matemática de KKT fallará y te mandará al lugar equivocado.</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>8.13 Aplicación Macro: La Regla de Oro (Solow)</h2>
+    <div class="contenido-texto">
+        <p>Un ejemplo brutal de optimización a nivel global es el Modelo de Crecimiento de Solow. ¿Cuál es la tasa de ahorro perfecta para un país?</p>
+        <ul>
+            <li>Si ahorras 0%, hoy consumes todo, pero mañana no tendrás máquinas y serás pobre.</li>
+            <li>Si ahorras 100%, serás el país con más máquinas del mundo, pero hoy te mueres de hambre.</li>
+        </ul>
+        <p>Buscamos maximizar el Consumo en el Estado Estacionario. Derivamos e igualamos a cero, y el óptimo (La <strong>Regla de Oro</strong>) ocurre cuando el Producto Marginal del Capital ($PMg_K$) es exactamente igual a la tasa de depreciación. Un hermoso óptimo interior balanceado.</p>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>Práctica Autónoma: Óptimos y Envolvente (1-4)</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
         <ol>
-            <li>Identifica si la siguiente relación es una función: "A cada persona en un país se le asigna su número de teléfono celular". <em>(Pista: Analiza qué pasa si alguien tiene dos líneas a su nombre bajo la regla de "exactamente un" elemento).</em></li>
-            <li>Determina si la función $f(x) = x^2$ (definida para todos los números reales) es inyectiva. Justifica usando la definición formal matemática.</li>
-            <li>Sean $f(x) = 2x + 1$ y $g(x) = x^2$. Calcula:
-                <ul>
-                    <li>La composición $(g \circ f)(x)$</li>
-                    <li>La composición $(f \circ g)(x)$</li>
-                </ul>
-                ¿Los resultados son equivalentes?
-            </li>
+            <li><strong>Topología:</strong> Dibuja en tu cuaderno una función $f(x)$ que tenga 3 óptimos locales y señala cuál de ellos es el global.</li>
+            <li>¿Por qué la condición de "Primera Derivada igual a Cero" es una condición <em>necesaria</em> pero NO <em>suficiente</em> para confirmar un máximo global?</li>
+            <li><strong>Lema de Hotelling:</strong> Si la función de beneficios máximos de una granja depende del precio del maíz ($P$) y se expresa como $\pi^*(P) = 10P^2 - 50$, usa el Teorema de la Envolvente para encontrar la función de Oferta $Q^*$ del agricultor.</li>
+            <li>Si la oferta del problema anterior es $Q^*(P)$, ¿cuánto maíz ofrecerá el agricultor si el precio del mercado es $P=5$?</li>
         </ol>
     </div>
 </div>
 
-<!-- ── DIAPOSITIVA 21: CIERRE DEL MÓDULO ── -->
 <div class="slide">
-    <h2 style="color: #2a4939; text-align: center; margin-bottom: 20px;">¡Felicidades! Has completado el Módulo 1</h2>
+    <h2>Práctica Autónoma: Holgura Complementaria (5-8)</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
+        <ol start="5">
+            <li>La ecuación de holgura complementaria en KKT es $\lambda [M - g(x,y)] = 0$. Explica lógicamente por qué no es posible que $\lambda$ sea igual a $10$ si al consumidor le sobraron $\$5$ de presupuesto.</li>
+            <li>En un problema de maximización de ganancia sujeto a la capacidad de la fábrica, resuelves asumiendo que la restricción está inactiva y obtienes que debes producir 150 sillas. Sin embargo, tu fábrica solo tiene capacidad para 100 sillas. ¿Qué significa esto respecto a tu asunción inicial de "inactividad"?</li>
+            <li>Establece el Lagrangiano $\mathcal{L}$ para maximizar $U(x,y) = xy$ sujeto a $3x + 4y \leq 120$.</li>
+            <li>Escribe las tres condiciones de Primer Orden de KKT para el Lagrangiano del ejercicio 7.</li>
+        </ol>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>Práctica Autónoma: KKT Casos (9-11)</h2>
+    <div class="contenido-texto" style="font-size: 0.85rem;">
+        <ol start="9">
+            <li>Retomando el ejercicio 7: Asume el <strong>Caso 1</strong> (Restricción Activa, $3x + 4y = 120$). Resuelve el sistema como un Lagrange normal para encontrar $x^*, y^*$ y $\lambda^*$.</li>
+            <li>Verifica si la solución que encontraste en el ejercicio 9 es válida. ¿Es $\lambda^* \geq 0$? Si es así, has encontrado el óptimo.</li>
+            <li><strong>Caso 2:</strong> Ahora asume que la restricción es Inactiva ($\lambda = 0$). Maximiza $U=xy$ libremente. Las derivadas te dirán que la Utilidad Marginal siempre es positiva (siempre quieres más). ¿Existe algún límite donde te detendrías de forma "libre"? Concluye por qué en este modelo Cobb-Douglas la restricción de presupuesto <em>siempre</em> estará activa en la realidad.</li>
+        </ol>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>Práctica Autónoma: Soluciones de Esquina (12-15)</h2>
+    <div class="contenido-texto" style="font-size: 0.9rem;">
+        <ol start="12">
+            <li><strong>Sustitutos Perfectos:</strong> Tienes $\$50$. Quieres comprar cuadernos marca A ($P_A = \$5$) o marca B ($P_B = \$10$). Para ti, ambos cuadernos son exactamente iguales ($U = A + B$). Calcula la RMS y compárala con los precios relativos. ¿Qué comprarás y cuánto?</li>
+            <li>Dibuja en tu cuaderno la gráfica de la solución del problema 12 (similar a la diapositiva 11).</li>
+            <li><strong>Complementos Perfectos (Leontief):</strong> Eres un constructor. Para hacer un muro, necesitas obligatoriamente 1 saco de cemento y 100 ladrillos. No puedes sustituirlos. ¿Crees que en una función de utilidad de este tipo ($U = \min(Cemento, Ladrillos)$) pueda existir una "Solución de Esquina"? Justifica lógicamente.</li>
+            <li>¿Qué papel juega el requerimiento matemático de $x \geq 0$ en KKT cuando la matemática pura sugiere resultados negativos?</li>
+        </ol>
+    </div>
+</div>
+
+<div class="slide">
+    <h2>Práctica Autónoma: Análisis Avanzado (16-17)</h2>
+    <div class="contenido-texto">
+        <ol start="16">
+            <li><strong>La Sombra del Desempleo:</strong> Un gobierno impone un salario mínimo. Esto actúa como una restricción de desigualdad ($Salario \geq Mínimo$). Si el óptimo del libre mercado era pagar menos, la restricción se vuelve Activa. Gráficamente, el mercado es forzado a una solución en el límite. ¿Cuál es el resultado económico clásico (exceso de oferta) de esta restricción activa en el mercado laboral?</li>
+            <li>¿Por qué se dice que el Multiplicador de Lagrange ($\lambda$) es el puente entre las matemáticas puras y la teoría del valor económico?</li>
+        </ol>
+    </div>
+</div>
+
+<div class="slide">
+    <h2 style="color: #2a4939; text-align: center; margin-bottom: 20px;">¡Felicidades! Has completado el Módulo 8</h2>
     <div class="contenido-texto" style="text-align: center;">
-        <div style="font-size: 3rem; margin-bottom: 15px;">🎓</div>
-        <p>Has construido los cimientos analíticos necesarios para adentrarte en las matemáticas superiores sin temor al rigor formal.</p>
-        <p style="margin-top: 15px;">Ahora dominas:</p>
+        <div style="font-size: 3rem; margin-bottom: 15px;">🏁</div>
+        <p>Acabas de conquistar la optimización bajo las duras reglas de la realidad económica. Ahora sabes que el óptimo no siempre está en un valle o una cima perfectamente suave; a veces choca de frente con una pared de presupuesto o regulaciones.</p>
+        <p style="margin-top: 15px;">Tu dominio matemático ahora abarca:</p>
         <ul style="text-align: left; display: inline-block; margin-top: 10px;">
-            <li>La estructura lógica para construir argumentos irrebatibles ($p \implies q$).</li>
-            <li>El uso correcto de los cuantificadores ($\forall, \exists$) y su negación.</li>
-            <li>Las estrategias matemáticas para demostrar la veracidad de una afirmación.</li>
-            <li>El lenguaje de los conjuntos, las relaciones y la definición estricta de una función.</li>
+            <li>Diferenciar entre un óptimo local y la victoria absoluta del óptimo global.</li>
+            <li>Aplicar el Teorema de la Envolvente para analizar shocks en la economía.</li>
+            <li>Resolver problemas con restricciones desiguales usando las Condiciones KKT.</li>
+            <li>Diagnosticar Soluciones de Esquina cuando el mercado ofrece tratos ineficientes.</li>
         </ul>
-        <p style="margin-top: 25px; font-weight: bold;">Estás listo para iniciar el <strong>Módulo 2: Álgebra</strong>.</p>
+        <p style="margin-top: 25px; font-weight: bold;">El puente teórico está completo. Es momento de aterrizar estos modelos abstractos en bases de datos reales. ¡Nos vemos en el <strong>Módulo 9: Estadística 1</strong>!</p>
+        
         <div style="text-align: center; margin-top: 50px; margin-bottom: 30px;">
-    <button id="btnCompletarM1" style="background-color: #2a4939; color: #fff1da; padding: 14px 28px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: background 0.3s;">
-        Marcar Módulo 1 como Completado
-    </button>
-</div>
+            <button id="btnCompletarM8" style="background-color: #2a4939; color: #fff1da; padding: 14px 28px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.05rem; transition: background 0.3s;">
+                Marcar Módulo 8 como Completado
+            </button>
+        </div>
     </div>
 </div>
             <!-- ── NAVEGACIÓN ── -->
