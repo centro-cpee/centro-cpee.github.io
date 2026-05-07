@@ -197,7 +197,7 @@
 
             try {
                 // Guardamos en una NUEVA colección especial para las constancias
-                const constanciaRef = doc(db, "solicitudes_constancias", uid);
+                const constanciaRef = doc(db, "solicitudes_constancias_cursome", uid);
                 await setDoc(constanciaRef, {
                     nombre_completo: nombre,
                     correo: correo,
