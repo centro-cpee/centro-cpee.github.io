@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo III: Marx II: Ganancia y Dinero — CPEE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+<style>
+/* SHARED BASE FOR CURSO CE */
+:root {
+    --crema: #fff1da;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --naranja: #d35a34;
+    --rojo-marx: #8b261b;
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--crema); color: var(--negro); font-family: 'DM Sans', sans-serif; line-height: 1.7; overflow-x: hidden; }
+
+/* MENU */
+.menu-trigger { position: fixed; top: 22px; left: 24px; z-index: 1100; background: var(--cafe); border: none; border-radius: 8px; width: 44px; height: 44px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: background 0.2s; }
+.menu-trigger:hover { background: var(--rojo-marx); }
+.menu-trigger span { display: block; width: 20px; height: 2px; background: var(--crema); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease; transform-origin: center; }
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu-overlay { position: fixed; inset: 0; background: rgba(43,27,18,0.45); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; z-index: 1050; transition: opacity 0.3s ease; }
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
+.menu-panel { position: fixed; top: 0; left: 0; height: 100%; width: 280px; background: var(--cafe); z-index: 1090; transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; padding: 80px 0 40px; }
+.menu-panel.abierto { transform: translateX(0); }
+.menu-panel-logo { padding: 0 28px 32px; border-bottom: 1px solid rgba(215,196,165,0.2); margin-bottom: 12px; }
+.menu-panel-logo span { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: #D7C4A5; line-height: 1.3; display: block; }
+.menu-panel-logo em { font-family: 'Libre Baskerville', serif; font-size: 0.78rem; color: rgba(215,196,165,0.55); font-style: italic; }
+.menu-panel nav a { display: flex; align-items: center; gap: 12px; padding: 13px 28px; color: #D7C4A5; text-decoration: none; font-size: 0.95rem; font-weight: 400; border-left: 3px solid transparent; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.menu-panel nav a:hover { background: rgba(215,196,165,0.07); border-left-color: var(--rojo-marx); color: #f0dfc0; }
+.menu-panel nav a .nav-num { font-size: 0.7rem; opacity: 0.4; font-weight: 500; min-width: 18px; }
+
+/* BREADCRUMB */
+.breadcrumb { padding: 18px 48px 18px 90px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.7; border-bottom: 1px solid rgba(43,27,18,0.08); flex-wrap: wrap; }
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--rojo-marx); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--rojo-marx); opacity: 1; }
+
+/* HEADER */
+header { position: relative; padding: 48px 48px 40px; border-bottom: 1px solid rgba(43,27,18,0.15); overflow: hidden; }
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before { content: ''; position: absolute; top: -40px; right: -60px; width: 260px; height: 260px; border-radius: 50%; border: 1px solid rgba(139,38,27,0.1); }
+.header-bg-deco::after { content: ''; position: absolute; top: 10px; right: 10px; width: 150px; height: 150px; border-radius: 50%; border: 1px solid rgba(139,38,27,0.07); }
+.header-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.header-texto { flex: 1; }
+.header-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rojo-marx); margin-bottom: 12px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+.header-eyebrow::before { content: ''; display: block; width: 28px; height: 2px; background: var(--rojo-marx); }
+header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 400; line-height: 1.2; color: var(--cafe); opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+.modulo-badge { flex-shrink: 0; background: rgba(139,38,27,0.08); border: 1px solid rgba(139,38,27,0.15); border-radius: 10px; padding: 14px 20px; text-align: center; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; align-self: center; }
+.modulo-badge .num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--rojo-marx); line-height: 1; display: block; }
+.modulo-badge .etiqueta { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rojo-marx); opacity: 0.8; }
+
+/* MAIN */
+main { max-width: 820px; margin: 0 auto; padding: 48px 48px 80px; }
+
+/* SLIDE WRAPPER */
+.slide-wrapper { opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.progress-bar-outer { height: 4px; background: rgba(43,27,18,0.1); border-radius: 4px; margin-bottom: 4px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: var(--rojo-marx); border-radius: 4px; transition: width 0.4s ease; }
+.progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.progress-texto { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.55; }
+.slide-counter-txt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; color: var(--rojo-marx); opacity: 0.9; }
+
+/* SLIDE CONTAINER */
+.slide-container { background: rgba(255,255,255,0.65); border: 1px solid rgba(43,27,18,0.1); border-radius: 12px; padding: 36px 40px 28px; min-height: 420px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(43,27,18,0.06); display: flex; flex-direction: column; gap: 20px; }
+.slide-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--rojo-marx); border-radius: 4px 0 0 4px; }
+
+/* SLIDES */
+.slide { display: none; animation: fadeSlide 0.4s ease; flex: 1; }
+.slide.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+/* SLIDE TYPE BADGE */
+.slide-tipo { display: inline-flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+.tipo-objetivo { background: rgba(139,38,27,0.1); color: var(--rojo-marx); }
+.tipo-teoria { background: rgba(43,27,18,0.08); color: var(--cafe); }
+.tipo-analisis { background: rgba(107,76,53,0.1); color: var(--cafe-claro); }
+.tipo-diagrama { background: rgba(139,38,27,0.08); color: var(--rojo-marx); }
+.tipo-recursos { background: rgba(42,73,57,0.06); color: var(--verde-medio); }
+
+/* SLIDE CONTENT */
+.slide h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; color: var(--cafe); margin-bottom: 18px; line-height: 1.3; padding-bottom: 12px; border-bottom: 1px solid rgba(43,27,18,0.1); }
+.contenido-texto { font-size: 0.95rem; color: var(--texto-suave); line-height: 1.85; }
+.contenido-texto p { margin-bottom: 15px; }
+.contenido-texto ul, .contenido-texto ol { padding-left: 20px; margin: 15px 0; }
+.contenido-texto li { margin-bottom: 8px; }
+.contenido-texto li::marker { color: var(--rojo-marx); }
+.contenido-texto strong { color: var(--cafe); font-weight: 600; }
+.contenido-texto em { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--cafe-claro); }
+
+/* SPECIAL BOXES */
+.caja-teorica { background: rgba(139,38,27,0.05); border: 1px solid rgba(139,38,27,0.14); border-left: 4px solid var(--rojo-marx); border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0; font-size: 0.9rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-teorica strong { color: var(--rojo-marx); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-analisis { background: rgba(255,241,218,0.8); border: 1px solid rgba(43,27,18,0.14); border-left: 4px solid var(--cafe); border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0; font-size: 0.9rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-analisis strong { color: var(--cafe); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-ecuacion { font-family: 'Times New Roman', serif; font-size: 1.4rem; text-align: center; padding: 20px; background: #fff; border: 1px dashed #ccc; border-radius: 8px; margin: 20px 0; color: var(--cafe); box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); }
+
+/* RECURSOS Y VIDEOS */
+.recursos-grid { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+.recurso-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.09); border-radius: 8px; font-size: 0.85rem; color: var(--texto-suave); }
+.recurso-item a { color: var(--rojo-marx); text-decoration: none; font-weight: 600; }
+.recurso-item a:hover { text-decoration: underline; }
+
+.video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: rgba(43,27,18,0.05); margin: 15px 0; border: 1px solid rgba(0,0,0,0.1); }
+.video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+/* NAV BUTTONS */
+.nav-buttons { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 15px; border-top: 1px solid rgba(43,27,18,0.08); }
+.btn-nav { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: var(--cafe); color: #D7C4A5; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; border-radius: 8px; transition: background 0.2s, transform 0.2s; }
+.btn-nav:hover:not(:disabled) { background: var(--rojo-marx); transform: translateY(-1px); }
+.btn-nav:disabled { background: rgba(43,27,18,0.1); color: rgba(43,27,18,0.3); cursor: not-allowed; transform: none; }
+.puntos-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.punto { width: 8px; height: 8px; border-radius: 50%; background: rgba(43,27,18,0.15); transition: background 0.3s, transform 0.3s; cursor: pointer; border: none; padding: 0; }
+.punto.activo { background: var(--rojo-marx); transform: scale(1.25); }
+
+/* MODULE NAV */
+.modulo-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 12px; }
+.btn-modulo { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.12); color: var(--texto-suave); text-decoration: none; font-size: 0.82rem; font-weight: 500; border-radius: 8px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.btn-modulo:hover { background: rgba(255,255,255,0.9); border-color: var(--rojo-marx); color: var(--rojo-marx); }
+
+/* CIERRE */
+.slide-cierre { text-align:center; padding: 20px 0; }
+.cierre-emoji { font-size:3.5rem; margin-bottom:18px; display:block; }
+.cierre-titulo { font-family:'DM Serif Display',serif; font-size:1.8rem; color: var(--rojo-marx); margin-bottom:14px; }
+.btn-completar { display:inline-flex; align-items:center; justify-content: center; width: 100%; max-width: 350px; margin-top:30px; padding:16px 20px; background:var(--rojo-marx); color:white; border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:1.1rem; font-weight:700; cursor:pointer; transition:background 0.25s,transform 0.2s; }
+.btn-completar:hover:not(:disabled) { background:#6e1b12; transform:translateY(-2px); }
+.btn-completar:disabled { background:var(--cafe-claro); cursor:default; opacity:0.75; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo"><span>Centro Popular de<br>Estudios Económicos</span><em>Ciencia Social aplicada</em></div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../lab.html"><span class="nav-num">01</span> Laboratorio</a>
+        <a href="ce_inicio.html"><span class="nav-num">02</span> Índice del Curso</a>
+    </nav>
+</aside>
+
+<div class="breadcrumb">
+    <a href="../lab.html">Laboratorio</a><span class="sep">/</span>
+    <a href="ce_inicio.html">Estructura y Crisis</a><span class="sep">/</span>
+    <span class="actual">Módulo III</span>
+</div>
+
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Macroeconomía Marxista</p>
+            <h1>Marx II: Ganancia, Crédito y Crisis</h1>
+        </div>
+        <div class="modulo-badge"><span class="num">III</span><span class="etiqueta">Módulo</span></div>
+    </div>
+</header>
+
+<main>
+<div class="slide-wrapper">
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+    <div class="progress-label">
+        <span class="progress-texto">Desarrollo Teórico</span>
+        <span class="slide-counter-txt" id="slideCounter"></span>
+    </div>
+    
+    <div class="slide-container">
+
+        <div class="slide active">
+            <span class="slide-tipo tipo-objetivo">🎯 Introducción y Objetivos</span>
+            <h2>El mundo real de la rentabilidad</h2>
+            <div class="contenido-texto">
+                <p>En los Tomos I y II, Marx analizó la producción de valor "en estado puro". En el <strong>Tomo III</strong>, desciende a la superficie de la sociedad capitalista, donde los capitalistas no ven "plusvalía" (p) ni "capital variable" (v), sino <strong>costos, precios y tasas de ganancia</strong>. Aquí aparece la competencia feroz y el capital financiero.</p>
+                
+                <div class="caja-teorica">
+                    <strong>Objetivos de Aprendizaje</strong>
+                    <ol>
+                        <li>Diferenciar la <em>Tasa de Plusvalía</em> de la <em>Tasa de Ganancia</em>.</li>
+                        <li>Entender la <strong>Ley de la baja tendencial de la tasa de ganancia (LTBTG)</strong> y por qué es el límite interno del capitalismo.</li>
+                        <li>Analizar las causas contrarrestantes que retrasan el colapso.</li>
+                        <li>Comprender el papel del crédito y el "capital que rinde interés" como detonantes de las crisis financieras.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Explicación Conceptual</span>
+            <h2>La ilusión de la ganancia</h2>
+            <div class="contenido-texto">
+                <p>Para Marx, la explotación se mide por la <strong>Tasa de Plusvalía (p')</strong>, que es la relación entre el plustrabajo (p) y el salario (v). Fórmula: <em>p' = p / v</em>.</p>
+                
+                <p>Sin embargo, al capitalista no le importa la tasa de explotación. A él le importa cuánto dinero obtiene en relación a <em>toda</em> la inversión que hizo, tanto en salarios como en máquinas. A esto se le llama <strong>Tasa de Ganancia (g')</strong>:</p>
+                
+                <div class="caja-ecuacion">
+                    g' = p / (c + v)
+                </div>
+
+                <p>Al dividir la plusvalía (p) entre la suma total del capital constante (c) y el capital variable (v), la tasa de ganancia siempre será matemáticamente <strong>menor</strong> que la tasa de plusvalía. Esta fórmula esconde el origen real del valor, haciendo parecer que las máquinas (c) también generan ganancia.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Tomo III: Capítulos XIII y XIV</span>
+            <h2>La contradicción fundamental: LTBTG</h2>
+            <div class="contenido-texto">
+                <p>Marx descubrió una paradoja matemática letal en el corazón del sistema: <strong>La Ley de la baja tendencial de la tasa de ganancia (LTBTG)</strong>. ¿Cómo funciona?</p>
+                
+                <ol>
+                    <li>La competencia obliga al capitalista a innovar, invirtiendo masivamente en tecnología (Capital Constante - <strong>c</strong>).</li>
+                    <li>La proporción entre máquinas y trabajadores (<strong>c/v</strong>) aumenta constantemente. A esto Marx le llama <em>Composición Orgánica del Capital</em>.</li>
+                    <li>Dado que solo el trabajo vivo (<strong>v</strong>) crea plusvalía (<strong>p</strong>), la masa de ganancia crece, pero crece mucho más despacio que la inversión total (c + v).</li>
+                    <li>Por lo tanto, la ecuación <em>g' = p / (c + v)</em> tiende estructural e inevitablemente a la baja con el tiempo.</li>
+                </ol>
+
+                <p>El capitalismo es víctima de su propia eficiencia tecnológica. Al intentar aumentar la productividad expulsando obreros, ahoga la única fuente de su rentabilidad.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Factores Mitigantes</span>
+            <h2>Las causas contrarrestantes</h2>
+            <div class="contenido-texto">
+                <p>Si la tasa de ganancia cae matemáticamente, ¿por qué el capitalismo no colapsó hace 100 años? Marx advirtió que esta ley es una <em>tendencia</em>, y el capital despliega mecanismos feroces para frenarla (Capítulo XIV):</p>
+                
+                <ul>
+                    <li><strong>Aumento del grado de explotación:</strong> Hacer trabajar más intensamente al obrero o alargar la jornada laboral sin subir el salario (aumenta p).</li>
+                    <li><strong>Abaratamiento del capital constante:</strong> Si las máquinas y materias primas se vuelven muy baratas debido a la misma alta productividad, "c" no crece tan rápido.</li>
+                    <li><strong>Comercio exterior (Imperialismo):</strong> Importar materias primas baratas del extranjero y exportar mercancías para obtener tasas de ganancia extraordinarias.</li>
+                    <li><strong>Depresión de los salarios por debajo de su valor:</strong> Una práctica común que hoy vemos en la precarización laboral y la economía "gig" (Uber, Rappi).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Tomo III: Capítulo XXXVI</span>
+            <h2>El Crédito y el Capital Ficticio</h2>
+            <div class="contenido-texto">
+                <p>Cuando la tasa de ganancia productiva cae, el capitalista busca desesperadamente rentabilidad en la esfera financiera. Aparece el <strong>"Capital que rinde interés"</strong>.</p>
+                
+                <p>El esquema productivo normal es <strong>D - M - D'</strong> (Dinero compra Mercancías para venderse por más Dinero). El esquema financiero es <strong>D - D'</strong> (Dinero que mágicamente engendra más Dinero, saltándose el tedioso proceso de producir mercancías).</p>
+
+                <div class="caja-teorica">
+                    <strong>Capital Ficticio:</strong>
+                    Marx llamó así a los títulos de propiedad (acciones, bonos, deuda) que se comercializan en el mercado. No son capital real (fábricas, máquinas), sino <em>derechos sobre plusvalías futuras</em>. Cuando el crédito se expande más allá de la capacidad de la economía real para generar plusvalía, la burbuja especulativa está garantizada.
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-diagrama">📊 Diagrama Estructural</span>
+            <h2>Morfología de la Crisis Marxista</h2>
+            <div class="contenido-texto">
+                <p>El ciclo del capital obedece a una dinámica de purgación violenta. La crisis no es el fin del sistema, sino el mecanismo extremo mediante el cual el capitalismo se reequilibra destruyendo capital sobrante.</p>
+                
+                <div style="text-align: center; margin: 25px 0; overflow-x: auto;">
+                    <svg viewBox="0 0 700 450" width="100%" min-width="600px" style="background-color: #fafafa; border: 1px solid #ddd; border-radius: 12px; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        <defs>
+                            <marker id="arrowLoop" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#8b261b" />
+                            </marker>
+                        </defs>
+
+                        <rect x="50" y="50" width="160" height="70" rx="8" fill="#fff" stroke="#8b261b" stroke-width="2"/>
+                        <text x="130" y="80" font-size="13" font-weight="bold" fill="#8b261b" text-anchor="middle">Competencia e</text>
+                        <text x="130" y="100" font-size="13" font-weight="bold" fill="#8b261b" text-anchor="middle">Innovación</text>
+
+                        <rect x="270" y="50" width="160" height="70" rx="8" fill="#fff" stroke="#8b261b" stroke-width="2"/>
+                        <text x="350" y="80" font-size="13" font-weight="bold" fill="#8b261b" text-anchor="middle">Aumenta</text>
+                        <text x="350" y="100" font-size="13" font-weight="bold" fill="#8b261b" text-anchor="middle">Composición (c/v)</text>
+
+                        <rect x="490" y="50" width="160" height="70" rx="8" fill="#fff" stroke="#8b261b" stroke-width="2"/>
+                        <text x="570" y="80" font-size="13" font-weight="bold" fill="#8b261b" text-anchor="middle">Cae la Tasa de</text>
+                        <text x="570" y="100" font-size="13" font-weight="bold" fill="#8b261b" text-anchor="middle">Ganancia (g')</text>
+
+                        <rect x="490" y="190" width="160" height="70" rx="8" fill="#fff" stroke="#d35a34" stroke-width="2"/>
+                        <text x="570" y="220" font-size="13" font-weight="bold" fill="#d35a34" text-anchor="middle">Fuga al Crédito</text>
+                        <text x="570" y="240" font-size="13" font-weight="bold" fill="#d35a34" text-anchor="middle">(Capital Ficticio)</text>
+
+                        <rect x="270" y="320" width="160" height="70" rx="8" fill="#fcece8" stroke="#8b261b" stroke-width="3"/>
+                        <text x="350" y="350" font-size="15" font-weight="bold" fill="#8b261b" text-anchor="middle">ESTALLIDO DE</text>
+                        <text x="350" y="370" font-size="15" font-weight="bold" fill="#8b261b" text-anchor="middle">LA CRISIS</text>
+
+                        <rect x="50" y="320" width="160" height="70" rx="8" fill="#fff" stroke="#2B1B12" stroke-width="2"/>
+                        <text x="130" y="350" font-size="13" font-weight="bold" fill="#2B1B12" text-anchor="middle">Destrucción de</text>
+                        <text x="130" y="370" font-size="13" font-weight="bold" fill="#2B1B12" text-anchor="middle">Capital Obsoleto</text>
+
+                        <path d="M 210 85 L 260 85" fill="none" stroke="#8b261b" stroke-width="2" marker-end="url(#arrowLoop)"/>
+                        <path d="M 430 85 L 480 85" fill="none" stroke="#8b261b" stroke-width="2" marker-end="url(#arrowLoop)"/>
+                        <path d="M 570 120 L 570 180" fill="none" stroke="#d35a34" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrowLoop)"/>
+                        <path d="M 570 260 L 570 355 L 440 355" fill="none" stroke="#8b261b" stroke-width="2" marker-end="url(#arrowLoop)"/>
+                        <path d="M 270 355 L 220 355" fill="none" stroke="#8b261b" stroke-width="2" marker-end="url(#arrowLoop)"/>
+                        
+                        <path d="M 130 320 L 130 130" fill="none" stroke="#2B1B12" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowLoop)"/>
+                        <text x="100" y="230" font-size="11" fill="#4a3828" transform="rotate(-90 100,230)">Restaura Rentabilidad</text>
+
+                        <text x="350" y="425" font-size="12" fill="#666" font-style="italic" text-anchor="middle">La crisis destruye el exceso de capital, abarata medios de producción y salarios, reactivando la tasa de ganancia.</text>
+                    </svg>
+                </div>
+                </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-analisis">✍️ Taller de Análisis</span>
+            <h2>El límite del capital es el capital mismo</h2>
+            <div class="contenido-texto">
+                <p>Las crisis financieras contemporáneas a menudo se leen como desastres de desregulación bancaria. Sin embargo, conectando el Módulo I con Marx, adquieren un matiz más profundo.</p>
+                
+                <div class="caja-analisis">
+                    <strong>Ejercicio Analítico: De Marx a 2008</strong>
+                    Piensa en la explosión de las hipotecas <em>Subprime</em> de 2008. Los bancos emitieron derivados (Capital Ficticio) respaldados por créditos hipotecarios otorgados a trabajadores con salarios estancados. El volumen de deuda (D') creció exponencialmente, asumiendo que los precios de las casas subirían para siempre.<br><br>
+                    <strong>Pregunta de Reflexión:</strong><br>
+                    Considerando la LTBTG de Marx, ¿fue la especulación financiera la *causa* de la crisis de 2008, o fue un *síntoma* de un sistema que, ante la imposibilidad de sostener tasas de ganancia altas en la producción real (fábricas, tecnología), tuvo que huir hacia el capital ficticio para sostener la ilusión de acumulación?
+                </div>
+
+                <details style="background: #f0f7f4; padding: 15px; border-radius: 6px; border: 1px solid var(--rojo-marx); cursor: pointer;">
+                    <summary style="font-weight: bold; color: var(--rojo-marx);">Conclusión Estructural</summary>
+                    <p style="margin-top: 10px; font-size: 0.95rem;">La financiarización no es un error de los banqueros, es la vía de escape temporal de un sistema ahogado por su propia acumulación productiva. La crisis estalla cuando el "Capital Ficticio" es obligado violentamente a reconciliarse con la base real de plusvalía que, en teoría, debería respaldarlo.</p>
+                </details>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-recursos">📚 Recursos y Glosario</span>
+            <h2>Bibliografía y Audiovisuales</h2>
+            <div class="contenido-texto">
+                <p><strong>Lecturas Obligatorias:</strong></p>
+                <div class="recursos-grid">
+                    <div class="recurso-item">Marx, K. (1894). <em>El Capital. Crítica de la economía política. Tomo III.</em> FCE. (Capítulos XIII, XIV y XXXVI).</div>
+                </div>
+
+                <p><strong>Glosario Técnico:</strong></p>
+                <ul>
+                    <li><strong>Tasa de Ganancia (g'):</strong> La rentabilidad del capital total invertido. Su fórmula es $g' = p / (c + v)$.</li>
+                    <li><strong>Capital Ficticio:</strong> Títulos financieros (deuda, acciones) que no representan capital real activo, sino derechos sobre la apropiación de plusvalía futura.</li>
+                    <li><strong>Desvalorización del Capital:</strong> Proceso durante la crisis donde activos, máquinas y mercancías pierden su valor contable, abaratando los costos (c) para el siguiente ciclo productivo.</li>
+                </ul>
+
+                <p><strong>Cátedra en Video:</strong></p>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube-nocookie.com/embed/n4q93r9VEXY" title="Michael Roberts - La tasa de ganancia" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--cafe-claro); font-style: italic;">Conferencia del economista marxista Michael Roberts explicando empíricamente la vigencia de la Ley de la baja tendencial de la tasa de ganancia en el capitalismo contemporáneo.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-cierre">
+                <span class="cierre-emoji">📉</span>
+                <h2 class="cierre-titulo">¡Módulo III Completado!</h2>
+                <p style="color: var(--texto-suave); font-size: 1.05rem; max-width: 600px; margin: 0 auto;">
+                    Has concluido la exploración de <em>El Capital</em>. Entiendes que el sistema está sujeto a la ley ineludible de la caída de la tasa de ganancia y que el crédito es su vía de escape temporal. Con esta base estructural, estamos listos para saltar en el tiempo y abordar a Keynes, quien intentó salvar al capitalismo de este destino fatal a través de la demanda efectiva.
+                </p>
+                <button class="btn-completar" id="btnCompletarM3">Guardar Progreso del Módulo III</button>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <div class="puntos-nav" id="puntos"></div>
+            <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+    
+    <div class="modulo-nav">
+        <a href="ce_m2.html" class="btn-modulo">← Módulo II</a>
+        <a href="ce_inicio.html" class="btn-modulo">↑ Índice</a>
+        <a href="ce_m4.html" class="btn-modulo">Siguiente: Módulo IV →</a>
+    </div>
+</div>
+</main>
+
+<script>
+// Menú
+function toggleMenu() {
+    const btn=document.getElementById('menuBtn'),panel=document.getElementById('menuPanel'),overlay=document.getElementById('menuOverlay'),abierto=panel.classList.contains('abierto');
+    btn.classList.toggle('abierto',!abierto); panel.classList.toggle('abierto',!abierto); overlay.classList.toggle('visible',!abierto);
+    panel.setAttribute('aria-hidden',abierto?'true':'false'); document.body.style.overflow=abierto?'':'hidden';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=document.getElementById('menuPanel');if(p.classList.contains('abierto'))toggleMenu();}});
+
+// Slides
+let currentSlide=0;
+const slides=document.querySelectorAll('.slide'),counter=document.getElementById('slideCounter'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn'),progress=document.getElementById('progressBar'),puntosContainer=document.getElementById('puntos');
+slides.forEach((_,i)=>{const btn=document.createElement('button');btn.classList.add('punto');if(i===0)btn.classList.add('activo');btn.addEventListener('click',()=>goToSlide(i));puntosContainer.appendChild(btn);});
+function updateUI(){const t=slides.length;counter.innerText=`${currentSlide+1} / ${t}`;prevBtn.disabled=currentSlide===0;nextBtn.disabled=currentSlide===t-1;progress.style.width=`${((currentSlide+1)/t)*100}%`;document.querySelectorAll('.punto').forEach((p,i)=>p.classList.toggle('activo',i===currentSlide));}
+function goToSlide(n){slides[currentSlide].classList.remove('active');currentSlide=n;slides[currentSlide].classList.add('active');updateUI();}
+function changeSlide(n){goToSlide(currentSlide+n);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&currentSlide<slides.length-1)changeSlide(1);if(e.key==='ArrowLeft'&&currentSlide>0)changeSlide(-1);});
+updateUI();
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+        authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+        projectId: "cpee-plataforma-a655a",
+        storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+        messagingSenderId: "684415102099",
+        appId: "1:684415102099:web:3f2b649a34386677a87166"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    const btnCompletar = document.getElementById("btnCompletarM3");
+
+    function marcarCompletado() {
+        if (btnCompletar) {
+            btnCompletar.innerHTML = "✅ Progreso Guardado";
+            btnCompletar.style.background = "var(--cafe-claro)";
+            btnCompletar.disabled = true;
+            btnCompletar.style.cursor = "default";
+        }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "../../login.html";
+            return;
+        }
+        const docRef  = doc(db, "progreso_usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists() || docSnap.data().acceso_ce !== true) {
+            window.location.href = "ce_inicio.html";
+            return;
+        }
+
+        if (docSnap.data().modulo3_ce_completado === true) {
+            marcarCompletado();
+        }
+
+        if (btnCompletar) {
+            btnCompletar.addEventListener("click", async () => {
+                btnCompletar.innerText = "Registrando...";
+                try {
+                    await setDoc(docRef, {
+                        modulo3_ce_completado: true,
+                        fecha_completado_ce_m3: new Date()
+                    }, { merge: true });
+                    marcarCompletado();
+                } catch (error) {
+                    console.error("Error al guardar: ", error);
+                    alert("Error de red. Intenta de nuevo.");
+                    btnCompletar.innerText = "Guardar Progreso del Módulo III";
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
