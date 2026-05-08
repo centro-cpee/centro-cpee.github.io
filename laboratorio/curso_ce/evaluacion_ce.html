@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación: Estructura y Crisis - CPEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cafe: #2B1B12;
+            --naranja: #d35a34;
+            --crema: #fff1da;
+            --pizarra: #2c3e50;
+            --texto-suave: #4a3828;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--crema);
+            color: var(--cafe);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--pizarra);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .instrucciones {
+            text-align: center;
+            color: var(--texto-suave);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--crema);
+        }
+        .pregunta-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-left: 4px solid var(--naranja);
+            border-radius: 4px;
+        }
+        .pregunta-texto {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .opciones label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.5;
+        }
+        .opciones label:hover {
+            border-color: var(--naranja);
+            background: #fff8f5;
+        }
+        .opciones input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--naranja);
+        }
+        .btn-enviar {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--pizarra);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+        .btn-enviar:hover {
+            background: #1a252f;
+        }
+        .btn-enviar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        /* Pantalla de bloqueo */
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--crema);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo">
+        <h2 id="bloqueo-texto" style="font-family: 'DM Serif Display', serif; color: var(--cafe); font-size: 2rem;">Verificando credenciales...</h2>
+        <p id="bloqueo-subtexto">Analizando tu progreso en el curso.</p>
+        <button id="btn-volver" style="display:none; margin-top: 20px; padding: 10px 20px; background: var(--pizarra); color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="window.location.href='ce_inicio.html'">Volver al Inicio</button>
+    </div>
+
+    <div class="container" id="contenedor-examen" style="display: none;">
+        <h1>Evaluación: Estructura y Crisis</h1>
+        <div class="instrucciones">
+            <p>Lee detenidamente cada caso. Tienes un máximo de <strong>3 intentos</strong> para aprobar. <br>Necesitas al menos <strong>16 aciertos (8.0)</strong> para obtener tu constancia.</p>
+            <p style="color: var(--naranja); font-weight: bold;" id="intentos-restantes-texto"></p>
+        </div>
+
+        <form id="formulario-evaluacion">
+            
+            <div class="pregunta-card">
+                <div class="pregunta-texto">1. Para la economía ortodoxa clásica, el mercado es perfecto y las crisis son solo "accidentes" temporales. En cambio, para la teoría heterodoxa, las crisis son:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q1" value="A" required> A) Consecuencia exclusiva de la mala suerte.</label>
+                    <label><input type="radio" name="q1" value="B"> B) Un fenómeno inevitable que nace del propio funcionamiento estructural del capitalismo.</label>
+                    <label><input type="radio" name="q1" value="C"> C) Un problema que ya se resolvió en el siglo XXI.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">2. Según el autor Guillén Romo, la crisis global de 2008 (Subprime) no fue un hecho nuevo y aislado, sino:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q2" value="A" required> A) Un simple error en las computadoras de los bancos.</label>
+                    <label><input type="radio" name="q2" value="B"> B) La continuación de una vieja crisis de rentabilidad de los años 70, disfrazada temporalmente con deudas y créditos.</label>
+                    <label><input type="radio" name="q2" value="C"> C) Consecuencia de que a los trabajadores se les pagaba demasiado.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">3. Cuando los empresarios compiten, invierten cada vez más en máquinas y menos en trabajadores (Composición Orgánica). Según Marx, esto genera forzosamente:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q3" value="A" required> A) El fin de la pobreza mundial.</label>
+                    <label><input type="radio" name="q3" value="B"> B) La creación de un "Ejército Industrial de Reserva" (desempleo estructural).</label>
+                    <label><input type="radio" name="q3" value="C"> C) Que las máquinas empiecen a comprar mercancías.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">4. En los esquemas de Reproducción de Marx, para que el sistema funcione sin crisis, el Sector I (que hace máquinas) y el Sector II (que hace bienes de consumo) deben:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q4" value="A" required> A) Trabajar de forma aislada sin comprarse nada entre ellos.</label>
+                    <label><input type="radio" name="q4" value="B"> B) Intercambiar sus productos de forma proporcional para que la oferta y demanda encajen.</label>
+                    <label><input type="radio" name="q4" value="C"> C) Ser absorbidos totalmente por el gobierno.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">5. La "Ley de la baja tendencial de la tasa de ganancia" de Marx ocurre principalmente porque:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q5" value="A" required> A) Los empresarios pagan demasiados impuestos.</label>
+                    <label><input type="radio" name="q5" value="B"> B) Se invierte tanto en tecnología que la proporción de trabajo humano (creador de valor) disminuye en relación al capital total.</label>
+                    <label><input type="radio" name="q5" value="C"> C) La gente de pronto deja de querer comprar cosas.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">6. Cuando poner una fábrica ya no deja buenas ganancias, ¿hacia dónde huye el capital para intentar seguir creciendo de forma rápida, provocando burbujas?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q6" value="A" required> A) Hacia el pago de mejores salarios para sus empleados.</label>
+                    <label><input type="radio" name="q6" value="B"> B) Hacia el crédito y la especulación financiera ("Capital Ficticio").</label>
+                    <label><input type="radio" name="q6" value="C"> C) Hacia la agricultura de autoconsumo.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">7. Keynes destruyó la "Ley de Say" (la idea de que todo lo que se produce se vende mágicamente). Él demostró que:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q7" value="A" required> A) La gente prefiere ahorrar una parte de su dinero; y si ese ahorro no se invierte, falta demanda y se generan despidos.</label>
+                    <label><input type="radio" name="q7" value="B"> B) Los bancos siempre ocultan el dinero físico.</label>
+                    <label><input type="radio" name="q7" value="C"> C) El consumo es irrelevante porque solo importa exportar.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">8. Durante una crisis, ¿por qué es una mala idea a nivel macroeconómico reducir los salarios (como sugerían los clásicos)?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q8" value="A" required> A) Porque a los empresarios no les gusta pagar menos.</label>
+                    <label><input type="radio" name="q8" value="B"> B) Porque el salario es la principal fuente de demanda; si caen los salarios, nadie compra y las empresas quiebran.</label>
+                    <label><input type="radio" name="q8" value="C"> C) Porque automáticamente sube el precio de la gasolina.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">9. Según Keynes, las decisiones de inversión de los empresarios no son matemáticas perfectas, sino que dependen mucho de:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q9" value="A" required> A) Las fases de la luna.</label>
+                    <label><input type="radio" name="q9" value="B"> B) La incertidumbre y la confianza psicológica del momento (los "Animal Spirits").</label>
+                    <label><input type="radio" name="q9" value="C"> C) La cantidad de billetes que imprima el Banco Central ese día.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">10. Si hay mucho desempleo y los empresarios tienen pánico de invertir, la principal solución que propone el modelo keynesiano es:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q10" value="A" required> A) Esperar pacientemente a que el mercado se arregle solo.</label>
+                    <label><input type="radio" name="q10" value="B"> B) Que el Estado inyecte dinero mediante el Gasto Público para reanimar la demanda (Efecto Multiplicador).</label>
+                    <label><input type="radio" name="q10" value="C"> C) Subirle los impuestos a las clases bajas.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">11. Douglass North hace una diferencia clave entre Instituciones y Organizaciones. ¿Cuál es?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q11" value="A" required> A) Las instituciones son edificios públicos y las organizaciones son empresas privadas.</label>
+                    <label><input type="radio" name="q11" value="B"> B) Las instituciones son las "reglas del juego" (leyes, costumbres) y las organizaciones son los "jugadores" (empresas, partidos).</label>
+                    <label><input type="radio" name="q11" value="C"> C) En economía significan exactamente lo mismo.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">12. Los "Costos de Transacción" demuestran que intercambiar bienes en el mercado no es gratis, porque:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q12" value="A" required> A) Cuesta tiempo y dinero buscar información, negociar contratos y obligar a que se cumplan legalmente.</label>
+                    <label><input type="radio" name="q12" value="B"> B) Todo producto tiene un impuesto al valor agregado (IVA).</label>
+                    <label><input type="radio" name="q12" value="C"> C) El papel moneda es caro de imprimir.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">13. La "Asimetría de la Información" ocurre cuando en un intercambio económico:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q13" value="A" required> A) Nadie sabe leer ni escribir el contrato.</label>
+                    <label><input type="radio" name="q13" value="B"> B) Una de las partes tiene más o mejor información que la otra (ej. el vendedor sabe si el auto usado está descompuesto).</label>
+                    <label><input type="radio" name="q13" value="C"> C) El gobierno no publica las cifras oficiales de inflación.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">14. Desde el enfoque neoinstitucional, el exceso de informalidad en países en desarrollo (ej. un tianguis) ocurre porque:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q14" value="A" required> A) Hay una cultura biológica que odia la formalidad.</label>
+                    <label><input type="radio" name="q14" value="B"> B) Los trámites y la corrupción hacen que ser formal sea tan caro que la gente huye a la informalidad para sobrevivir.</label>
+                    <label><input type="radio" name="q14" value="C"> C) Es una orden directa del Fondo Monetario Internacional.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">15. El beneficio económico principal de tener "Derechos de Propiedad" seguros y respetados por la ley es:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q15" value="A" required> A) Que nadie pueda visitar tu casa.</label>
+                    <label><input type="radio" name="q15" value="B"> B) Darle confianza a las personas para que inviertan e innoven sin miedo a que les roben o expropien su esfuerzo.</label>
+                    <label><input type="radio" name="q15" value="C"> C) Que el gobierno pueda cobrar más impuestos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">16. El concepto de "Dependencia de la trayectoria" (Path Dependence) nos ayuda a entender que:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q16" value="A" required> A) Es facilísimo cambiar las leyes si se elige un nuevo presidente.</label>
+                    <label><input type="radio" name="q16" value="B"> B) Las reglas del pasado crearon élites que defienden sus privilegios hoy, haciendo muy difícil cambiar instituciones ineficientes.</label>
+                    <label><input type="radio" name="q16" value="C"> C) Todos los países terminarán siendo ricos algún día.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">17. Un país cuyas leyes están diseñadas para que una pequeña élite monopolice y extraiga la riqueza de la mayoría, tiene instituciones:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q17" value="A" required> A) Extractivas.</label>
+                    <label><input type="radio" name="q17" value="B"> B) Inclusivas.</label>
+                    <label><input type="radio" name="q17" value="C"> C) Perfectas.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">18. En contraste con la visión institucional pacífica, Marx demuestra que los derechos de propiedad privada originarios surgieron por:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q18" value="A" required> A) Un acuerdo democrático y voluntario.</label>
+                    <label><input type="radio" name="q18" value="B"> B) El despojo violento y la privatización forzada de tierras comunales (Acumulación Originaria).</label>
+                    <label><input type="radio" name="q18" value="C"> C) Una donación caritativa de los reyes.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">19. Mientras Keynes propone gastar dinero público para estimular el consumo, Marx diría que eso es solo un parche temporal porque no resuelve el problema de fondo, que es:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q19" value="A" required> A) La falta de oro en las reservas.</label>
+                    <label><input type="radio" name="q19" value="B"> B) El estancamiento de la rentabilidad (la caída en la tasa de ganancia de la producción).</label>
+                    <label><input type="radio" name="q19" value="C"> C) El exceso de felicidad de los trabajadores.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">20. <strong>Caso Práctico:</strong> Un gobierno da millones en subsidios para reactivar la economía (Keynes). Pero como el país no castiga el fraude y las leyes son corruptas (Neoinstitucionalismo), los grandes empresarios usan ese dinero para especular en la bolsa en lugar de construir fábricas (Capital Ficticio - Marx). ¿Qué concluyes de este caso?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q20" value="A" required> A) Que el libre mercado siempre funciona perfectamente si lo dejan en paz.</label>
+                    <label><input type="radio" name="q20" value="B" required> B) Que inyectar dinero no sirve de nada si las malas instituciones desvían ese dinero hacia la especulación financiera, agravando la crisis.</label>
+                    <label><input type="radio" name="q20" value="C" required> C) Que la culpa es de los trabajadores por no ahorrar lo suficiente en la bolsa de valores.</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btn-enviar">Terminar Examen y Calificar</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+            authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+            projectId: "cpee-plataforma-a655a",
+            storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+            messagingSenderId: "684415102099",
+            appId: "1:684415102099:web:3f2b649a34386677a87166"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
+        const contenedorExamen = document.getElementById('contenedor-examen');
+        const txtBloqueo = document.getElementById('bloqueo-texto');
+        const subTxtBloqueo = document.getElementById('bloqueo-subtexto');
+        const btnVolver = document.getElementById('btn-volver');
+        const txtIntentos = document.getElementById('intentos-restantes-texto');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        const respuestasCorrectas = {
+            q1: "B", q2: "B", q3: "B", q4: "B", q5: "B",
+            q6: "B", q7: "A", q8: "B", q9: "B", q10: "B",
+            q11: "B", q12: "A", q13: "B", q14: "B", q15: "B",
+            q16: "B", q17: "A", q18: "B", q19: "B", q20: "B"
+        };
+
+        let userRef;
+        let userData;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "../../login.html"; 
+                return;
+            }
+
+            userRef = doc(db, "progreso_usuarios", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (!docSnap.exists() || docSnap.data().acceso_ce !== true) {
+                window.location.href = "ce_inicio.html";
+                return;
+            }
+
+            userData = docSnap.data();
+
+            // 1. Ya aprobó antes
+            if (userData.examen_ce_aprobado === true) {
+                txtBloqueo.innerText = "¡Ya aprobaste la evaluación!";
+                txtBloqueo.style.color = "var(--pizarra)";
+                subTxtBloqueo.innerText = "Tu constancia está lista para ser generada.";
+                btnVolver.innerText = "Ir a solicitar mi Constancia";
+                btnVolver.onclick = () => window.location.href = "constancia_ce.html";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 2. Verificar que los 6 módulos estén completos
+            const modulosRequeridos = [
+                'modulo1_ce_completado', 'modulo2_ce_completado', 
+                'modulo3_ce_completado', 'modulo4_ce_completado', 
+                'modulo5_ce_completado', 'modulo6_ce_completado'
+            ];
+            
+            let faltaModulo = false;
+            for (let mod of modulosRequeridos) {
+                if (!userData[mod]) {
+                    faltaModulo = true;
+                    break;
+                }
+            }
+
+            if (faltaModulo) {
+                txtBloqueo.innerText = "Acceso Denegado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Aún te faltan módulos por terminar en este curso.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 3. Verificar intentos
+            let intentos = userData.intentos_examen_ce || 0;
+            if (intentos >= 3) {
+                txtBloqueo.innerText = "Límite de intentos alcanzado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Has agotado tus 3 intentos para este curso.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // Si pasa todo, le damos acceso
+            pantallaBloqueo.style.display = "none";
+            contenedorExamen.style.display = "block";
+            txtIntentos.innerText = `Intento ${intentos + 1} de 3`;
+        });
+
+        // Al calificar
+        document.getElementById('formulario-evaluacion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Calificando...";
+
+            const formData = new FormData(e.target);
+            let aciertos = 0;
+
+            for (let [pregunta, respuesta] of formData.entries()) {
+                if (respuestasCorrectas[pregunta] === respuesta) {
+                    aciertos++;
+                }
+            }
+
+            let calificacion = (aciertos / 20) * 10;
+            let intentosActuales = (userData.intentos_examen_ce || 0) + 1;
+
+            if (calificacion >= 8.0) {
+                await setDoc(userRef, {
+                    examen_ce_aprobado: true,
+                    calificacion_final_ce: calificacion,
+                    intentos_examen_ce: intentosActuales
+                }, { merge: true });
+
+                alert(`¡Felicidades! Obtuviste ${aciertos}/20 (${calificacion}). Has aprobado el curso.`);
+                window.location.href = "constancia_ce.html";
+            } else {
+                await setDoc(userRef, {
+                    intentos_examen_ce: intentosActuales
+                }, { merge: true });
+
+                if (intentosActuales >= 3) {
+                    alert(`Calificación: ${calificacion}. Has agotado tus 3 intentos. Examen bloqueado.`);
+                    window.location.reload();
+                } else {
+                    alert(`Obtuviste ${aciertos}/20 (${calificacion}). Necesitas al menos 16 aciertos (8.0). Te quedan ${3 - intentosActuales} intentos.`);
+                    window.location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
