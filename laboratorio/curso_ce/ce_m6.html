@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo VI: Neoinstitucionalismo II — CPEE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+<style>
+/* SHARED BASE FOR CURSO CE */
+:root {
+    --crema: #fff1da;
+    --verde: #2a4939;
+    --verde-medio: #3d6655;
+    --cafe: #2B1B12;
+    --cafe-claro: #6b4c35;
+    --naranja: #d35a34;
+    --pizarra-institucional: #2c3e50; 
+    --negro: #111111;
+    --texto-suave: #4a3828;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--crema); color: var(--negro); font-family: 'DM Sans', sans-serif; line-height: 1.7; overflow-x: hidden; }
+
+/* MENU */
+.menu-trigger { position: fixed; top: 22px; left: 24px; z-index: 1100; background: var(--cafe); border: none; border-radius: 8px; width: 44px; height: 44px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: background 0.2s; }
+.menu-trigger:hover { background: var(--pizarra-institucional); }
+.menu-trigger span { display: block; width: 20px; height: 2px; background: var(--crema); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease; transform-origin: center; }
+.menu-trigger.abierto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-trigger.abierto span:nth-child(2) { opacity: 0; width: 0; }
+.menu-trigger.abierto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu-overlay { position: fixed; inset: 0; background: rgba(43,27,18,0.45); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; z-index: 1050; transition: opacity 0.3s ease; }
+.menu-overlay.visible { opacity: 1; pointer-events: all; }
+.menu-panel { position: fixed; top: 0; left: 0; height: 100%; width: 280px; background: var(--cafe); z-index: 1090; transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; padding: 80px 0 40px; }
+.menu-panel.abierto { transform: translateX(0); }
+.menu-panel-logo { padding: 0 28px 32px; border-bottom: 1px solid rgba(215,196,165,0.2); margin-bottom: 12px; }
+.menu-panel-logo span { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: #D7C4A5; line-height: 1.3; display: block; }
+.menu-panel-logo em { font-family: 'Libre Baskerville', serif; font-size: 0.78rem; color: rgba(215,196,165,0.55); font-style: italic; }
+.menu-panel nav a { display: flex; align-items: center; gap: 12px; padding: 13px 28px; color: #D7C4A5; text-decoration: none; font-size: 0.95rem; font-weight: 400; border-left: 3px solid transparent; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.menu-panel nav a:hover { background: rgba(215,196,165,0.07); border-left-color: var(--pizarra-institucional); color: #f0dfc0; }
+.menu-panel nav a .nav-num { font-size: 0.7rem; opacity: 0.4; font-weight: 500; min-width: 18px; }
+
+/* BREADCRUMB */
+.breadcrumb { padding: 18px 48px 18px 90px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.7; border-bottom: 1px solid rgba(43,27,18,0.08); flex-wrap: wrap; }
+.breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--pizarra-institucional); }
+.breadcrumb .sep { opacity: 0.4; }
+.breadcrumb .actual { color: var(--pizarra-institucional); opacity: 1; }
+
+/* HEADER */
+header { position: relative; padding: 48px 48px 40px; border-bottom: 1px solid rgba(43,27,18,0.15); overflow: hidden; }
+.header-bg-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.header-bg-deco::before { content: ''; position: absolute; top: -40px; right: -60px; width: 260px; height: 260px; border-radius: 50%; border: 1px solid rgba(44,62,80,0.1); }
+.header-bg-deco::after { content: ''; position: absolute; top: 10px; right: 10px; width: 150px; height: 150px; border-radius: 50%; border: 1px solid rgba(44,62,80,0.07); }
+.header-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.header-texto { flex: 1; }
+.header-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pizarra-institucional); margin-bottom: 12px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
+.header-eyebrow::before { content: ''; display: block; width: 28px; height: 2px; background: var(--pizarra-institucional); }
+header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 400; line-height: 1.2; color: var(--cafe); opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+.modulo-badge { flex-shrink: 0; background: rgba(44,62,80,0.08); border: 1px solid rgba(44,62,80,0.15); border-radius: 10px; padding: 14px 20px; text-align: center; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; align-self: center; }
+.modulo-badge .num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--pizarra-institucional); line-height: 1; display: block; }
+.modulo-badge .etiqueta { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pizarra-institucional); opacity: 0.8; }
+
+/* MAIN */
+main { max-width: 820px; margin: 0 auto; padding: 48px 48px 80px; }
+
+/* SLIDE WRAPPER */
+.slide-wrapper { opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+.progress-bar-outer { height: 4px; background: rgba(43,27,18,0.1); border-radius: 4px; margin-bottom: 4px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: var(--pizarra-institucional); border-radius: 4px; transition: width 0.4s ease; }
+.progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.progress-texto { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cafe-claro); opacity: 0.55; }
+.slide-counter-txt { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; color: var(--pizarra-institucional); opacity: 0.9; }
+
+/* SLIDE CONTAINER */
+.slide-container { background: rgba(255,255,255,0.65); border: 1px solid rgba(43,27,18,0.1); border-radius: 12px; padding: 36px 40px 28px; min-height: 420px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(43,27,18,0.06); display: flex; flex-direction: column; gap: 20px; }
+.slide-container::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--pizarra-institucional); border-radius: 4px 0 0 4px; }
+
+/* SLIDES */
+.slide { display: none; animation: fadeSlide 0.4s ease; flex: 1; }
+.slide.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+/* SLIDE TYPE BADGE */
+.slide-tipo { display: inline-flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+.tipo-objetivo { background: rgba(44,62,80,0.1); color: var(--pizarra-institucional); }
+.tipo-teoria { background: rgba(43,27,18,0.08); color: var(--cafe); }
+.tipo-analisis { background: rgba(107,76,53,0.1); color: var(--cafe-claro); }
+.tipo-diagrama { background: rgba(44,62,80,0.08); color: var(--pizarra-institucional); }
+.tipo-recursos { background: rgba(42,73,57,0.06); color: var(--verde-medio); }
+
+/* SLIDE CONTENT */
+.slide h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; color: var(--cafe); margin-bottom: 18px; line-height: 1.3; padding-bottom: 12px; border-bottom: 1px solid rgba(43,27,18,0.1); }
+.contenido-texto { font-size: 0.95rem; color: var(--texto-suave); line-height: 1.85; }
+.contenido-texto p { margin-bottom: 15px; }
+.contenido-texto ul, .contenido-texto ol { padding-left: 20px; margin: 15px 0; }
+.contenido-texto li { margin-bottom: 8px; }
+.contenido-texto li::marker { color: var(--pizarra-institucional); }
+.contenido-texto strong { color: var(--cafe); font-weight: 600; }
+.contenido-texto em { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--cafe-claro); }
+
+/* SPECIAL BOXES */
+.caja-teorica { background: rgba(44,62,80,0.05); border: 1px solid rgba(44,62,80,0.14); border-left: 4px solid var(--pizarra-institucional); border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0; font-size: 0.9rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-teorica strong { color: var(--pizarra-institucional); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.caja-analisis { background: rgba(255,241,218,0.8); border: 1px solid rgba(43,27,18,0.14); border-left: 4px solid var(--cafe); border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0; font-size: 0.9rem; color: var(--texto-suave); line-height: 1.7; }
+.caja-analisis strong { color: var(--cafe); font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* RECURSOS Y VIDEOS */
+.recursos-grid { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+.recurso-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.09); border-radius: 8px; font-size: 0.85rem; color: var(--texto-suave); }
+.recurso-item a { color: var(--pizarra-institucional); text-decoration: none; font-weight: 600; }
+.recurso-item a:hover { text-decoration: underline; }
+
+.video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: rgba(43,27,18,0.05); margin: 15px 0; border: 1px solid rgba(0,0,0,0.1); }
+.video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+/* NAV BUTTONS */
+.nav-buttons { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 15px; border-top: 1px solid rgba(43,27,18,0.08); }
+.btn-nav { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: var(--cafe); color: #D7C4A5; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; border-radius: 8px; transition: background 0.2s, transform 0.2s; }
+.btn-nav:hover:not(:disabled) { background: var(--pizarra-institucional); transform: translateY(-1px); }
+.btn-nav:disabled { background: rgba(43,27,18,0.1); color: rgba(43,27,18,0.3); cursor: not-allowed; transform: none; }
+.puntos-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.punto { width: 8px; height: 8px; border-radius: 50%; background: rgba(43,27,18,0.15); transition: background 0.3s, transform 0.3s; cursor: pointer; border: none; padding: 0; }
+.punto.activo { background: var(--pizarra-institucional); transform: scale(1.25); }
+
+/* MODULE NAV */
+.modulo-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 12px; }
+.btn-modulo { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(43,27,18,0.12); color: var(--texto-suave); text-decoration: none; font-size: 0.82rem; font-weight: 500; border-radius: 8px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.btn-modulo:hover { background: rgba(255,255,255,0.9); border-color: var(--pizarra-institucional); color: var(--pizarra-institucional); }
+
+/* CIERRE */
+.slide-cierre { text-align:center; padding: 20px 0; }
+.cierre-emoji { font-size:3.5rem; margin-bottom:18px; display:block; }
+.cierre-titulo { font-family:'DM Serif Display',serif; font-size:1.8rem; color: var(--pizarra-institucional); margin-bottom:14px; }
+.btn-completar { display:inline-flex; align-items:center; justify-content: center; width: 100%; max-width: 350px; margin-top:30px; padding:16px 20px; background:var(--pizarra-institucional); color:white; border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:1.1rem; font-weight:700; cursor:pointer; transition:background 0.25s,transform 0.2s; }
+.btn-completar:hover:not(:disabled) { background:#1a252f; transform:translateY(-2px); }
+.btn-completar:disabled { background:var(--cafe-claro); cursor:default; opacity:0.75; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<button class="menu-trigger" id="menuBtn" aria-label="Abrir menú" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<aside class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-panel-logo"><span>Centro Popular de<br>Estudios Económicos</span><em>Ciencia Social aplicada</em></div>
+    <nav>
+        <a href="../../index.html"><span class="nav-num">00</span> Inicio</a>
+        <a href="../lab.html"><span class="nav-num">01</span> Laboratorio</a>
+        <a href="ce_inicio.html"><span class="nav-num">02</span> Índice del Curso</a>
+    </nav>
+</aside>
+
+<div class="breadcrumb">
+    <a href="../lab.html">Laboratorio</a><span class="sep">/</span>
+    <a href="ce_inicio.html">Estructura y Crisis</a><span class="sep">/</span>
+    <span class="actual">Módulo VI</span>
+</div>
+
+<header>
+    <div class="header-bg-deco"></div>
+    <div class="header-inner">
+        <div class="header-texto">
+            <p class="header-eyebrow">Microfundamentos y Sociedad</p>
+            <h1>Neoinstitucionalismo II: Propiedad y Desarrollo</h1>
+        </div>
+        <div class="modulo-badge"><span class="num">VI</span><span class="etiqueta">Módulo</span></div>
+    </div>
+</header>
+
+<main>
+<div class="slide-wrapper">
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+    <div class="progress-label">
+        <span class="progress-texto">Desarrollo Teórico</span>
+        <span class="slide-counter-txt" id="slideCounter"></span>
+    </div>
+    
+    <div class="slide-container">
+
+        <div class="slide active">
+            <span class="slide-tipo tipo-objetivo">🎯 Introducción y Objetivos</span>
+            <h2>El origen de la riqueza de las naciones</h2>
+            <div class="contenido-texto">
+                <p>Retomando los textos de José Ayala y la tesis central de Douglass North, en este módulo final conectaremos el diseño de las reglas del juego con el crecimiento económico a largo plazo. Responderemos a la gran interrogante del desarrollo: ¿Por qué la historia pesa tanto y por qué es tan difícil para un país pobre volverse rico?</p>
+                
+                <div class="caja-teorica">
+                    <strong>Objetivos de Aprendizaje</strong>
+                    <ol>
+                        <li>Entender los <em>Derechos de Propiedad</em> no solo como un concepto jurídico, sino como la estructura de incentivos básicos de la economía.</li>
+                        <li>Explicar el concepto de <em>Path Dependence</em> (Dependencia de la Trayectoria).</li>
+                        <li>Comprender por qué las instituciones ineficientes persisten en el tiempo a pesar de obstaculizar el desarrollo macroeconómico.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 Explicación Conceptual</span>
+            <h2>Los Derechos de Propiedad</h2>
+            <div class="contenido-texto">
+                <p>Para la economía institucional, un "Derecho de Propiedad" no es simplemente el papel que dice que eres dueño de una casa. Es el derecho <strong>exclusivo</strong> a: usar el activo, obtener ingresos de él, y transferirlo a un tercero.</p>
+                
+                <p>Si estos derechos no están bien definidos o el Estado no puede garantizarlos (ej. riesgo de expropiación arbitraria, invasiones, piratería), los individuos no tienen <strong>incentivos para invertir ni innovar</strong>. </p>
+
+                <div class="caja-teorica">
+                    <strong>La Internalización de las Externalidades:</strong>
+                    La función económica primordial de los derechos de propiedad es hacer que los individuos asuman los costos y beneficios de sus propias acciones. Si un agricultor sabe que el Estado le garantiza que la cosecha será suya (beneficio) y que será castigado si contamina el río del vecino (costo), sus incentivos privados se alinean con la eficiencia social.
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 La Tesis de North</span>
+            <h2>Instituciones y Desempeño Económico</h2>
+            <div class="contenido-texto">
+                <p>Douglass North concluye que las instituciones son la causa subyacente del crecimiento económico, mientras que la innovación tecnológica o la acumulación de capital son solo los <em>resultados</em> de esas instituciones.</p>
+                
+                <p><strong>La regla de oro:</strong> Si la estructura institucional de un país (sus reglas formales y la forma en que los tribunales aplican la ley) recompensa la piratería, el rentismo o el monopolio, las organizaciones invertirán sus recursos en volverse mejores piratas o en corromper políticos. Si las instituciones recompensan el esfuerzo productivo y garantizan patentes, las organizaciones invertirán en investigación y desarrollo.</p>
+
+                <p>El subdesarrollo, por tanto, no es falta de recursos naturales; es el resultado de un arreglo institucional donde a las élites (organizaciones dominantes) les resulta más rentable extraer riqueza existente que crear riqueza nueva.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-teoria">📖 El peso de la historia</span>
+            <h2>La Dependencia de la Trayectoria (Path Dependence)</h2>
+            <div class="contenido-texto">
+                <p>Si un país tiene instituciones ineficientes, ¿por qué no simplemente "copia" la constitución de un país rico y resuelve su problema? Ayala y North responden con el concepto de <strong>Path Dependence</strong>.</p>
+                
+                <p>El cambio institucional es incremental, no abrupto. Las reglas actuales crean organizaciones y élites que se benefician de esas mismas reglas. Estas élites tienen el poder político y económico para vetar cualquier reforma que amenace sus privilegios (costos de transacción del cambio político).</p>
+
+                <p>Además, las <em>instituciones informales</em> (la cultura, la tolerancia a la corrupción, el nivel de confianza interpersonal) cambian a un ritmo sumamente lento, a través de generaciones. Puedes cambiar la ley de un día para otro, pero no la cultura que la ejecuta.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-diagrama">📊 Diagrama Estructural</span>
+            <h2>La Divergencia Institucional</h2>
+            <div class="contenido-texto">
+                <p>Este diagrama (basado en Acemoglu y Robinson, herederos del neoinstitucionalismo) ilustra cómo las reglas iniciales determinan la trayectoria de una nación:</p>
+                
+                <div style="text-align: center; margin: 25px 0; overflow-x: auto;">
+                    <svg viewBox="0 0 700 350" width="100%" min-width="600px" style="background-color: #fafafa; border: 1px solid #ddd; border-radius: 12px; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        
+                        <rect x="50" y="140" width="120" height="60" rx="8" fill="#eaf2f8" stroke="#2c3e50" stroke-width="2"/>
+                        <text x="110" y="165" font-size="12" font-weight="bold" fill="#2c3e50" text-anchor="middle">CONDICIONES</text>
+                        <text x="110" y="180" font-size="12" font-weight="bold" fill="#2c3e50" text-anchor="middle">HISTÓRICAS</text>
+
+                        <path d="M 170 170 Q 230 170 230 100 L 260 100" fill="none" stroke="#d35a34" stroke-width="3" />
+                        <rect x="260" y="70" width="160" height="60" rx="6" fill="#fff" stroke="#d35a34" stroke-width="2"/>
+                        <text x="340" y="95" font-size="12" font-weight="bold" fill="#d35a34" text-anchor="middle">INSTITUCIONES</text>
+                        <text x="340" y="110" font-size="12" font-weight="bold" fill="#d35a34" text-anchor="middle">EXTRACTIVAS</text>
+
+                        <path d="M 420 100 L 500 100" fill="none" stroke="#d35a34" stroke-width="2"/>
+                        <rect x="500" y="70" width="150" height="60" rx="6" fill="#fcece8" stroke="#d35a34" stroke-width="2"/>
+                        <text x="575" y="95" font-size="12" font-weight="bold" fill="#d35a34" text-anchor="middle">ESTANCAMIENTO</text>
+                        <text x="575" y="110" font-size="11" fill="#4a3828" text-anchor="middle">(Concentración de Riqueza)</text>
+
+                        <path d="M 170 170 Q 230 170 230 240 L 260 240" fill="none" stroke="#2a4939" stroke-width="3" />
+                        <rect x="260" y="210" width="160" height="60" rx="6" fill="#fff" stroke="#2a4939" stroke-width="2"/>
+                        <text x="340" y="235" font-size="12" font-weight="bold" fill="#2a4939" text-anchor="middle">INSTITUCIONES</text>
+                        <text x="340" y="250" font-size="12" font-weight="bold" fill="#2a4939" text-anchor="middle">INCLUSIVAS</text>
+
+                        <path d="M 420 240 L 500 240" fill="none" stroke="#2a4939" stroke-width="2"/>
+                        <rect x="500" y="210" width="150" height="60" rx="6" fill="#eafcf0" stroke="#2a4939" stroke-width="2"/>
+                        <text x="575" y="235" font-size="12" font-weight="bold" fill="#2a4939" text-anchor="middle">CRECIMIENTO</text>
+                        <text x="575" y="250" font-size="11" fill="#4a3828" text-anchor="middle">(Innovación y Patentes)</text>
+
+                        <path d="M 575 70 Q 575 20 340 20 Q 260 20 260 70" fill="none" stroke="#d35a34" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="420" y="40" font-size="10" fill="#d35a34" text-anchor="middle">Refuerzan el poder de la élite</text>
+
+                        <path d="M 575 270 Q 575 320 340 320 Q 260 320 260 270" fill="none" stroke="#2a4939" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="420" y="315" font-size="10" fill="#2a4939" text-anchor="middle">Refuerzan la pluralidad política</text>
+
+                    </svg>
+                </div>
+                </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-analisis">✍️ Choque Teórico</span>
+            <h2>El Origen de la Propiedad: North vs Marx</h2>
+            <div class="contenido-texto">
+                <p>Es momento de ejercer el pensamiento crítico uniendo los bloques de este curso. El neoinstitucionalismo es brillante, pero tiene un punto ciego que la teoría marxista ataca directamente: <strong>la neutralidad de los derechos de propiedad</strong>.</p>
+                
+                <div class="caja-analisis">
+                    <strong>Taller Crítico Comparativo</strong><br><br>
+                    <strong>La visión Institucionalista (Eficiencia):</strong> North argumenta que los derechos de propiedad surgen como una solución técnica y eficiente para internalizar externalidades y fomentar el crecimiento económico general. Es un diseño para el bien común.<br><br>
+                    <strong>La visión Marxista (Poder y Despojo):</strong> Marx, en su capítulo sobre la <em>"Acumulación Originaria"</em> (Tomo I), demuestra históricamente que los derechos de propiedad privada no nacieron pacíficamente por un deseo de "eficiencia", sino mediante el despojo violento y la privatización de las tierras comunales campesinas, obligando a las masas a vender su fuerza de trabajo para sobrevivir.
+                </div>
+
+                <details style="background: #f0f7f4; padding: 15px; border-radius: 6px; border: 1px solid var(--pizarra-institucional); cursor: pointer;">
+                    <summary style="font-weight: bold; color: var(--pizarra-institucional);">Conclusión Estructural de Síntesis</summary>
+                    <p style="margin-top: 10px; font-size: 0.95rem;">Ambos tienen razón en distintos niveles. Marx tiene razón en el <em>origen histórico</em>: los derechos de propiedad son instituciones diseñadas para consolidar el poder de clase y asegurar la apropiación de plusvalía. North tiene razón en la <em>mecánica</em>: una vez consolidado el sistema capitalista, la eficiencia y garantía legal de esos derechos de propiedad es el pre-requisito técnico indispensable para que la inversión tecnológica ocurra y el sistema macroeconómico crezca.</p>
+                </details>
+            </div>
+        </div>
+
+        <div class="slide">
+            <span class="slide-tipo tipo-recursos">📚 Recursos y Glosario</span>
+            <h2>Bibliografía y Audiovisuales</h2>
+            <div class="contenido-texto">
+                <p><strong>Lecturas Obligatorias:</strong></p>
+                <div class="recursos-grid">
+                    <div class="recurso-item">Ayala, J. (1999). <em>Instituciones y Economía. Una introducción al Neoinstitucionalismo económico.</em> FCE. (Capítulos VI, IX y X).</div>
+                    <div class="recurso-item">Acemoglu, D. & Robinson, J. (2012). <em>Por qué fracasan los países.</em> (Lectura contemporánea recomendada para aplicar a North).</div>
+                </div>
+
+                <p><strong>Glosario Técnico:</strong></p>
+                <ul>
+                    <li><strong>Derechos de Propiedad:</strong> Conjunto de reglas legales y sociales que determinan qué pueden hacer los individuos con los bienes económicos y cómo se apropian de sus retornos.</li>
+                    <li><strong>Path Dependence (Dependencia de la trayectoria):</strong> Fenómeno donde las decisiones tomadas en el pasado, debido a los costos hundidos y los intereses creados, limitan severamente las opciones institucionales disponibles en el presente.</li>
+                    <li><strong>Instituciones Extractivas:</strong> Reglas diseñadas para extraer ingresos y riqueza de un subconjunto de la sociedad para beneficiar a una élite, desalentando la inversión general.</li>
+                </ul>
+
+                <p><strong>Cátedra en Video:</strong></p>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube-nocookie.com/embed/1v0U6uP-Kk0" title="Daron Acemoglu Nobel 2024" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--cafe-claro); font-style: italic;">Mini-documental del Premio Nobel de Economía 2024 otorgado a Daron Acemoglu, Simon Johnson y James A. Robinson, herederos directos de la escuela neoinstitucional de Douglass North, explicando por qué las instituciones determinan la prosperidad.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-cierre">
+                <span class="cierre-emoji">🏁</span>
+                <h2 class="cierre-titulo">¡Has finalizado el temario teórico!</h2>
+                <p style="color: var(--texto-suave); font-size: 1.05rem; max-width: 600px; margin: 0 auto;">
+                    Felicidades. Has cruzado el arco intelectual más ambicioso de la teoría económica: desde la anatomía ineludible de la crisis (Guillén Romo), las entrañas del valor, la explotación y el colapso de la rentabilidad (Marx), las políticas de rescate de la demanda agregada (Keynes) y finalmente las reglas sistémicas y los costos de transacción que definen a las naciones (Ayala/North). Estás listo para tu Evaluación Estructural Final.
+                </p>
+                <button class="btn-completar" id="btnCompletarM6">Guardar Progreso del Módulo VI</button>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <div class="puntos-nav" id="puntos"></div>
+            <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
+        </div>
+    </div>
+    
+    <div class="modulo-nav">
+        <a href="ce_m5.html" class="btn-modulo">← Módulo V</a>
+        <a href="ce_inicio.html" class="btn-modulo">↑ Índice</a>
+        <a href="evaluacion_ce.html" class="btn-modulo" style="border-color:var(--pizarra-institucional); color:var(--pizarra-institucional); font-weight:bold;">Ir a la Evaluación Final →</a>
+    </div>
+</div>
+</main>
+
+<script>
+// Menú
+function toggleMenu() {
+    const btn=document.getElementById('menuBtn'),panel=document.getElementById('menuPanel'),overlay=document.getElementById('menuOverlay'),abierto=panel.classList.contains('abierto');
+    btn.classList.toggle('abierto',!abierto); panel.classList.toggle('abierto',!abierto); overlay.classList.toggle('visible',!abierto);
+    panel.setAttribute('aria-hidden',abierto?'true':'false'); document.body.style.overflow=abierto?'':'hidden';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=document.getElementById('menuPanel');if(p.classList.contains('abierto'))toggleMenu();}});
+
+// Slides
+let currentSlide=0;
+const slides=document.querySelectorAll('.slide'),counter=document.getElementById('slideCounter'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn'),progress=document.getElementById('progressBar'),puntosContainer=document.getElementById('puntos');
+slides.forEach((_,i)=>{const btn=document.createElement('button');btn.classList.add('punto');if(i===0)btn.classList.add('activo');btn.addEventListener('click',()=>goToSlide(i));puntosContainer.appendChild(btn);});
+function updateUI(){const t=slides.length;counter.innerText=`${currentSlide+1} / ${t}`;prevBtn.disabled=currentSlide===0;nextBtn.disabled=currentSlide===t-1;progress.style.width=`${((currentSlide+1)/t)*100}%`;document.querySelectorAll('.punto').forEach((p,i)=>p.classList.toggle('activo',i===currentSlide));}
+function goToSlide(n){slides[currentSlide].classList.remove('active');currentSlide=n;slides[currentSlide].classList.add('active');updateUI();}
+function changeSlide(n){goToSlide(currentSlide+n);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&currentSlide<slides.length-1)changeSlide(1);if(e.key==='ArrowLeft'&&currentSlide>0)changeSlide(-1);});
+updateUI();
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+        authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+        projectId: "cpee-plataforma-a655a",
+        storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+        messagingSenderId: "684415102099",
+        appId: "1:684415102099:web:3f2b649a34386677a87166"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    const btnCompletar = document.getElementById("btnCompletarM6");
+
+    function marcarCompletado() {
+        if (btnCompletar) {
+            btnCompletar.innerHTML = "✅ Progreso Guardado";
+            btnCompletar.style.background = "var(--cafe-claro)";
+            btnCompletar.disabled = true;
+            btnCompletar.style.cursor = "default";
+        }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "../../login.html";
+            return;
+        }
+        const docRef  = doc(db, "progreso_usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists() || docSnap.data().acceso_ce !== true) {
+            window.location.href = "ce_inicio.html";
+            return;
+        }
+
+        if (docSnap.data().modulo6_ce_completado === true) {
+            marcarCompletado();
+        }
+
+        if (btnCompletar) {
+            btnCompletar.addEventListener("click", async () => {
+                btnCompletar.innerText = "Registrando...";
+                try {
+                    await setDoc(docRef, {
+                        modulo6_ce_completado: true,
+                        fecha_completado_ce_m6: new Date()
+                    }, { merge: true });
+                    marcarCompletado();
+                } catch (error) {
+                    console.error("Error al guardar: ", error);
+                    alert("Error de red. Intenta de nuevo.");
+                    btnCompletar.innerText = "Guardar Progreso del Módulo VI";
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
