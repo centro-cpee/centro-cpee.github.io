@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación: Investigación Social - CPEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cafe: #2B1B12;
+            --naranja: #d35a34;
+            --crema: #fff1da;
+            --azul-inv: #1f3a5e;
+            --azul-claro: #325680;
+            --texto-suave: #4a3828;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--crema);
+            color: var(--cafe);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--azul-inv);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .instrucciones {
+            text-align: center;
+            color: var(--texto-suave);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--crema);
+        }
+        .pregunta-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-left: 4px solid var(--azul-inv);
+            border-radius: 4px;
+        }
+        .pregunta-texto {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .opciones label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.5;
+        }
+        .opciones label:hover {
+            border-color: var(--azul-claro);
+            background: #f4f8fb;
+        }
+        .opciones input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--azul-inv);
+        }
+        .btn-enviar {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--azul-inv);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+        .btn-enviar:hover {
+            background: var(--azul-claro);
+        }
+        .btn-enviar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        /* Pantalla de bloqueo */
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--crema);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo">
+        <h2 id="bloqueo-texto" style="font-family: 'DM Serif Display', serif; color: var(--cafe); font-size: 2rem;">Verificando credenciales...</h2>
+        <p id="bloqueo-subtexto">Analizando tu progreso en el curso.</p>
+        <button id="btn-volver" style="display:none; margin-top: 20px; padding: 10px 20px; background: var(--azul-inv); color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="window.location.href='inv_inicio.html'">Volver al Inicio</button>
+    </div>
+
+    <div class="container" id="contenedor-examen" style="display: none;">
+        <h1>Evaluación: Investigación Social</h1>
+        <div class="instrucciones">
+            <p>Responde a los 15 planteamientos metodológicos. Tienes un máximo de <strong>3 intentos</strong> para aprobar. <br>Necesitas al menos <strong>12 aciertos (8.0)</strong> para obtener tu constancia.</p>
+            <p style="color: var(--naranja); font-weight: bold;" id="intentos-restantes-texto"></p>
+        </div>
+
+        <form id="formulario-evaluacion">
+            
+            <div class="pregunta-card">
+                <div class="pregunta-texto">1. ¿Cuál es la diferencia principal entre una opinión cotidiana y una investigación social?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q1" value="A" required> A) La investigación usa un método sistemático y evidencia para comprobar la realidad, mientras que la opinión se basa en intuiciones o prejuicios.</label>
+                    <label><input type="radio" name="q1" value="B"> B) La investigación siempre se hace en laboratorios con tubos de ensayo, la opinión se da en la calle.</label>
+                    <label><input type="radio" name="q1" value="C"> C) No hay diferencia, ambas son formas válidas de establecer leyes universales.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">2. C. Wright Mills hablaba de la "Imaginación Sociológica". ¿Qué significa aplicar esta herramienta?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q2" value="A" required> A) Imaginar mundos de ciencia ficción para escapar de la realidad.</label>
+                    <label><input type="radio" name="q2" value="B"> B) Conectar nuestras inquietudes y problemas personales diarios con los grandes problemas de la estructura pública y social.</label>
+                    <label><input type="radio" name="q2" value="C"> C) Inventar datos cuando no encontramos respuestas en las encuestas.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">3. De las siguientes opciones, ¿cuál es un ejemplo de una BUENA pregunta de investigación?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q3" value="A" required> A) ¿Por qué la gente es pobre en el mundo?</label>
+                    <label><input type="radio" name="q3" value="B"> B) ¿La tecnología es buena o mala para la humanidad?</label>
+                    <label><input type="radio" name="q3" value="C"> C) ¿Cómo afecta la falta de transporte público al abandono escolar de los jóvenes en la colonia X durante 2023?</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">4. Si tu objetivo es saber EXACTAMENTE qué porcentaje de la población mexicana tiene acceso a internet, ¿qué enfoque de investigación debes usar?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q4" value="A" required> A) Enfoque Cuantitativo (Encuestas, censos, estadísticas).</label>
+                    <label><input type="radio" name="q4" value="B"> B) Enfoque Cualitativo (Entrevistas profundas a tres familias).</label>
+                    <label><input type="radio" name="q4" value="C"> C) Enfoque Literario (Escribir un poema sobre el internet).</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">5. Si tu objetivo es entender los sentimientos y motivos profundos por los cuales un grupo de personas decide migrar de su país, el enfoque ideal propuesto por la tradición de Max Weber es:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q5" value="A" required> A) Contar cuántos migrantes cruzan la frontera al día.</label>
+                    <label><input type="radio" name="q5" value="B"> B) El enfoque Cualitativo (entrevistas a fondo e historias de vida) para comprender el "sentido" de su acción.</label>
+                    <label><input type="radio" name="q5" value="C"> C) Analizar las bases de datos del Banco Mundial.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">6. Cuando un investigador usa una encuesta (cuantitativo) para medir cuánta violencia hay en una escuela, y luego hace entrevistas (cualitativo) para entender cómo se sienten los alumnos al respecto, está aplicando:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q6" value="A" required> A) Un error metodológico grave.</label>
+                    <label><input type="radio" name="q6" value="B"> B) La Triangulación o Enfoque Mixto, que da una visión más completa de la realidad.</label>
+                    <label><input type="radio" name="q6" value="C"> C) Un sesgo de confirmación.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">7. En la metodología de investigación, ¿qué es una Hipótesis?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q7" value="A" required> A) Es una verdad absoluta que no puede ser cuestionada bajo ninguna circunstancia.</label>
+                    <label><input type="radio" name="q7" value="B"> B) Es una conjetura educada o respuesta tentativa a la pregunta de investigación, que los datos deberán comprobar o rechazar.</label>
+                    <label><input type="radio" name="q7" value="C"> C) Es el resumen final que se pone en la última página del trabajo.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">8. En la hipótesis: "El aumento en el nivel educativo incrementa el salario de las personas", ¿cuál es la Variable INDEPENDIENTE (la causa)?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q8" value="A" required> A) El nivel educativo.</label>
+                    <label><input type="radio" name="q8" value="B"> B) El salario de las personas.</label>
+                    <label><input type="radio" name="q8" value="C"> C) Las personas.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">9. En la misma hipótesis anterior, ¿cuál es la Variable DEPENDIENTE (el efecto o resultado)?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q9" value="A" required> A) El nivel educativo.</label>
+                    <label><input type="radio" name="q9" value="B"> B) Las escuelas y universidades.</label>
+                    <label><input type="radio" name="q9" value="C"> C) El salario (porque depende del nivel educativo).</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">10. Ves una gráfica que muestra que, en las ciudades donde hay más iglesias, hay más crímenes. Concluyes que las iglesias causan crímenes. ¿Qué error analítico cometiste?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q10" value="A" required> A) Ninguno, la gráfica demuestra la verdad absoluta.</label>
+                    <label><input type="radio" name="q10" value="B"> B) Confundiste correlación con causalidad; ignoraste la variable oculta "población" (las ciudades grandes tienen más iglesias y también más crímenes).</label>
+                    <label><input type="radio" name="q10" value="C"> C) Usaste demasiada imaginación sociológica.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">11. Si un político hace un estudio y publica únicamente las cifras de los meses donde la economía mejoró, ocultando los años donde la economía colapsó, está cometiendo el sesgo de:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q11" value="A" required> A) Triangulación de datos.</label>
+                    <label><input type="radio" name="q11" value="B"> B) Cherry Picking (seleccionar solo lo que le conviene y esconder el resto).</label>
+                    <label><input type="radio" name="q11" value="C"> C) Causalidad inversa.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">12. Al interpretar por qué los alumnos de zonas marginadas reprueban más, el enfoque estructural (como el de Pierre Bourdieu) diría que:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q12" value="A" required> A) Es porque esos alumnos son biológicamente menos capaces o flojos.</label>
+                    <label><input type="radio" name="q12" value="B"> B) Se debe a desigualdades en el "capital cultural" (acceso a libros, tiempo libre de los padres), pues la escuela premia a quienes ya tienen ventajas previas.</label>
+                    <label><input type="radio" name="q12" value="C"> C) Se debe a que los exámenes son demasiado fáciles.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">13. Antes de que el gobierno construya un parque o proponga una ley para resolver un problema, ¿qué herramienta de investigación debe aplicar primero para no fracasar?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q13" value="A" required> A) Escribir un poema.</label>
+                    <label><input type="radio" name="q13" value="B"> B) Realizar un Diagnóstico Social (una fotografía científica del problema y las necesidades reales del lugar).</label>
+                    <label><input type="radio" name="q13" value="C"> C) Ver qué hizo otro país y copiarlo sin preguntar.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">14. En la Investigación-Acción Participativa (IAP) promovida por Orlando Fals Borda, la comunidad afectada:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q14" value="A" required> A) Solo sirve para que el investigador le extraiga datos y se vaya.</label>
+                    <label><input type="radio" name="q14" value="B"> B) Participa activamente como "sujeto de conocimiento", ayudando a diseñar la investigación y buscando transformar su propia realidad.</label>
+                    <label><input type="radio" name="q14" value="C"> C) Tiene prohibido hablar durante el estudio.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">15. Estás diseñando un cuestionario. ¿Cuál de las siguientes es una pregunta SESGADA que arruinaría tu investigación?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q15" value="A" required> A) "¿No le parece que las estúpidas leyes actuales están destruyendo al país?" (Induce la respuesta).</label>
+                    <label><input type="radio" name="q15" value="B"> B) "¿Cómo evaluaría usted las leyes aprobadas este año?" (Neutral).</label>
+                    <label><input type="radio" name="q15" value="C"> C) "¿Del 1 al 5, qué tanta confianza tiene en el sistema de justicia?" (Neutral).</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btn-enviar">Terminar Examen y Calificar</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+            authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+            projectId: "cpee-plataforma-a655a",
+            storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+            messagingSenderId: "684415102099",
+            appId: "1:684415102099:web:3f2b649a34386677a87166"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
+        const contenedorExamen = document.getElementById('contenedor-examen');
+        const txtBloqueo = document.getElementById('bloqueo-texto');
+        const subTxtBloqueo = document.getElementById('bloqueo-subtexto');
+        const btnVolver = document.getElementById('btn-volver');
+        const txtIntentos = document.getElementById('intentos-restantes-texto');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        // CLAVE DE RESPUESTAS (Módulo Investigación)
+        const respuestasCorrectas = {
+            q1: "A", q2: "B", q3: "C", q4: "A", q5: "B",
+            q6: "B", q7: "B", q8: "A", q9: "C", q10: "B",
+            q11: "B", q12: "B", q13: "B", q14: "B", q15: "A"
+        };
+
+        let userRef;
+        let userData;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "../../login.html"; 
+                return;
+            }
+
+            userRef = doc(db, "progreso_usuarios", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (!docSnap.exists() || docSnap.data().acceso_inv !== true) {
+                window.location.href = "inv_inicio.html";
+                return;
+            }
+
+            userData = docSnap.data();
+
+            // 1. Ya aprobó antes
+            if (userData.examen_inv_aprobado === true) {
+                txtBloqueo.innerText = "¡Ya aprobaste la evaluación!";
+                txtBloqueo.style.color = "var(--azul-inv)";
+                subTxtBloqueo.innerText = "Tu constancia está lista para ser generada.";
+                btnVolver.innerText = "Ir a solicitar mi Constancia";
+                btnVolver.onclick = () => window.location.href = "constancia_inv.html";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 2. Verificar que los 5 módulos estén completos
+            const modulosRequeridos = [
+                'modulo1_inv_completado', 'modulo2_inv_completado', 
+                'modulo3_inv_completado', 'modulo4_inv_completado', 
+                'modulo5_inv_completado'
+            ];
+            
+            let faltaModulo = false;
+            for (let mod of modulosRequeridos) {
+                if (!userData[mod]) {
+                    faltaModulo = true;
+                    break;
+                }
+            }
+
+            if (faltaModulo) {
+                txtBloqueo.innerText = "Acceso Denegado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Aún te faltan módulos por terminar en este curso de investigación.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 3. Verificar intentos
+            let intentos = userData.intentos_examen_inv || 0;
+            if (intentos >= 3) {
+                txtBloqueo.innerText = "Límite de intentos alcanzado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Has agotado tus 3 intentos para este curso.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // Mostrar examen
+            pantallaBloqueo.style.display = "none";
+            contenedorExamen.style.display = "block";
+            txtIntentos.innerText = `Intento ${intentos + 1} de 3`;
+        });
+
+        // Al calificar
+        document.getElementById('formulario-evaluacion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Calificando...";
+
+            const formData = new FormData(e.target);
+            let aciertos = 0;
+
+            for (let [pregunta, respuesta] of formData.entries()) {
+                if (respuestasCorrectas[pregunta] === respuesta) {
+                    aciertos++;
+                }
+            }
+
+            // Calificación sobre base 10
+            let calificacion = (aciertos / 15) * 10;
+            let intentosActuales = (userData.intentos_examen_inv || 0) + 1;
+
+            if (calificacion >= 8.0) {
+                await setDoc(userRef, {
+                    examen_inv_aprobado: true,
+                    calificacion_final_inv: calificacion,
+                    intentos_examen_inv: intentosActuales
+                }, { merge: true });
+
+                alert(`¡Felicidades! Obtuviste ${aciertos}/15 (${calificacion.toFixed(1)}). Has aprobado el curso.`);
+                window.location.href = "constancia_inv.html";
+            } else {
+                await setDoc(userRef, {
+                    intentos_examen_inv: intentosActuales
+                }, { merge: true });
+
+                if (intentosActuales >= 3) {
+                    alert(`Calificación: ${calificacion.toFixed(1)}. Has agotado tus 3 intentos. Examen bloqueado.`);
+                    window.location.reload();
+                } else {
+                    alert(`Obtuviste ${aciertos}/15 (${calificacion.toFixed(1)}). Necesitas al menos 12 aciertos (8.0). Te quedan ${3 - intentosActuales} intentos.`);
+                    window.location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
