@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación: Organización Comunitaria - CPEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cafe: #2B1B12;
+            --naranja: #d35a34;
+            --crema: #fff1da;
+            --ocre-comunidad: #b85b3f;
+            --ocre-oscuro: #8b3e28;
+            --texto-suave: #4a3828;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--crema);
+            color: var(--cafe);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--ocre-comunidad);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .instrucciones {
+            text-align: center;
+            color: var(--texto-suave);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--crema);
+        }
+        .pregunta-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-left: 4px solid var(--ocre-comunidad);
+            border-radius: 4px;
+        }
+        .pregunta-texto {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .opciones label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.5;
+        }
+        .opciones label:hover {
+            border-color: var(--ocre-oscuro);
+            background: #fdfaf6;
+        }
+        .opciones input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--ocre-comunidad);
+        }
+        .btn-enviar {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--ocre-comunidad);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+        .btn-enviar:hover {
+            background: var(--ocre-oscuro);
+        }
+        .btn-enviar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        /* Pantalla de bloqueo */
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--crema);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo">
+        <h2 id="bloqueo-texto" style="font-family: 'DM Serif Display', serif; color: var(--cafe); font-size: 2rem;">Verificando credenciales...</h2>
+        <p id="bloqueo-subtexto">Analizando tu progreso en el curso.</p>
+        <button id="btn-volver" style="display:none; margin-top: 20px; padding: 10px 20px; background: var(--ocre-comunidad); color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="window.location.href='oc_inicio.html'">Volver al Inicio</button>
+    </div>
+
+    <div class="container" id="contenedor-examen" style="display: none;">
+        <h1>Evaluación: Organización Comunitaria</h1>
+        <div class="instrucciones">
+            <p>Responde a los 15 planteamientos organizativos. Tienes un máximo de <strong>3 intentos</strong> para aprobar. <br>Necesitas al menos <strong>12 aciertos (8.0)</strong> para obtener tu constancia.</p>
+            <p style="color: var(--naranja); font-weight: bold;" id="intentos-restantes-texto"></p>
+        </div>
+
+        <form id="formulario-evaluacion">
+            
+            <div class="pregunta-card">
+                <div class="pregunta-texto">1. Desde una perspectiva sociológica crítica, ¿por qué suele ser difícil convocar a asambleas vecinales en barrios periféricos urbanos?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q1" value="A" required> A) Porque las personas de escasos recursos son egoístas y carecen de valores morales por naturaleza.</label>
+                    <label><input type="radio" name="q1" value="B"> B) Por barreras estructurales: la gente invierte horas en transporte y trabajos precarizados, lo que fragmenta su tiempo y energía.</label>
+                    <label><input type="radio" name="q1" value="C"> C) Porque ya no existen problemas en esos barrios gracias a los programas gubernamentales.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">2. De acuerdo a la clasificación del Capital Social de Robert Putnam, ¿qué es el "Capital Social Puente" (Bridging)?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q2" value="A" required> A) Lazos expansivos que unen a personas distintas o grupos diferentes, permitiendo organizar movimientos amplios.</label>
+                    <label><input type="radio" name="q2" value="B"> B) El dinero en efectivo que una comunidad tiene guardado en el banco.</label>
+                    <label><input type="radio" name="q2" value="C"> C) Los lazos cerrados y exclusivos que existen únicamente dentro de una familia muy unida.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">3. ¿Cuál es la principal diferencia práctica entre el asistencialismo y la acción colectiva estructural?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q3" value="A" required> A) El asistencialismo requiere firmas notariales; la acción colectiva no.</label>
+                    <label><input type="radio" name="q3" value="B"> B) Ambas son exactamente lo mismo, solo cambia el nombre dependiendo de quién done el dinero.</label>
+                    <label><input type="radio" name="q3" value="C"> C) El asistencialismo resuelve un síntoma temporal y crea dependencia, mientras que la acción colectiva organiza a la gente para solucionar la raíz del problema de forma autónoma.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">4. Al construir un "Árbol de Problemas" durante un diagnóstico comunitario, ¿qué elemento debe ubicarse en las RAÍCES?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q4" value="A" required> A) Las causas estructurales que generan el problema central.</label>
+                    <label><input type="radio" name="q4" value="B"> B) Las consecuencias o efectos visibles de la situación.</label>
+                    <label><input type="radio" name="q4" value="C"> C) Los nombres de los políticos que no hicieron su trabajo.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">5. ¿Por qué es fundamental realizar un "Mapeo de Actores" antes de iniciar un proyecto en un territorio nuevo?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q5" value="A" required> A) Para saber a quién cobrarle impuestos vecinales.</label>
+                    <label><input type="radio" name="q5" value="B"> B) Para identificar líderes formales e informales, entender quién confía en quién y conocer los recursos sociales que ya existen en el lugar.</label>
+                    <label><input type="radio" name="q5" value="C"> C) Para hacer un plano arquitectónico de las calles y avenidas.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">6. La escuela de observación urbana de Jane Jacobs enseña que, antes de imponer una solución arquitectónica o social, el organizador debe:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q6" value="A" required> A) Observar empíricamente la dinámica real y orgánica de las calles y sus habitantes en distintos momentos del día.</label>
+                    <label><input type="radio" name="q6" value="B"> B) Demoler los edificios viejos inmediatamente para construir plazas modernas.</label>
+                    <label><input type="radio" name="q6" value="C"> C) Prohibir el comercio ambulante porque da mal aspecto a la colonia.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">7. La economista Elinor Ostrom demostró que la "Tragedia de los comunes" (la destrucción de recursos compartidos) NO es inevitable. Para evitarla, las comunidades necesitan:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q7" value="A" required> A) Privatizar absolutamente todo el territorio y venderlo a corporaciones.</label>
+                    <label><input type="radio" name="q7" value="B"> B) Que el gobierno federal asuma el control militar del recurso compartido.</label>
+                    <label><input type="radio" name="q7" value="C"> C) Establecer reglas claras de uso, monitoreo mutuo y sanciones graduales acordadas por el propio grupo.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">8. El "Síndrome del Organizador Mártir" ocurre cuando el líder de un proyecto asume absolutamente todas las tareas y no delega responsabilidades. ¿Cuál es su consecuencia principal?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q8" value="A" required> A) Genera el agotamiento total (burnout) del líder y asfixia la participación de los vecinos, volviendo frágil al proyecto.</label>
+                    <label><input type="radio" name="q8" value="B"> B) Garantiza que el proyecto será un éxito permanente porque las cosas se hacen "bien".</label>
+                    <label><input type="radio" name="q8" value="C"> C) Permite ahorrar mucho dinero en sueldos y materiales.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">9. Para que un Plan de Acción logístico deje de ser una simple "buena intención", cada actividad debe tener asignado obligatoriamente:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q9" value="A" required> A) Un permiso del presidente municipal.</label>
+                    <label><input type="radio" name="q9" value="B"> B) A "toda la comunidad" como responsable, para que sea un esfuerzo parejo.</label>
+                    <label><input type="radio" name="q9" value="C"> C) Un responsable directo con nombre y apellido, y una fecha límite exacta.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">10. Siguiendo el enfoque pedagógico de Paulo Freire, una convocatoria comunitaria exitosa NO debe tratar de "depositar" información o dar órdenes, sino que debe buscar:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q10" value="A" required> A) Construir un diálogo horizontal donde todos analizan y deciden sobre el problema en conjunto.</label>
+                    <label><input type="radio" name="q10" value="B"> B) Convencer a la gente de que son ignorantes y necesitan la guía de un experto.</label>
+                    <label><input type="radio" name="q10" value="C"> C) Asignar culpas a los vecinos por no haber participado antes.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">11. Durante una asamblea estalla un conflicto entre dos grupos de vecinos por el uso de un presupuesto. El moderador debe aplicar la "despersonalización". Esto significa:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q11" value="A" required> A) Expulsar a las personas que estén gritando y llamar a la policía.</label>
+                    <label><input type="radio" name="q11" value="B"> B) Ignorar el problema y fingir que todos están de acuerdo para no generar tensión.</label>
+                    <label><input type="radio" name="q11" value="C"> C) Separar a las personas del problema, frenando los insultos personales para enfocarse en identificar el interés o necesidad real (terreno común) que defienden ambos grupos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">12. Para evitar que una asamblea colaborativa sea secuestrada por las personas que "gritan más fuerte" o los caciques locales, la herramienta más indispensable del organizador es:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q12" value="A" required> A) Un orden del día (agenda) claro y tiempos estrictos y equitativos de participación.</label>
+                    <label><input type="radio" name="q12" value="B"> B) Un micrófono con volumen muy alto solo para el organizador.</label>
+                    <label><input type="radio" name="q12" value="C"> C) Dejar que discutan hasta que se cansen naturalmente.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">13. Al evaluar proyectos comunitarios, es vital no confundir "Outputs" con "Outcomes". Si tu proyecto reporta que "impartió 20 talleres de oficios este mes", estás reportando:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q13" value="A" required> A) Un Outcome (El impacto o cambio real en la estructura social).</label>
+                    <label><input type="radio" name="q13" value="B"> B) Un Output (El resultado inmediato o la actividad realizada, que no garantiza un cambio real en los ingresos o vidas de los asistentes).</label>
+                    <label><input type="radio" name="q13" value="C"> C) Un fracaso absoluto de la organización.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">14. ¿Cuál es el síntoma definitivo de que una iniciativa comunitaria tiene "sostenibilidad real" y superó el complejo de "salvador"?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q14" value="A" required> A) Los vecinos han adquirido conocimientos operativos, toman las decisiones clave y el proyecto puede seguir funcionando aunque el fundador original se retire.</label>
+                    <label><input type="radio" name="q14" value="B"> B) El proyecto recibe donaciones de millones de pesos de fundaciones internacionales de manera vitalicia.</label>
+                    <label><input type="radio" name="q14" value="C"> C) El fundador sale en las portadas de los periódicos locales recibiendo premios.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">15. Para garantizar el "relevo institucional" o generacional en un proyecto comunitario, la acción más importante es:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q15" value="A" required> A) Contratar a una empresa de consultoría externa para que maneje la comunidad.</label>
+                    <label><input type="radio" name="q15" value="B"> B) Involucrar a nuevos miembros locales en la toma de poder y documentar mediante manuales o bitácoras los procesos logísticos que el líder sabe de memoria.</label>
+                    <label><input type="radio" name="q15" value="C"> C) Obligar legalmente a los vecinos a pagar cuotas obligatorias elevadas.</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btn-enviar">Terminar Examen y Calificar</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+            authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+            projectId: "cpee-plataforma-a655a",
+            storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+            messagingSenderId: "684415102099",
+            appId: "1:684415102099:web:3f2b649a34386677a87166"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
+        const contenedorExamen = document.getElementById('contenedor-examen');
+        const txtBloqueo = document.getElementById('bloqueo-texto');
+        const subTxtBloqueo = document.getElementById('bloqueo-subtexto');
+        const btnVolver = document.getElementById('btn-volver');
+        const txtIntentos = document.getElementById('intentos-restantes-texto');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        // CLAVE DE RESPUESTAS (Módulo Organización Comunitaria)
+        const respuestasCorrectas = {
+            q1: "B", q2: "A", q3: "C", q4: "A", q5: "B",
+            q6: "A", q7: "C", q8: "A", q9: "C", q10: "A",
+            q11: "C", q12: "A", q13: "B", q14: "A", q15: "B"
+        };
+
+        let userRef;
+        let userData;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "../../login.html"; 
+                return;
+            }
+
+            userRef = doc(db, "progreso_usuarios", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (!docSnap.exists() || docSnap.data().acceso_oc !== true) {
+                window.location.href = "oc_inicio.html";
+                return;
+            }
+
+            userData = docSnap.data();
+
+            // 1. Ya aprobó antes
+            if (userData.examen_oc_aprobado === true) {
+                txtBloqueo.innerText = "¡Ya aprobaste la evaluación!";
+                txtBloqueo.style.color = "var(--ocre-comunidad)";
+                subTxtBloqueo.innerText = "Tu constancia está lista para ser generada.";
+                btnVolver.innerText = "Ir a solicitar mi Constancia";
+                btnVolver.onclick = () => window.location.href = "constancia_oc.html";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 2. Verificar que los 5 módulos estén completos
+            const modulosRequeridos = [
+                'modulo1_oc_completado', 'modulo2_oc_completado', 
+                'modulo3_oc_completado', 'modulo4_oc_completado', 
+                'modulo5_oc_completado'
+            ];
+            
+            let faltaModulo = false;
+            for (let mod of modulosRequeridos) {
+                if (!userData[mod]) {
+                    faltaModulo = true;
+                    break;
+                }
+            }
+
+            if (faltaModulo) {
+                txtBloqueo.innerText = "Acceso Denegado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Aún te faltan módulos por terminar en este curso de Organización Comunitaria.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 3. Verificar intentos
+            let intentos = userData.intentos_examen_oc || 0;
+            if (intentos >= 3) {
+                txtBloqueo.innerText = "Límite de intentos alcanzado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Has agotado tus 3 intentos para este curso.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // Mostrar examen
+            pantallaBloqueo.style.display = "none";
+            contenedorExamen.style.display = "block";
+            txtIntentos.innerText = `Intento ${intentos + 1} de 3`;
+        });
+
+        // Al calificar
+        document.getElementById('formulario-evaluacion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Calificando...";
+
+            const formData = new FormData(e.target);
+            let aciertos = 0;
+
+            for (let [pregunta, respuesta] of formData.entries()) {
+                if (respuestasCorrectas[pregunta] === respuesta) {
+                    aciertos++;
+                }
+            }
+
+            // Calificación sobre base 10
+            let calificacion = (aciertos / 15) * 10;
+            let intentosActuales = (userData.intentos_examen_oc || 0) + 1;
+
+            if (calificacion >= 8.0) {
+                await setDoc(userRef, {
+                    examen_oc_aprobado: true,
+                    calificacion_final_oc: calificacion,
+                    intentos_examen_oc: intentosActuales
+                }, { merge: true });
+
+                alert(`¡Felicidades! Obtuviste ${aciertos}/15 (${calificacion.toFixed(1)}). Has aprobado el curso.`);
+                window.location.href = "constancia_oc.html";
+            } else {
+                await setDoc(userRef, {
+                    intentos_examen_oc: intentosActuales
+                }, { merge: true });
+
+                if (intentosActuales >= 3) {
+                    alert(`Calificación: ${calificacion.toFixed(1)}. Has agotado tus 3 intentos. Examen bloqueado.`);
+                    window.location.reload();
+                } else {
+                    alert(`Obtuviste ${aciertos}/15 (${calificacion.toFixed(1)}). Necesitas al menos 12 aciertos (8.0). Te quedan ${3 - intentosActuales} intentos.`);
+                    window.location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
