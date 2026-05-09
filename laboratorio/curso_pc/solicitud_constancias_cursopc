@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Constancia: Pensamiento Crítico - CPEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cafe: #2B1B12;
+            --purpura-critico: #4a2b4d;
+            --purpura-claro: #6a446d;
+            --crema: #fff1da;
+            --texto-suave: #4a3828;
+            --verde-exito: #2a4939;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--crema);
+            color: var(--cafe);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--purpura-critico);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        p {
+            color: var(--texto-suave);
+            line-height: 1.6;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--cafe);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .btn-enviar {
+            width: 100%;
+            padding: 15px;
+            background: var(--purpura-critico);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn-enviar:hover {
+            background: var(--purpura-claro);
+        }
+        #mensaje-exito {
+            display: none;
+            padding: 30px;
+            background: #f0f7f4;
+            border: 1px solid var(--verde-exito);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--crema);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo">
+        <h2 style="font-family: 'DM Serif Display', serif; color: var(--cafe); font-size: 2rem;">Validando aprobación...</h2>
+    </div>
+
+    <div class="container" id="contenedor-constancia" style="display: none;">
+        <div style="font-size: 3.5rem; margin-bottom: 10px;">👁️</div>
+        <h1>¡Pensamiento Crítico Aprobado!</h1>
+        <p>Has finalizado con éxito tu curso propedéutico. Ingresa tus datos para procesar tu constancia oficial del <strong>CPEE</strong>.</p>
+
+        <form id="form-constancia">
+            <div class="form-group">
+                <label for="nombre">Nombre Completo:</label>
+                <input type="text" id="nombre" placeholder="Nombre que aparecerá en el diploma" required>
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" id="correo" readonly style="background: #f4f4f4; color: #666; cursor: not-allowed;">
+            </div>
+            
+            <button type="submit" class="btn-enviar" id="btn-solicitar">Solicitar Constancia del Curso</button>
+        </form>
+
+        <div id="mensaje-exito">
+            <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+            <h3 style="color: var(--verde-exito); margin-top: 0;">Registro Exitoso</h3>
+            <p style="margin-bottom: 0;"><strong>Tu solicitud ha sido enviada. Tu constancia de "Pensamiento Crítico y Realidad Contemporánea" te será enviada por correo tras la validación de la coordinación.</strong></p>
+            <button onclick="window.location.href='pc_inicio.html'" style="margin-top: 20px; padding: 10px 20px; background: var(--purpura-critico); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Volver al Índice</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+            authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+            projectId: "cpee-plataforma-a655a",
+            storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+            messagingSenderId: "684415102099",
+            appId: "1:684415102099:web:3f2b649a34386677a87166"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "../../login.html";
+                return;
+            }
+
+            const userRef = doc(db, "progreso_usuarios", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            // Verificamos que haya aprobado el examen
+            if (!docSnap.exists() || docSnap.data().examen_pc_aprobado !== true) {
+                alert("Debes aprobar primero la evaluación final del curso.");
+                window.location.href = "evaluacion_pc.html";
+                return;
+            }
+
+            document.getElementById('pantalla-bloqueo').style.display = "none";
+            document.getElementById('contenedor-constancia').style.display = "block";
+            document.getElementById('correo').value = user.email;
+        });
+
+        document.getElementById('form-constancia').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-solicitar');
+            btn.disabled = true;
+            btn.innerText = "Registrando solicitud...";
+
+            const nombre = document.getElementById('nombre').value;
+            const correo = document.getElementById('correo').value;
+            const uid = auth.currentUser.uid;
+
+            try {
+                // GUARDANDO EN LA COLECCIÓN ESPECÍFICA
+                const constanciaRef = doc(db, "solicitud_constancias_cursopc", uid);
+                await setDoc(constanciaRef, {
+                    nombre_completo: nombre,
+                    correo: correo,
+                    curso: "Pensamiento Crítico y Realidad Contemporánea",
+                    fecha_solicitud: new Date(),
+                    estado: "Pendiente"
+                });
+
+                document.getElementById('form-constancia').style.display = "none";
+                document.getElementById('mensaje-exito').style.display = "block";
+
+            } catch (error) {
+                console.error("Error al registrar:", error);
+                alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+                btn.disabled = false;
+                btn.innerText = "Solicitar Constancia del Curso";
+            }
+        });
+    </script>
+</body>
+</html>

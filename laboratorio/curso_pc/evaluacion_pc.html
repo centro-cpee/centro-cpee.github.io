@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación: Pensamiento Crítico - CPEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cafe: #2B1B12;
+            --naranja: #d35a34;
+            --crema: #fff1da;
+            --purpura-critico: #4a2b4d;
+            --purpura-claro: #6a446d;
+            --texto-suave: #4a3828;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--crema);
+            color: var(--cafe);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--purpura-critico);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .instrucciones {
+            text-align: center;
+            color: var(--texto-suave);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--crema);
+        }
+        .pregunta-card {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-left: 4px solid var(--purpura-critico);
+            border-radius: 4px;
+        }
+        .pregunta-texto {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .opciones label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.5;
+        }
+        .opciones label:hover {
+            border-color: var(--purpura-claro);
+            background: #fdf5f7;
+        }
+        .opciones input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--purpura-critico);
+        }
+        .btn-enviar {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--purpura-critico);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+        .btn-enviar:hover {
+            background: var(--purpura-claro);
+        }
+        .btn-enviar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        /* Pantalla de bloqueo */
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--crema);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo">
+        <h2 id="bloqueo-texto" style="font-family: 'DM Serif Display', serif; color: var(--cafe); font-size: 2rem;">Verificando credenciales...</h2>
+        <p id="bloqueo-subtexto">Analizando tu progreso en el curso.</p>
+        <button id="btn-volver" style="display:none; margin-top: 20px; padding: 10px 20px; background: var(--purpura-critico); color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="window.location.href='pc_inicio.html'">Volver al Inicio</button>
+    </div>
+
+    <div class="container" id="contenedor-examen" style="display: none;">
+        <h1>Evaluación: Pensamiento Crítico</h1>
+        <div class="instrucciones">
+            <p>Responde a los 15 cuestionamientos. Tienes un máximo de <strong>3 intentos</strong> para aprobar. <br>Necesitas al menos <strong>12 aciertos (8.0)</strong> para obtener tu constancia.</p>
+            <p style="color: var(--naranja); font-weight: bold;" id="intentos-restantes-texto"></p>
+        </div>
+
+        <form id="formulario-evaluacion">
+            
+            <div class="pregunta-card">
+                <div class="pregunta-texto">1. Según la filosofía clásica, ¿cuál es la diferencia principal entre Doxa y Episteme?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q1" value="A" required> A) Doxa es el conocimiento científico, y Episteme es la ignorancia.</label>
+                    <label><input type="radio" name="q1" value="B"> B) Doxa es la simple opinión sin fundamentos ("sentido común"), mientras que Episteme es el conocimiento respaldado por evidencia y argumentos.</label>
+                    <label><input type="radio" name="q1" value="C"> C) Son exactamente lo mismo, ya que todas las opiniones son igual de válidas.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">2. Al estudiar el juicio de un líder nazi, Hannah Arendt acuñó el término "La banalidad del mal". ¿A qué se refería con esto?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q2" value="A" required> A) A que los seres humanos nacen genéticamente malos y disfrutan el sufrimiento ajeno.</label>
+                    <label><input type="radio" name="q2" value="B"> B) A que el gobierno debe castigar los delitos menores con penas de cárcel muy largas.</label>
+                    <label><input type="radio" name="q2" value="C"> C) A que personas "normales" pueden cometer actos atroces si renuncian a su capacidad de pensar críticamente y solo "siguen órdenes".</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">3. Daniel Kahneman demostró que nuestro cerebro usa "atajos" para ahorrar energía al procesar el mundo. Si una persona solo lee noticias que validan lo que ya piensa, ignorando cualquier dato que la contradiga, ¿de qué "atajo" es víctima?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q3" value="A" required> A) Sesgo de Confirmación.</label>
+                    <label><input type="radio" name="q3" value="B"> B) Selección Adversa.</label>
+                    <label><input type="radio" name="q3" value="C"> C) Efecto Multiplicador.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">4. Noam Chomsky argumenta que los grandes medios de comunicación "fabrican el consenso". Esto significa que:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q4" value="A" required> A) Los medios siempre mienten de forma evidente y ridícula.</label>
+                    <label><input type="radio" name="q4" value="B"> B) Los medios filtran la información (encuadran las noticias) de tal manera que protegen los intereses de las grandes corporaciones y del Estado.</label>
+                    <label><input type="radio" name="q4" value="C"> C) Los medios obligan legalmente a la gente a votar por ciertos candidatos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">5. En la "Economía de la Atención" de las redes sociales (TikTok, Twitter/X, Instagram), el principal modelo de negocio de estas empresas es:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q5" value="A" required> A) Vender el mayor tiempo posible de la atención del usuario a los anunciantes, usando algoritmos que premian la indignación y la polarización.</label>
+                    <label><input type="radio" name="q5" value="B"> B) Educar al usuario con información verificada y objetiva sobre su país.</label>
+                    <label><input type="radio" name="q5" value="C"> C) Cobrar una suscripción mensual a todos los que abren una cuenta nueva.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">6. Cuando el algoritmo te muestra únicamente publicaciones y personas que piensan exactamente igual que tú, te encierra en un fenómeno conocido sociológicamente como:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q6" value="A" required> A) Disonancia Cognitiva.</label>
+                    <label><input type="radio" name="q6" value="B"> B) Modernidad Sólida.</label>
+                    <label><input type="radio" name="q6" value="C"> C) Burbuja de Filtro (Cámara de Eco).</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">7. Zygmunt Bauman define nuestra época actual como la "Modernidad Líquida". ¿Cuál es su principal característica?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q7" value="A" required> A) La sociedad es altamente estable, predecible y la gente trabaja en la misma empresa toda su vida.</label>
+                    <label><input type="radio" name="q7" value="B"> B) Las instituciones, empleos y relaciones se han vuelto flexibles y temporales, generando una sensación constante de incertidumbre e inseguridad.</label>
+                    <label><input type="radio" name="q7" value="C"> C) El consumo de agua embotellada se ha disparado en los últimos 20 años.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">8. El filósofo Byung-Chul Han sostiene que vivimos en la "Sociedad del Cansancio". Según él, hoy nos agotamos hasta enfermarnos porque:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q8" value="A" required> A) Nos auto-explotamos voluntariamente bajo el discurso de "tú puedes lograrlo todo", convirtiéndonos en amo y esclavo a la vez.</label>
+                    <label><input type="radio" name="q8" value="B"> B) Trabajamos en minas y fábricas con castigos físicos impuestos por un capataz.</label>
+                    <label><input type="radio" name="q8" value="C"> C) La gente moderna ya no hace ejercicio ni come bien.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">9. ¿Cuál es el principal peligro crítico de la "industria de la autoayuda" extrema o la "cultura del esfuerzo" (Hustle Culture)?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q9" value="A" required> A) Que vuelve a las personas excesivamente flojas.</label>
+                    <label><input type="radio" name="q9" value="B"> B) Que convence a los individuos de que su pobreza o agotamiento es culpa exclusiva de su "falta de actitud", ocultando los problemas económicos y sociales estructurales.</label>
+                    <label><input type="radio" name="q9" value="C"> C) Que sus libros son muy caros de imprimir.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">10. Según Max Weber, lo que define estructuralmente al "Estado" frente a cualquier otra organización, es que el Estado posee:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q10" value="A" required> A) El derecho exclusivo a cobrar propinas voluntarias a los turistas.</label>
+                    <label><input type="radio" name="q10" value="B"> B) El monopolio de la violencia física legítima para hacer cumplir las leyes.</label>
+                    <label><input type="radio" name="q10" value="C"> C) El control absoluto de todas las empresas que producen alimentos.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">11. Mientras Weber veía el poder de "arriba hacia abajo" (coerción), Michel Foucault enseñó que el poder también es "disciplinario". Esto significa que el poder se ejerce cuando:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q11" value="A" required> A) Las instituciones (escuelas, médicos, redes) definen lo que es "normal", logrando que nos vigilemos y corrijamos a nosotros mismos sin necesidad de que nos arresten.</label>
+                    <label><input type="radio" name="q11" value="B"> B) El ejército invade un país extranjero para tomar sus recursos naturales.</label>
+                    <label><input type="radio" name="q11" value="C"> C) Un político gana las elecciones presidenciales mediante fraude.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">12. Desde la sociología, los conflictos sociales (marchas, huelgas) NO son vistos como "anomalías" o culpa de "inadaptados", sino como:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q12" value="A" required> A) Errores biológicos en el comportamiento de las multitudes.</label>
+                    <label><input type="radio" name="q12" value="B"> B) La manifestación visible de un desequilibrio acumulado en la relación de poder entre el Estado, el Mercado y la Sociedad Civil.</label>
+                    <label><input type="radio" name="q12" value="C"> C) Eventos provocados siempre y exclusivamente por espías extranjeros.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">13. Si en un debate alguien dice: <em>"Tu propuesta sobre el cambio climático no tiene sentido porque no terminaste la universidad"</em>, está cometiendo una falacia lógica llamada:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q13" value="A" required> A) Falacia del Hombre de Paja.</label>
+                    <label><input type="radio" name="q13" value="B"> B) Ad Hominem (Ataque personal).</label>
+                    <label><input type="radio" name="q13" value="C"> C) Falso Dilema.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">14. El sociólogo C. Wright Mills propuso utilizar la "Imaginación Sociológica". ¿Para qué sirve esta herramienta intelectual?</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q14" value="A" required> A) Para inventar teorías de conspiración sin necesidad de buscar pruebas o datos.</label>
+                    <label><input type="radio" name="q14" value="B"> B) Para conectar los problemas personales y privados (como perder tu trabajo) con los grandes problemas estructurales e históricos (como una crisis económica).</label>
+                    <label><input type="radio" name="q14" value="C"> C) Para escribir novelas de ciencia ficción basadas en la sociedad actual.</label>
+                </div>
+            </div>
+
+            <div class="pregunta-card">
+                <div class="pregunta-texto">15. Para debatir con honestidad intelectual y no solo para "ganar likes", un pensador crítico aplica el <strong>Principio de Caridad</strong>. Esto significa que debes:</div>
+                <div class="opciones">
+                    <label><input type="radio" name="q15" value="A" required> A) Darle siempre la razón al oponente para no ofender sus sentimientos.</label>
+                    <label><input type="radio" name="q15" value="B"> B) Interpretar el argumento de tu oponente en su versión más fuerte, lógica e inteligente posible antes de intentar refutarlo.</label>
+                    <label><input type="radio" name="q15" value="C"> C) Burlarte de sus errores gramaticales para desestabilizarlo emocionalmente.</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btn-enviar">Terminar Examen y Calificar</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5YZCAHcrMA36PmgpOxmHnTOI6zgZNMgg",
+            authDomain: "cpee-plataforma-a655a.firebaseapp.com",
+            projectId: "cpee-plataforma-a655a",
+            storageBucket: "cpee-plataforma-a655a.firebasestorage.app",
+            messagingSenderId: "684415102099",
+            appId: "1:684415102099:web:3f2b649a34386677a87166"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
+        const contenedorExamen = document.getElementById('contenedor-examen');
+        const txtBloqueo = document.getElementById('bloqueo-texto');
+        const subTxtBloqueo = document.getElementById('bloqueo-subtexto');
+        const btnVolver = document.getElementById('btn-volver');
+        const txtIntentos = document.getElementById('intentos-restantes-texto');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        // CLAVE DE RESPUESTAS
+        const respuestasCorrectas = {
+            q1: "B", q2: "C", q3: "A", q4: "B", q5: "A",
+            q6: "C", q7: "B", q8: "A", q9: "B", q10: "B",
+            q11: "A", q12: "B", q13: "B", q14: "B", q15: "B"
+        };
+
+        let userRef;
+        let userData;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "../../login.html"; 
+                return;
+            }
+
+            userRef = doc(db, "progreso_usuarios", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (!docSnap.exists() || docSnap.data().acceso_pc !== true) {
+                window.location.href = "pc_inicio.html";
+                return;
+            }
+
+            userData = docSnap.data();
+
+            // 1. Ya aprobó antes
+            if (userData.examen_pc_aprobado === true) {
+                txtBloqueo.innerText = "¡Ya aprobaste la evaluación!";
+                txtBloqueo.style.color = "var(--purpura-critico)";
+                subTxtBloqueo.innerText = "Tu constancia está lista para ser generada.";
+                btnVolver.innerText = "Ir a solicitar mi Constancia";
+                btnVolver.onclick = () => window.location.href = "constancia_pc.html";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 2. Verificar que los 5 módulos estén completos
+            const modulosRequeridos = [
+                'modulo1_pc_completado', 'modulo2_pc_completado', 
+                'modulo3_pc_completado', 'modulo4_pc_completado', 
+                'modulo5_pc_completado'
+            ];
+            
+            let faltaModulo = false;
+            for (let mod of modulosRequeridos) {
+                if (!userData[mod]) {
+                    faltaModulo = true;
+                    break;
+                }
+            }
+
+            if (faltaModulo) {
+                txtBloqueo.innerText = "Acceso Denegado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Aún te faltan módulos por terminar en este curso propedéutico.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // 3. Verificar intentos
+            let intentos = userData.intentos_examen_pc || 0;
+            if (intentos >= 3) {
+                txtBloqueo.innerText = "Límite de intentos alcanzado";
+                txtBloqueo.style.color = "var(--naranja)";
+                subTxtBloqueo.innerText = "Has agotado tus 3 intentos para este curso.";
+                btnVolver.style.display = "inline-block";
+                return;
+            }
+
+            // Todo en orden, mostrar examen
+            pantallaBloqueo.style.display = "none";
+            contenedorExamen.style.display = "block";
+            txtIntentos.innerText = `Intento ${intentos + 1} de 3`;
+        });
+
+        // Al calificar
+        document.getElementById('formulario-evaluacion').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Calificando...";
+
+            const formData = new FormData(e.target);
+            let aciertos = 0;
+
+            for (let [pregunta, respuesta] of formData.entries()) {
+                if (respuestasCorrectas[pregunta] === respuesta) {
+                    aciertos++;
+                }
+            }
+
+            // Calificación sobre base 10
+            let calificacion = (aciertos / 15) * 10;
+            let intentosActuales = (userData.intentos_examen_pc || 0) + 1;
+
+            if (calificacion >= 8.0) {
+                await setDoc(userRef, {
+                    examen_pc_aprobado: true,
+                    calificacion_final_pc: calificacion,
+                    intentos_examen_pc: intentosActuales
+                }, { merge: true });
+
+                alert(`¡Felicidades! Obtuviste ${aciertos}/15 (${calificacion.toFixed(1)}). Has aprobado el curso.`);
+                window.location.href = "constancia_pc.html";
+            } else {
+                await setDoc(userRef, {
+                    intentos_examen_pc: intentosActuales
+                }, { merge: true });
+
+                if (intentosActuales >= 3) {
+                    alert(`Calificación: ${calificacion.toFixed(1)}. Has agotado tus 3 intentos. Examen bloqueado.`);
+                    window.location.reload();
+                } else {
+                    alert(`Obtuviste ${aciertos}/15 (${calificacion.toFixed(1)}). Necesitas al menos 12 aciertos (8.0). Te quedan ${3 - intentosActuales} intentos.`);
+                    window.location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
